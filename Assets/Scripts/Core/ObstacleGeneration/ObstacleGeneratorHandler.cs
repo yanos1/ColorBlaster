@@ -10,12 +10,14 @@ namespace Core.ObstacleGeneration
 {
     public class ObstacleGeneratorHandler : MonoBehaviour
     {
-        // this dict is arranging all obstacles by difficulty levels (1,2,3),
-        // the int in the tuple is reffering to the max index currently available for that list of obstacles
-        private Dictionary<int, ValueTuple<int, List<Obstacle>>> _difficultyToObstacleMap;
+        public Obstacle CurrentObstacle { get; set; }
 
         // this list will hold the chances for generating each class of obstacle
         [SerializeField] List<SerializableTuple<int, float>> _difficultyToChanceMap;
+
+        // this dict is arranging all obstacles by difficulty levels (1,2,3),
+        // the int in the tuple is reffering to the max index currently available for that list of obstacles
+        private Dictionary<int, ValueTuple<int, List<Obstacle>>> _difficultyToObstacleMap;
 
 
         public void Init(Dictionary<int, ValueTuple<int, List<Obstacle>>> difficultyToObstacleMap)
@@ -55,11 +57,14 @@ namespace Core.ObstacleGeneration
             {
                 Debug.Log($"There has been an invalid difficulty selection with diffuculty {difficultyRandomed}");
             }
-
-            return _difficultyToObstacleMap[difficultyRandomed].Item2[
+            
+            CurrentObstacle = _difficultyToObstacleMap[difficultyRandomed].Item2[
                 UnityEngine.Random.Range(0, _difficultyToObstacleMap[difficultyRandomed].Item1)];
+            CurrentObstacle.ChangeColor();
+            return CurrentObstacle;
         }
 
+        // this method makes generating easy obstacles less likely and harder obstaclers more likely.
         public void AdjustWeights()
         {
             // Adjust the numbers with a minimum check to avoid negative values

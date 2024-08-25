@@ -1,7 +1,9 @@
-﻿namespace Core.Managers
+﻿using UnityEngine;
+
+namespace Core.Managers
 {
-    public class GameManager
+    public class GameManager : MonoBehaviour
     {
-        
+
     }
 }

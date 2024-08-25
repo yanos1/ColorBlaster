@@ -1,18 +1,34 @@
+using System;
 using System.Collections.Generic;
+using Core.Managers;
 using Core.ObstacleGeneration;
+using Extentions;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ObstacleGeneration
 {
-    public abstract class Obstacle : MonoBehaviour, Resetable
+    public class Obstacle : MonoBehaviour, Resetable
     {
-        // Start is called before the first frame update
-        [SerializeField] private PoolType type;
-        [SerializeField] private List<ObstaclePart> parts;
+        
+        public Vector3 RightMostPosition => rightMostPosition.position;
         public int Difficulty { get; private set; }
         
+        [SerializeField] private PoolType type;
+        [SerializeField] private List<ObstaclePart> obstacleParts;
+        [SerializeField] private Transform rightMostPosition;
         
-        public abstract void Reset();
+        private List<ObstaclePart> inactiveParts;
+
+
+
+        public void Reset()
+        {
+            foreach (var part in obstacleParts)
+            {
+                part.Reset();
+            }
+        }
 
         void Start()
         {
@@ -20,10 +36,34 @@ namespace ObstacleGeneration
         }
 
         // Update is called once per frame
-        void Update()
+        public virtual void Update()
         {
-
+            Move();
         }
 
+        public void ChangeStyle()
+        {
+            foreach (var part in obstacleParts)
+            {
+                part.ChangeStyle();
+            }
+        }
+
+        public void Move()
+        {
+            transform.position -= new Vector3(CoreManager.instance.ObstacleManager.BaseSpeed * Time.deltaTime, 0, 0);
+        }
+
+        public void ChangeColor()
+        {
+            Color[] colors = CoreManager.instance.StyleManager.GetStyle().ColorPalette;
+            UtilityFunctions.ShuffleArray(colors);
+     
+
+            for (int i = 0; i < obstacleParts.Count; ++i)
+            {
+                obstacleParts[i].Renderer.material.color = colors[i% colors.Length];
+            }
+        }
     }
 }

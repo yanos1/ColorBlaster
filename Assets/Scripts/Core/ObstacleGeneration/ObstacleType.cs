@@ -7,6 +7,6 @@
         WallObstacle2 = 2,
         FanObstacle1 = 3,
         FanObstacle2 = 4,
-        GearWheel = 5
+        GearWheel = 5,
     }
 }

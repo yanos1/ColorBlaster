@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core.ObstacleGeneration;
 using ObstacleGeneration;
+using ScriptableObjects;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,11 +10,19 @@ namespace Core.Managers
 {
     public class ObstacleManager : MonoBehaviour
     {
+
+        public float BaseSpeed
+        {
+            get => baseSpeed;
+            set => baseSpeed = Mathf.Max(0, value); // Ensures speed is not set to a negative value
+        }
+        
         [SerializeField] private Obstacle[] obstacleData;
         [SerializeField] private ObstacleGenerator obstacleGenerator;
-        [SerializeField] private float baseSpeed;
         
         private  Dictionary<int, ValueTuple<int , List<Obstacle>>> weightToObstacleMap = new();
+        private float baseSpeed;
+
 
         
         private void Awake()
@@ -21,6 +30,24 @@ namespace Core.Managers
             InitializeMap();
             obstacleGenerator.Init(weightToObstacleMap);
 
+        }
+
+        private void OnEnable()
+        {
+            CoreManager.instance.EventManager.AddListener(EventNames.ChangeStyle, ChangeObstacleStyle);
+        }
+        
+        private void OnDisable()
+        {
+            CoreManager.instance.EventManager.RemoveListener(EventNames.ChangeStyle, ChangeObstacleStyle);
+        }
+
+        private void ChangeObstacleStyle(object obj)
+        {
+            foreach (var obstacle in obstacleData)
+            {
+                obstacle.ChangeStyle();
+            }
         }
 
         public float GetBaseSpeed()
