@@ -30,3 +30,4 @@
             transform.position = newPosition;
         }
     }
+}
