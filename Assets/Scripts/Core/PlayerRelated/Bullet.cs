@@ -10,12 +10,12 @@ namespace Core.PlayerRelated
     {
         private void OnEnable()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.ChangeStyle, ApplyStyle);
+            CoreManager.instance.EventManager.AddListener(EventNames.SetStyle, ApplyStyle);
         }
         
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.ChangeStyle, ApplyStyle);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.SetStyle, ApplyStyle);
         }
 
         private void ApplyStyle(object obj)
@@ -28,7 +28,7 @@ namespace Core.PlayerRelated
             ColorBlock colorBlock = other.gameObject.GetComponent<ColorBlock>();
             if (colorBlock is not null)
             {
-                Renderer.material.color = colorBlock.color;
+                Renderer.material.color = colorBlock.GetColor();
             }
 
             ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();

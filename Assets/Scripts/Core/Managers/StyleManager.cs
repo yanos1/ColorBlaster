@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -9,9 +10,12 @@ namespace Core.Managers
     {
         // [SerializeField] private Volume _volume;
         [SerializeField] private List<Style> styles;
-        private Style currentStyle;
+        private Style currentStyle; // in the future take this from the saved style for the user
 
-  
+        private void Start()
+        {
+            currentStyle = styles.First();
+        }
 
         public Style GetStyle()
         {
@@ -27,7 +31,7 @@ namespace Core.Managers
                     currentStyle = style;
                 }
             }
-            CoreManager.instance.EventManager.InvokeEvent(EventNames.ChangeStyle, null);
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.SetStyle, null);
             
         }
         

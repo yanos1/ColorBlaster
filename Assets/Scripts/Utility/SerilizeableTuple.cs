@@ -28,12 +28,12 @@ namespace Extentions
 
         public void OnBeforeSerialize()
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public void OnAfterDeserialize()
         {
-            throw new NotImplementedException();
+            return;
         }
     }
 }

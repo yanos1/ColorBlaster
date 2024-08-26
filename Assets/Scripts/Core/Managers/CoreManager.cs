@@ -13,6 +13,8 @@ namespace Core.Managers
 
         public EventManager EventManager;
 
+        public ObjectPoolManager PoolManager;
+
         public StyleManager StyleManager;
 
         public ObstacleManager ObstacleManager;

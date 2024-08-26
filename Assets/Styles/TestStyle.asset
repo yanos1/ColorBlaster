@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32f2cbed24c941ab9487683dc23a98aa, type: 3}
+  m_Name: TestStyle
+  m_EditorClassIdentifier: 
+  styleName: 3
+  colorPalette:
+  - {r: 0.93962264, g: 0.3740761, b: 0.3740761, a: 0}
+  - {r: 0.19320033, g: 0.5015404, b: 0.7584905, a: 0}
+  - {r: 0.38620856, g: 0.7132075, b: 0.44429415, a: 0}
+  - {r: 0.8037735, g: 0.71710384, b: 0.21080092, a: 0}
+  material: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  texture: {fileID: 10307, guid: 0000000000000000f000000000000000, type: 0}
+  shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  shatterPrefab: {fileID: 3373895658911521268, guid: 6b6f3d02fe3e1f2429c6e40259b90610, type: 3}
+  shatterSound: {fileID: 0}

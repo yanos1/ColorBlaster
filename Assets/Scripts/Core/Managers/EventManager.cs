@@ -47,6 +47,6 @@
 
     public enum EventNames
     {
-        ChangeStyle = 0,
+        SetStyle = 0,
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.Managers;
 using Extentions;
 using ObstacleGeneration;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = System.Random;
 
@@ -10,10 +12,8 @@ namespace Core.ObstacleGeneration
 {
     public class ObstacleGeneratorHandler : MonoBehaviour
     {
-        public Obstacle CurrentObstacle { get; set; }
-
         // this list will hold the chances for generating each class of obstacle
-        [SerializeField] List<SerializableTuple<int, float>> _difficultyToChanceMap;
+        [SerializeField] SerializableTuple<int, float>[] _difficultyToChanceMap;
 
         // this dict is arranging all obstacles by difficulty levels (1,2,3),
         // the int in the tuple is reffering to the max index currently available for that list of obstacles
@@ -27,19 +27,6 @@ namespace Core.ObstacleGeneration
 
         void Start()
         {
-            // Run 20 iterations
-            List<Vector3> results20Positive = new List<Vector3>();
-            for (int i = 0; i < 20; i++)
-            {
-                AdjustWeights();
-                // Print the results
-                foreach (SerializableTuple<int, float> pair in _difficultyToChanceMap)
-                {
-                    Debug.Log($"{pair.second}");
-                }
-
-                Debug.Log("-------");
-            }
         }
 
         public void AddObstacles(int difficulty, int amount)
@@ -55,14 +42,17 @@ namespace Core.ObstacleGeneration
             int difficultyRandomed = RandomNextObstacleDifficulty(randomNumber);
             if (_difficultyToObstacleMap[difficultyRandomed].Item1 == 0)
             {
-                Debug.Log($"There has been an invalid difficulty selection with diffuculty {difficultyRandomed}");
+                Debug.Log($"There has been an invalid difficulty selection with difficulty {difficultyRandomed}");
             }
-            
-            CurrentObstacle = _difficultyToObstacleMap[difficultyRandomed].Item2[
+
+            Obstacle nextObstacle = _difficultyToObstacleMap[difficultyRandomed].Item2[
                 UnityEngine.Random.Range(0, _difficultyToObstacleMap[difficultyRandomed].Item1)];
-            CurrentObstacle.ChangeColor();
-            return CurrentObstacle;
+
+            var obstacle = ResetNextObstacle(nextObstacle);
+
+            return obstacle;
         }
+
 
         // this method makes generating easy obstacles less likely and harder obstaclers more likely.
         public void AdjustWeights()
@@ -98,6 +88,14 @@ namespace Core.ObstacleGeneration
             }
 
             return 0;
+        }
+
+        private static Obstacle ResetNextObstacle(Obstacle nextObstacle)
+        {
+            GameObject obstaclePrefab = CoreManager.instance.PoolManager.GetFromPool(nextObstacle.PoolType);
+            Obstacle obstacle = obstaclePrefab.GetComponent<Obstacle>();
+            obstacle.ChangeColor();
+            return obstacle;
         }
     }
 }

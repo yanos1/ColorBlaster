@@ -1,17 +1,37 @@
-﻿using UnityEngine;
+﻿using Core.Managers;
+using Core.StyleRelated;
+using ScriptableObjects;
+using UnityEngine;
 
 namespace Core.PlayerRelated
 {
-    public class ColorBlock : MonoBehaviour
+    public class ColorBlock : StyleableObject
     {
-        public Color color;
-
-        void Start()
+        private void OnEnable()
         {
-            // Apply the color to the GameObject's material on start
-            GetComponent<Renderer>().material.color = color;
+            CoreManager.instance.EventManager.AddListener(EventNames.SetStyle, ApplyStyle);
         }
         
+        private void OnDisable()
+        {
+            CoreManager.instance.EventManager.RemoveListener(EventNames.SetStyle, ApplyStyle);
+        }
+
+        private void ApplyStyle(object obj)
+        {
+            Style currentStyle = base.ApplyStyle();
+            print("style applied");
+        }
+
+        public Color GetColor()
+        {
+            return color;
+        }
+
+        public void SetColor(Color newColor)
+        {
+            color = newColor;
+        }
         
     }
 }

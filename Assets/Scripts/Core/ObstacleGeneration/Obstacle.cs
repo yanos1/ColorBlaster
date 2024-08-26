@@ -12,21 +12,30 @@ namespace ObstacleGeneration
     {
         
         public Vector3 RightMostPosition => rightMostPosition.position;
-        public int Difficulty { get; private set; }
-        
+
+        public int Difficulty
+        {
+            get => difficulty;
+            private set => difficulty = value;
+        }
+
+        public PoolType PoolType
+        {
+            get => type;
+            private set => type = value;
+        }
+        [SerializeField] private int difficulty;
         [SerializeField] private PoolType type;
         [SerializeField] private List<ObstaclePart> obstacleParts;
         [SerializeField] private Transform rightMostPosition;
         
         private List<ObstaclePart> inactiveParts;
 
-
-
-        public void Reset()
+        public void ResetGameObject()
         {
             foreach (var part in obstacleParts)
             {
-                part.Reset();
+                part.ResetGameObject();
             }
         }
 

@@ -9,13 +9,14 @@ namespace Core.StyleRelated
         
         public Renderer Renderer => _renderer;
         
-        protected Renderer _renderer;
+        [SerializeField] protected SpriteRenderer _renderer;
+        
         protected AudioSource _audioSource;
         protected Color color;
 
         private void Awake()
         {
-            _renderer = GetComponent<Renderer>();
+            _renderer = GetComponent<SpriteRenderer>();
             _audioSource = GetComponent<AudioSource>();
         }
         public virtual Style ApplyStyle()
