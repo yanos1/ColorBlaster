@@ -11,8 +11,8 @@ namespace Core.ObstacleGeneration
     {
         public void Shatter()
         {
-            // Play the shatter sound
-            _audioSource.Play();
+            // Play the shatter sound *ADD LATER*
+            // _audioSource.Play();
 
             // Instantiate the shatter effect at the part's position
             GameObject shatterEffect = Instantiate(
@@ -22,7 +22,7 @@ namespace Core.ObstacleGeneration
             );
 
             // Set the color of the shatter effect to match the part's color
-            var shatterRenderer = shatterEffect.GetComponent<Renderer>();  // can be optimised
+            var shatterRenderer = shatterEffect.GetComponent<SpriteRenderer>();  // can be optimised
             if (shatterRenderer != null)
             {
                 shatterRenderer.material.color = _renderer.material.color;
@@ -35,7 +35,7 @@ namespace Core.ObstacleGeneration
         public override Style ApplyStyle()
         {
             Style currentStyle = base.ApplyStyle();
-            _audioSource.clip = currentStyle.ShatterSound;
+            // _audioSource.clip = currentStyle.ShatterSound;
             return null;
         }
         public void ChangeStyle()
@@ -47,13 +47,6 @@ namespace Core.ObstacleGeneration
         {
             gameObject.SetActive(true);
         }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.GetComponent<Bullet>() is not null)
-            {
-                gameObject.SetActive(false);
-            }
-        }
+        
     }
 }

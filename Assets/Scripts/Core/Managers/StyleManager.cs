@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ScriptableObjects;
@@ -15,7 +16,13 @@ namespace Core.Managers
         private void Start()
         {
             currentStyle = styles.First();
+            SetStyle(currentStyle.StyleName);
+
         }
+        
+        
+        // This is a bad function - CHANGE IT. we need to set the style in a better way
+     
 
         public Style GetStyle()
         {

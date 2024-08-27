@@ -65,13 +65,13 @@ namespace ObstacleGeneration
 
         public void ChangeColor()
         {
-            Color[] colors = CoreManager.instance.StyleManager.GetStyle().ColorPalette;
-            UtilityFunctions.ShuffleArray(colors);
+            Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.StyleManager.GetStyle().ColorPalette);
      
 
             for (int i = 0; i < obstacleParts.Count; ++i)
             {
-                obstacleParts[i].Renderer.material.color = colors[i% colors.Length];
+                obstacleParts[i].SetColor(shuffledColors[i% shuffledColors.Length]);
+                
             }
         }
     }

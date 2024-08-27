@@ -4,15 +4,18 @@ namespace Extentions
 {
     public static class UtilityFunctions
     {
-        public static void ShuffleArray<T>(T[] array)
+        public static T[] ShuffleArray<T>(T[] array)
         {
+            T[] copy = (T[])array.Clone();
             System.Random random = new System.Random();
             int n = array.Length;
             for (int i = n - 1; i > 0; i--)
             {
                 int j = random.Next(0, i + 1);
-                (array[i], array[j]) = (array[j], array[i]);
+                (copy[i], copy[j]) = (copy[j], copy[i]);
             }
+
+            return copy;
         }
 
     }

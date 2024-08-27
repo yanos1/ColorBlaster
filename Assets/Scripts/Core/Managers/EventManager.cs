@@ -47,6 +47,10 @@
 
     public enum EventNames
     {
-        SetStyle = 0,
+        None = 0,
+        SetStyle = 1,
+        Shoot = 2,
+        Move = 3
+        
     }
 }

@@ -57,9 +57,9 @@ namespace Core.ObstacleGeneration
 
         private Obstacle GenerateObstacle()
         {
-            Obstacle currentObstacle = _generatorHandler.GetRandomObstacle();
-            activeObstacles.Add(currentObstacle);
+            currentObstacle = _generatorHandler.GetRandomObstacle();
             currentObstacle.transform.position = transform.position;
+            activeObstacles.Add(currentObstacle);
             return currentObstacle;
         }
     }

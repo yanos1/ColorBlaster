@@ -7,7 +7,7 @@ namespace Core.StyleRelated
     public class StyleableObject : MonoBehaviour
     {
         
-        public Renderer Renderer => _renderer;
+        public SpriteRenderer Renderer => _renderer;
         
         [SerializeField] protected SpriteRenderer _renderer;
         
@@ -16,28 +16,38 @@ namespace Core.StyleRelated
 
         private void Awake()
         {
-            _renderer = GetComponent<SpriteRenderer>();
             _audioSource = GetComponent<AudioSource>();
         }
         public virtual Style ApplyStyle()
         {
             Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
-
             // Apply the material from the style
-            _renderer.material = currentStyle.Material;
+            _renderer.sharedMaterial = currentStyle.Material;
 
             // Apply texture and shader from the style (if needed)
             if (currentStyle.Texture != null)
             {
-                _renderer.material.mainTexture = currentStyle.Texture;
+                _renderer.sharedMaterial.mainTexture = currentStyle.Texture;
             }
 
             if (currentStyle.Shader != null)
             {
-                _renderer.material.shader = currentStyle.Shader;
+                _renderer.sharedMaterial.shader = currentStyle.Shader;
             }
 
             return currentStyle;
+        }
+        
+        public Color GetColor()
+        {
+            return color;
+        }
+
+        public void SetColor(Color newColor)
+        {
+            color = newColor;
+            _renderer.color = newColor;
+
         }
     }
 }

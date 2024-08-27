@@ -23,15 +23,7 @@ namespace Core.PlayerRelated
             print("style applied");
         }
 
-        public Color GetColor()
-        {
-            return color;
-        }
-
-        public void SetColor(Color newColor)
-        {
-            color = newColor;
-        }
+      
         
     }
 }
