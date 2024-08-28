@@ -50,7 +50,8 @@
         None = 0,
         SetStyle = 1,
         Shoot = 2,
-        Move = 3
+        Move = 3,
+        IncreaseGameDifficulty = 4
         
     }
 }
