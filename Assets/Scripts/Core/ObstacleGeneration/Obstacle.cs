@@ -58,7 +58,7 @@ namespace ObstacleGeneration
             }
         }
 
-        public virtual void Move()
+        public void Move()
         {
             transform.position -= new Vector3(CoreManager.instance.ObstacleManager.BaseSpeed * Time.deltaTime, 0, 0);
         }

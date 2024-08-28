@@ -66,11 +66,11 @@ namespace Core.Managers
                 weightToObstacleMap[obs.Difficulty].Item2.Add(obs);
 
                 // Print the current state of the dictionary
-                // foreach (var kvp in weightToObstacleMap)
-                // {
-                //     Debug.Log($"Key: {kvp.Key}, Value: (Weight: {kvp.Value.Item1}, Obstacles: {kvp.Value.Item2.Count})");
-                // }
-                // print("----------");
+                foreach (var kvp in weightToObstacleMap)
+                {
+                    Debug.Log($"Key: {kvp.Key}, Value: (Weight: {kvp.Value.Item1}, Obstacles: {kvp.Value.Item2.Count})");
+                }
+                print("----------");
             }
 
            

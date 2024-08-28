@@ -25,16 +25,10 @@ namespace Core.ObstacleGeneration
             _difficultyToObstacleMap = difficultyToObstacleMap;
         }
 
-        private void OnEnable()
+        void Start()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.IncreaseGameDifficulty, AdjustWeights);
         }
-        
-        private void OnDisable()
-        {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.IncreaseGameDifficulty, AdjustWeights);
-        }
- 
+
         public void AddObstacles(int difficulty, int amount)
         {
             var (currentMaxIndex, obstacleList) = _difficultyToObstacleMap[difficulty];
@@ -61,7 +55,7 @@ namespace Core.ObstacleGeneration
 
 
         // this method makes generating easy obstacles less likely and harder obstaclers more likely.
-        public void AdjustWeights(object obj)
+        public void AdjustWeights()
         {
             // Adjust the numbers with a minimum check to avoid negative values
             float aAdjusted =
