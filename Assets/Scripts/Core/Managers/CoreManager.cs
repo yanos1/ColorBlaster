@@ -12,7 +12,7 @@ namespace Core.Managers
         public GameManager GameManager;
 
         public EventManager EventManager;
-
+        
         public ObjectPoolManager PoolManager;
 
         public StyleManager StyleManager;

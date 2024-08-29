@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.Managers;
 using Core.ObstacleGeneration;
 using Extentions;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,15 +11,13 @@ namespace ObstacleGeneration
 {
     public class Obstacle : MonoBehaviour, Resetable
     {
-        
         public Vector3 RightMostPosition => rightMostPosition.position;
-
         public int Difficulty
         {
             get => difficulty;
             private set => difficulty = value;
         }
-
+        
         public PoolType PoolType
         {
             get => type;
@@ -26,19 +25,17 @@ namespace ObstacleGeneration
         }
         [SerializeField] private int difficulty;
         [SerializeField] private PoolType type;
-        [SerializeField] private List<ObstaclePart> obstacleParts;
+        [SerializeField] private List<ObstacleComponent> obstacleComponents;
         [SerializeField] private Transform rightMostPosition;
         
-        private List<ObstaclePart> inactiveParts;
-
         public void ResetGameObject()
         {
-            foreach (var part in obstacleParts)
+            foreach (var part in obstacleComponents)
             {
                 part.ResetGameObject();
             }
         }
-
+        
         void Start()
         {
 
@@ -52,7 +49,7 @@ namespace ObstacleGeneration
 
         public void ChangeStyle()
         {
-            foreach (var part in obstacleParts)
+            foreach (var part in obstacleComponents)
             {
                 part.ChangeStyle();
             }
@@ -66,12 +63,10 @@ namespace ObstacleGeneration
         public void ChangeColor()
         {
             Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.StyleManager.GetStyle().ColorPalette);
-     
-
-            for (int i = 0; i < obstacleParts.Count; ++i)
+            int currentColorIndex = 0;
+            for (int i = 0; i < obstacleComponents.Count; ++i)
             {
-                obstacleParts[i].SetColor(shuffledColors[i% shuffledColors.Length]);
-                
+                currentColorIndex = obstacleComponents[i].SetColor(shuffledColors, currentColorIndex);
             }
         }
     }

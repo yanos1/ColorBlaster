@@ -42,12 +42,5 @@ namespace Core.StyleRelated
         {
             return color;
         }
-
-        public void SetColor(Color newColor)
-        {
-            color = newColor;
-            _renderer.color = newColor;
-
-        }
     }
 }
