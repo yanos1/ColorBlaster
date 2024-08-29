@@ -25,7 +25,7 @@ namespace Core.ObstacleGeneration
             var shatterRenderer = shatterEffect.GetComponent<SpriteRenderer>();  // can be optimised
             if (shatterRenderer != null)
             {
-                shatterRenderer.material.color = _renderer.material.color;
+                shatterRenderer.color = _renderer.color;
             }
 
             // Disable the part or handle other shatter logic

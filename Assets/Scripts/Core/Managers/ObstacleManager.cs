@@ -42,7 +42,7 @@ namespace Core.Managers
         {
             foreach (var obstacle in obstacleData)
             {
-                obstacle.ChangeStyle();
+                obstacle.ApplyStyle();
             }
         }
 

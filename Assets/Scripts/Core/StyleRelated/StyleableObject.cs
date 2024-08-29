@@ -42,5 +42,15 @@ namespace Core.StyleRelated
         {
             return color;
         }
+<<<<<<< Updated upstream
+=======
+
+        public void SetColor(Color newColor)
+        {
+            color = newColor;
+            _renderer.color = color;
+
+        }
+>>>>>>> Stashed changes
     }
 }

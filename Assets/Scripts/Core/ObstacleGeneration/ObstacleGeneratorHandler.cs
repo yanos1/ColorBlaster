@@ -101,7 +101,7 @@ namespace Core.ObstacleGeneration
             GameObject obstaclePrefab = CoreManager.instance.PoolManager.GetFromPool(nextObstacle.PoolType);
             Obstacle obstacle = obstaclePrefab.GetComponent<Obstacle>();
             obstacle.ResetGameObject();
-            obstacle.ChangeColor();
+            obstacle.ChangeColors();
             return obstacle;
         }
     }

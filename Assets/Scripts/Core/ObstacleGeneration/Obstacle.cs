@@ -25,7 +25,11 @@ namespace ObstacleGeneration
         }
         [SerializeField] private int difficulty;
         [SerializeField] private PoolType type;
+<<<<<<< Updated upstream
         [SerializeField] private List<ObstacleComponent> obstacleComponents;
+=======
+        [SerializeField] private List<ObstacleComponent> obstacleParts;
+>>>>>>> Stashed changes
         [SerializeField] private Transform rightMostPosition;
         
         public void ResetGameObject()
@@ -47,11 +51,11 @@ namespace ObstacleGeneration
             Move();
         }
 
-        public void ChangeStyle()
+        public void ApplyStyle()
         {
             foreach (var part in obstacleComponents)
             {
-                part.ChangeStyle();
+                part.ApplyStyle();
             }
         }
 
@@ -60,13 +64,21 @@ namespace ObstacleGeneration
             transform.position -= new Vector3(CoreManager.instance.ObstacleManager.BaseSpeed * Time.deltaTime, 0, 0);
         }
 
-        public void ChangeColor()
+        public void ChangeColors()
         {
             Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.StyleManager.GetStyle().ColorPalette);
+<<<<<<< Updated upstream
             int currentColorIndex = 0;
             for (int i = 0; i < obstacleComponents.Count; ++i)
             {
                 currentColorIndex = obstacleComponents[i].SetColor(shuffledColors, currentColorIndex);
+=======
+            int curIndex = 0;
+            for (int i = 0; i < obstacleParts.Count; ++i)
+            {
+               curIndex =  obstacleParts[i].SetColor(shuffledColors, curIndex);
+                
+>>>>>>> Stashed changes
             }
         }
     }
