@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
-using Core.ObstacleGeneration;
+﻿using System;
+using System.Collections.Generic;
+using Core.Managers;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
-namespace ObstacleGeneration
+namespace Core.ObstacleGeneration
 {
     public class ObstacleComponent : MonoBehaviour, Resetable
     {
         [SerializeField] private List<ObstaclePart> parts;
+
+        
 
         public void ResetGameObject()
         {
@@ -28,10 +32,14 @@ namespace ObstacleGeneration
         {
             foreach (var part in parts)
             {
-                part.Renderer.color = colors[index++ % colors.Length];
+                part.SetColor(colors[index++ % colors.Length]);
             }
 
             return index;
         }
+
+        
+        
+        
     }
 }

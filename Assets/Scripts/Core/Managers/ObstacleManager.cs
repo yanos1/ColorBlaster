@@ -55,25 +55,23 @@ namespace Core.Managers
         {
             foreach (var obs in obstacleData)
             {
-                // Check if the dictionary contains the key
                 if (!weightToObstacleMap.ContainsKey(obs.Difficulty))
                 {
-                    // If not, add a new entry with the default weight and a new list of obstacles
                     weightToObstacleMap[obs.Difficulty] = (0, new List<Obstacle>());
                 }
-
-                // Add the obstacle to the appropriate list
+                
                 weightToObstacleMap[obs.Difficulty].Item2.Add(obs);
-
-                // Print the current state of the dictionary
-                foreach (var kvp in weightToObstacleMap)
-                {
-                    Debug.Log($"Key: {kvp.Key}, Value: (Weight: {kvp.Value.Item1}, Obstacles: {kvp.Value.Item2.Count})");
-                }
-                print("----------");
+                
+                // foreach (var kvp in weightToObstacleMap)
+                // {
+                //     Debug.Log(
+                //         $"Key: {kvp.Key}, Value: (Weight: {kvp.Value.Item1}, Obstacles: {kvp.Value.Item2.Count})");
+                // }
+                //
+                // print("----------");
             }
 
-           
+
             // this line makes all the obstacles in difficulty 1 available, the rest of ddiculties arent available at start
             weightToObstacleMap[1] = (weightToObstacleMap[1].Item2.Count, weightToObstacleMap[1].Item2);
         }

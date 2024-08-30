@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Extentions
 {
@@ -16,6 +18,28 @@ namespace Extentions
             }
 
             return copy;
+        }
+
+        public static IEnumerator FadeImage(Renderer renderer, float startValue, float endValue, float imageFadeDuration)
+        {
+            float elapsedTime = 0f;
+
+            Color color = renderer.material.color;
+
+            while (elapsedTime < imageFadeDuration)
+            {
+                elapsedTime += Time.deltaTime;
+                float currentAlpha = Mathf.Lerp(startValue, endValue, elapsedTime / imageFadeDuration);
+        
+                color.a = currentAlpha;
+        
+                renderer.material.color = color;
+
+                yield return null;
+            }
+
+            color.a = endValue;
+            renderer.material.color = color;
         }
 
     }

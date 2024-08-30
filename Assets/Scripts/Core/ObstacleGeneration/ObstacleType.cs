@@ -3,12 +3,13 @@
     public enum PoolType
     {
         None = 0,
-        WallObstacle1 = 1,
-        WallObstacle2 = 2,
-        FanObstacle1 = 3,
-        FanObstacle2 = 4,
-        GearWheelObstacle = 5,
-        Bullet = 6,
+        EasyWallObstacle1 = 1,
+        EasyWallObstacle2 = 2,
+        EasyFanObstacle1 = 3,
+        EasyGearWheelObstacle = 4,
+        NormalFanObstacle1 = 5,
+        NormalRocketObstacle=6,
+        Bullet = 7
         
     }
 }

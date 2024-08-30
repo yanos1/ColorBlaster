@@ -64,7 +64,6 @@ namespace Core.Managers
             }
             else
             {
-                Debug.Log("Touchscreen not detected or initialized.");
             }
         }
 

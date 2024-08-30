@@ -17,7 +17,11 @@ namespace ObstacleGeneration
             get => difficulty;
             private set => difficulty = value;
         }
-        
+        public float MoveSpeed
+        {
+            get => moveSpeed;
+            set => moveSpeed = value;
+        }
         public PoolType PoolType
         {
             get => type;
@@ -25,13 +29,11 @@ namespace ObstacleGeneration
         }
         [SerializeField] private int difficulty;
         [SerializeField] private PoolType type;
-<<<<<<< Updated upstream
         [SerializeField] private List<ObstacleComponent> obstacleComponents;
-=======
-        [SerializeField] private List<ObstacleComponent> obstacleParts;
->>>>>>> Stashed changes
         [SerializeField] private Transform rightMostPosition;
         
+        private float moveSpeed;
+
         public void ResetGameObject()
         {
             foreach (var part in obstacleComponents)
@@ -40,9 +42,9 @@ namespace ObstacleGeneration
             }
         }
         
-        void Start()
+        public virtual void Start()
         {
-
+            moveSpeed = CoreManager.instance.ObstacleManager.BaseSpeed;
         }
 
         // Update is called once per frame
@@ -61,25 +63,19 @@ namespace ObstacleGeneration
 
         public void Move()
         {
-            transform.position -= new Vector3(CoreManager.instance.ObstacleManager.BaseSpeed * Time.deltaTime, 0, 0);
+            transform.position -= new Vector3(moveSpeed * Time.deltaTime, 0, 0);
         }
 
         public void ChangeColors()
         {
             Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.StyleManager.GetStyle().ColorPalette);
-<<<<<<< Updated upstream
             int currentColorIndex = 0;
             for (int i = 0; i < obstacleComponents.Count; ++i)
             {
                 currentColorIndex = obstacleComponents[i].SetColor(shuffledColors, currentColorIndex);
-=======
-            int curIndex = 0;
-            for (int i = 0; i < obstacleParts.Count; ++i)
-            {
-               curIndex =  obstacleParts[i].SetColor(shuffledColors, curIndex);
-                
->>>>>>> Stashed changes
+
             }
         }
     }
 }
+

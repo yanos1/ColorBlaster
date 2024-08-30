@@ -38,13 +38,13 @@ namespace Core.ObstacleGeneration
                     Obstacle obstacle = activeObstacles[i];
 
                     // Check if the obstacle crossed the generation threshold
-                    if (obstacle == currentObstacle && obstacle.transform.position.x < generationThreshold)
+                    if (obstacle == currentObstacle && obstacle.RightMostPosition.x < generationThreshold)
                     {
                         currentObstacle = GenerateObstacle();
                     }
 
                     // Check if the obstacle crossed the return-to-pool threshold
-                    if (obstacle.transform.position.x < returnToPoolThreshold)
+                    if (obstacle.RightMostPosition.x < returnToPoolThreshold)
                     {
                         CoreManager.instance.PoolManager.ReturnToPool(obstacle.PoolType, obstacle.gameObject);
                         activeObstacles.RemoveAt(i); // Remove it from the active list

@@ -623,9 +623,15 @@ MonoBehaviour:
   - type: 2
     prefab: {fileID: 7084234598654905003, guid: 5c960a1a1a66a4b4499a4f4874048c5c, type: 3}
     count: 3
-  - type: 6
+  - type: 7
     prefab: {fileID: 2242495670987547168, guid: 17889344a936adf4e8d28dcd666abd2a, type: 3}
-    count: 10
+    count: 15
+  - type: 3
+    prefab: {fileID: 621210479612147459, guid: 2b5024d3d589dfb4382cb459fbd0f5c9, type: 3}
+    count: 3
+  - type: 6
+    prefab: {fileID: 2875097408178664016, guid: 5d789d75d48a6a84ab11a6617d92ce8a, type: 3}
+    count: 1
 --- !u!4 &1772854451
 Transform:
   m_ObjectHideFlags: 0
@@ -673,6 +679,8 @@ MonoBehaviour:
   obstacleData:
   - {fileID: 4593088555778702884, guid: e9cc0ce5ffa0e9949b2cb860b20f9196, type: 3}
   - {fileID: 1886096160865127755, guid: 5c960a1a1a66a4b4499a4f4874048c5c, type: 3}
+  - {fileID: 7874923284203621253, guid: 2b5024d3d589dfb4382cb459fbd0f5c9, type: 3}
+  - {fileID: 5737639846289160380, guid: 5d789d75d48a6a84ab11a6617d92ce8a, type: 3}
   baseSpeed: 3
 --- !u!4 &2013968359
 Transform:

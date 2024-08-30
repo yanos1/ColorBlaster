@@ -43,7 +43,7 @@ namespace Core.ObstacleGeneration
             ApplyStyle(); // Reapply the current style when the style changes
         }
 
-        public void ResetGameObject()
+        public virtual void ResetGameObject()
         {
             gameObject.SetActive(true);
         }

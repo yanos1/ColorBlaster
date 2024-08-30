@@ -19,7 +19,7 @@ namespace Core.Managers
         {
             if (Time.time > time + ChangeDifficultyInterval)
             {
-                CoreManager.instance.EventManager.InvokeEvent(EventNames.IncreaseGameDifficulty, null);
+                // CoreManager.instance.EventManager.InvokeEvent(EventNames.IncreaseGameDifficulty, null);
             }
         }
     }
