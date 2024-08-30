@@ -12,6 +12,9 @@ namespace ObstacleGeneration
     public class Obstacle : MonoBehaviour, Resetable
     {
         public Vector3 RightMostPosition => rightMostPosition.position;
+
+        public List<ObstacleComponent> ObstacleComponents => obstacleComponents;
+
         public int Difficulty
         {
             get => difficulty;
@@ -33,6 +36,7 @@ namespace ObstacleGeneration
         [SerializeField] private Transform rightMostPosition;
         
         private float moveSpeed;
+        private bool stop;
 
         public void ResetGameObject()
         {

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3495355062483403668}
-  - component: {fileID: 1395759996456165925}
+  - component: {fileID: 2084105168619154934}
   m_Layer: 0
   m_Name: WallComponent
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 8861390499341487928}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1395759996456165925
+--- !u!114 &2084105168619154934
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,11 +42,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 831250115945865344}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac44c4c24ac94864a54bc0110cf2b5d5, type: 3}
+  m_Script: {fileID: 11500000, guid: b3c4189ef5ce4df9b084dd303291dab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parts:
-  - {fileID: 8295498733474562862}
+  - {fileID: 2557454894274207486}
+  isSingleColorComponent: 0
 --- !u!1 &8186761375300714043
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,8 +58,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8861390499341487928}
   - component: {fileID: 2823863115819416238}
-  - component: {fileID: 8295498733474562862}
   - component: {fileID: 5148119021333205458}
+  - component: {fileID: 2557454894274207486}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -133,19 +134,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8295498733474562862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8186761375300714043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b985387ff6f340f991b39157d3a9c10e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _renderer: {fileID: 2823863115819416238}
 --- !u!61 &5148119021333205458
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -191,3 +179,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2557454894274207486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8186761375300714043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca239bd9cff9a047963f1f4ef8599a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _renderer: {fileID: 2823863115819416238}

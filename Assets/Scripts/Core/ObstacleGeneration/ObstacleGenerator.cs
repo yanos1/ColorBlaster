@@ -17,6 +17,8 @@ namespace Core.ObstacleGeneration
         private List<Obstacle> activeObstacles;
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> obstacleData;
         private Obstacle currentObstacle;
+        private float maxTimeBetweenObstacles = 8f;
+        private float lastTimeGenerated;
 
 
         // Update is called once per frame
@@ -33,11 +35,18 @@ namespace Core.ObstacleGeneration
         {
             while (true)
             {
+                if (Time.time > lastTimeGenerated + maxTimeBetweenObstacles)
+                {
+                    CoreManager.instance.PoolManager.ReturnToPool(currentObstacle.PoolType, currentObstacle.gameObject);
+                    currentObstacle = GenerateObstacle();
+                }
+                
                 for (int i = activeObstacles.Count - 1; i >= 0; i--)
                 {
                     Obstacle obstacle = activeObstacles[i];
 
                     // Check if the obstacle crossed the generation threshold
+                   
                     if (obstacle == currentObstacle && obstacle.RightMostPosition.x < generationThreshold)
                     {
                         currentObstacle = GenerateObstacle();
@@ -57,6 +66,7 @@ namespace Core.ObstacleGeneration
 
         private Obstacle GenerateObstacle()
         {
+            lastTimeGenerated = Time.time;
             currentObstacle = _generatorHandler.GetRandomObstacle();
             currentObstacle.transform.position = transform.position;
             activeObstacles.Add(currentObstacle);

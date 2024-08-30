@@ -12,7 +12,6 @@ namespace Core.StyleRelated
         [SerializeField] protected SpriteRenderer _renderer;
         
         protected AudioSource _audioSource;
-        protected Color color;
 
         private void Awake()
         {
@@ -40,14 +39,13 @@ namespace Core.StyleRelated
         
         public Color GetColor()
         {
-            return color;
+            return _renderer.color;
         }
 
 
         public void SetColor(Color newColor)
         {
-            color = newColor;
-            _renderer.color = color;
+            _renderer.color = newColor;
         }
     }
 }
