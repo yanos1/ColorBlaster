@@ -176,6 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parts:
   - {fileID: 6624746219587418851}
+  isSingleColorComponent: 0
 --- !u!1 &5706652029252158743 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8186761375300714043, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}

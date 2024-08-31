@@ -181,6 +181,7 @@ MonoBehaviour:
   parts:
   - {fileID: 5459710603184321903}
   - {fileID: 3057477558134059983}
+  isSingleColorComponent: 0
   RotationSpeed: {x: 0, y: 0, z: 25}
 --- !u!114 &5459710603184321903 stripped
 MonoBehaviour:
@@ -301,4 +302,5 @@ MonoBehaviour:
   parts:
   - {fileID: 8559840379453114854}
   - {fileID: 1684406764531486534}
+  isSingleColorComponent: 0
   RotationSpeed: {x: 0, y: 0, z: -25}
