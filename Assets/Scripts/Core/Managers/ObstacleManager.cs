@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Core.Managers
 {
-    public class ObstacleManager : MonoBehaviour
+    public class ObstacleManager
     {
         public float BaseSpeed
         {
@@ -16,44 +16,44 @@ namespace Core.Managers
             set => baseSpeed = Mathf.Max(0, value); // Ensures speed is not set to a negative value
         }
 
-        [SerializeField] private Obstacle[] obstacleData;
+        private Obstacle[] _obstacleData;
 
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> weightToObstacleMap = new();
-        [SerializeField] private float baseSpeed;
+        private float baseSpeed;
 
-
-        private void OnEnable()
+        public ObstacleManager(Obstacle[] obstacleData, float obstaclesBaseSpeed)
         {
+            _obstacleData = obstacleData;
+            baseSpeed = obstaclesBaseSpeed;
+
+            // Manually handle event subscriptions
             CoreManager.instance.EventManager.AddListener(EventNames.SetStyle, ChangeObstacleStyle);
+            
+            InitializeMap();
         }
 
-        private void OnDisable()
+        public void OnDestroy()
         {
+            // Clean up event subscriptions
             CoreManager.instance.EventManager.RemoveListener(EventNames.SetStyle, ChangeObstacleStyle);
         }
 
         public Dictionary<int, ValueTuple<int, List<Obstacle>>> GetParsedObstacleData()
         {
-            InitializeMap();
             return weightToObstacleMap;
         }
 
         private void ChangeObstacleStyle(object obj)
         {
-            foreach (var obstacle in obstacleData)
+            foreach (var obstacle in _obstacleData)
             {
                 obstacle.ApplyStyle();
             }
         }
 
-        public float GetBaseSpeed()
-        {
-            return baseSpeed;
-        }
-
         private void InitializeMap()
         {
-            foreach (var obs in obstacleData)
+            foreach (var obs in _obstacleData)
             {
                 if (!weightToObstacleMap.ContainsKey(obs.Difficulty))
                 {
@@ -61,19 +61,13 @@ namespace Core.Managers
                 }
                 
                 weightToObstacleMap[obs.Difficulty].Item2.Add(obs);
-                
-                // foreach (var kvp in weightToObstacleMap)
-                // {
-                //     Debug.Log(
-                //         $"Key: {kvp.Key}, Value: (Weight: {kvp.Value.Item1}, Obstacles: {kvp.Value.Item2.Count})");
-                // }
-                //
-                // print("----------");
             }
 
-
-            // this line makes all the obstacles in difficulty 1 available, the rest of ddiculties arent available at start
-            weightToObstacleMap[1] = (weightToObstacleMap[1].Item2.Count, weightToObstacleMap[1].Item2);
+            // Make all the obstacles in difficulty 1 available initially
+            if (weightToObstacleMap.ContainsKey(1))
+            {
+                weightToObstacleMap[1] = (weightToObstacleMap[1].Item2.Count, weightToObstacleMap[1].Item2);
+            }
         }
     }
 }

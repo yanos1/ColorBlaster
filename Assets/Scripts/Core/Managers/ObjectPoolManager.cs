@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Extentions;
 using ObstacleGeneration;
 using UnityEngine;
 
@@ -13,15 +14,14 @@ namespace Core.Managers
         public GameObject prefab;
         public int count; // Number of objects to pre-create
     }
-    public class ObjectPoolManager : MonoBehaviour
+    public class ObjectPoolManager 
     {
-        [SerializeField] private  PoolEntry[] _entries;
-        
-
+        private  PoolEntry[] _entries;
         private Dictionary<PoolType, Queue<GameObject>> pools;
 
-        private void Awake()
+        public ObjectPoolManager(PoolEntry[] entries)
         {
+            _entries = entries;
             InitializePool();
         }
 
@@ -35,7 +35,8 @@ namespace Core.Managers
 
                 for (int i = 0; i < entry.count; i++)
                 {
-                    GameObject obj = Instantiate(entry.prefab);
+                    GameObject obj = MonoRunner.InstantiateObject(entry.prefab);
+                    MonoRunner.MonoRunnerDontDestroyOnLoad(obj);
                     obj.SetActive(false);
                     objectQueue.Enqueue(obj);
                 }

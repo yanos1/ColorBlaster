@@ -7,22 +7,23 @@ using UnityEngine;
 
 namespace Core.Managers
 {
-    public class StyleManager : MonoBehaviour
+    public class StyleManager
     {
         // [SerializeField] private Volume _volume;
-        [SerializeField] private List<Style> styles;
+        private Style[] _styles;
         private Style currentStyle; // in the future take this from the saved style for the user
 
-        private void Start()
+
+        public StyleManager(Style[] styles)
         {
+            _styles = styles;
             currentStyle = styles.First();
             SetStyle(currentStyle.StyleName);
-
         }
-        
-        
+
+
         // This is a bad function - CHANGE IT. we need to set the style in a better way
-     
+
 
         public Style GetStyle()
         {
@@ -31,20 +32,17 @@ namespace Core.Managers
 
         public void SetStyle(StyleName newStyle)
         {
-            foreach (var style in styles)
+            foreach (var style in _styles)
             {
                 if (style.GetStyle() == newStyle)
                 {
                     currentStyle = style;
                 }
             }
+
             CoreManager.instance.EventManager.InvokeEvent(EventNames.SetStyle, null);
-            
         }
-        
     }
-
-
 
 
     public enum StyleName
@@ -55,6 +53,4 @@ namespace Core.Managers
         Pastel = 3,
         Metal = 4
     }
-
-    
 }

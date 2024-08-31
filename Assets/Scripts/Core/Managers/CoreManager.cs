@@ -1,43 +1,48 @@
 ﻿using System;
 using Core.PlayerRelated;
+using Extentions;
+using ObstacleGeneration;
+using ScriptableObjects;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Core.Managers
 {
-    public class CoreManager : MonoBehaviour
+    public class CoreManager
     {
         public static CoreManager instance;
+        public GameManager GameManager { get; private set; }
+        public EventManager EventManager { get; private set; }
+        public TimeManager TimeManager { get; private set; }
+        public ObjectPoolManager PoolManager { get; private set; }
+        public StyleManager StyleManager { get; private set; }
+        public ObstacleManager ObstacleManager { get; private set; }
+        public Player Player { get; set; }
+        public MonoRunner MonoRunner { get; private set; }
 
-        public GameManager GameManager;
-
-        public EventManager EventManager;
-        
-        public ObjectPoolManager PoolManager;
-
-        public StyleManager StyleManager;
-
-        public ObstacleManager ObstacleManager;
-
-        public ColorBlockManager ColorBlockManager;
-        
-        public Player Player;
-        //
-
-        //
-        // public UIManager uiManager;
-        //
-        // public SoundManager soundManager;
-
-        private void Awake()
+        public CoreManager()
         {
             if (instance != null)
             {
-                return;
+                throw new InvalidOperationException("CoreManager instance already exists.");
             }
+            instance = this;
 
             EventManager = new EventManager();
-            instance = this;
+            MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
+        }
+
+        public void InitializeManagers(Style[] styles, Obstacle[] obstacles, PoolEntry[] poolEntries, float baseObstacleSpeed, Action onComplete)
+        {
+            // Initialize all the managers here
+            GameManager = new GameManager();
+            EventManager = new EventManager();
+            TimeManager = new TimeManager();
+            StyleManager = new StyleManager(styles);
+            PoolManager = new ObjectPoolManager(poolEntries);
+            ObstacleManager = new ObstacleManager(obstacles, baseObstacleSpeed);
+
+            // Notify that initialization is complete
+            onComplete?.Invoke();
         }
     }
 }

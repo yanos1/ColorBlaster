@@ -1,26 +1,25 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
 namespace Core.Managers
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager
     {
-        private float time;
+        private float lastObstacleUpdateTime;
         private float ChangeDifficultyInterval = 18f;
 
 
-        private void Start()
+        public GameManager()
         {
-            time = Time.time;
+            lastObstacleUpdateTime = Time.time;
+            CoreManager.instance.EventManager.AddListener(EventNames.StartGame, StartGame);
         }
 
-        private void Update()
+        private void StartGame(object obj)
         {
-            if (Time.time > time + ChangeDifficultyInterval)
-            {
-                // CoreManager.instance.EventManager.InvokeEvent(EventNames.IncreaseGameDifficulty, null);
-            }
+            CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty,null,ChangeDifficultyInterval);
         }
     }
 }
