@@ -7,6 +7,7 @@ namespace Core.PlayerRelated
 {
     public class Player : MonoBehaviour
     {
+        
         private void Awake()
         {
             CoreManager.instance.Player = this;
@@ -19,6 +20,9 @@ namespace Core.PlayerRelated
         [SerializeField] private Shooter shooter;
         [SerializeField] private PlayerMovement playerMovement;
 
-       
+        private void Update()
+        {
+            
+        }
     }
 }

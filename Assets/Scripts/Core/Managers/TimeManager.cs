@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core.Managers;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TimeManager
@@ -17,16 +18,23 @@ public class TimeManager
         _runningCoroutines = new List<Coroutine>();
         _isPaused = false;
         _elapsedTime = 0f;
+        _coroutineRunner.StopCoroutine(UpdateTime());
+        CoreManager.instance.EventManager.AddListener(EventNames.RestartGame, CancelAllCoroutines);
     }
 
-    // Run a function X times every Y seconds
-    public void RunFunctionXTImes(EventNames eventName,object parameters, int repeatitions, float interval)
+    public void OnDestroy()
     {
-        Coroutine coroutine = _coroutineRunner.StartCoroutine(RunXTImesCoroutine(eventName,parameters, repeatitions, interval));
+        CoreManager.instance.EventManager.RemoveListener(EventNames.RestartGame, CancelAllCoroutines);
+    }
+    // Run a function X times every Y seconds
+    public void RunFunctionXTImes(EventNames eventName, object parameters, int repeatitions, float interval)
+    {
+        Coroutine coroutine =
+            _coroutineRunner.StartCoroutine(RunXTImesCoroutine(eventName, parameters, repeatitions, interval));
         _runningCoroutines.Add(coroutine);
     }
 
-    private IEnumerator RunXTImesCoroutine(EventNames eventName,object parameters, int x, float interval)
+    private IEnumerator RunXTImesCoroutine(EventNames eventName, object parameters, int x, float interval)
     {
         int count = 0;
         while (count < x)
@@ -45,11 +53,11 @@ public class TimeManager
     // Run a function infinitely every Y seconds
     public void RunFunctionInfinitely(EventNames eventName, object parameters, float interval)
     {
-        Coroutine coroutine = _coroutineRunner.StartCoroutine(RunInfinitelyCoroutine(eventName,parameters, interval));
+        Coroutine coroutine = _coroutineRunner.StartCoroutine(RunInfinitelyCoroutine(eventName, parameters, interval));
         _runningCoroutines.Add(coroutine);
     }
 
-    private IEnumerator RunInfinitelyCoroutine(EventNames eventName,object parameters, float interval)
+    private IEnumerator RunInfinitelyCoroutine(EventNames eventName, object parameters, float interval)
     {
         while (true)
         {
@@ -58,7 +66,7 @@ public class TimeManager
                 yield return null; // Wait until unpaused
             }
 
-            CoreManager.instance.EventManager.InvokeEvent(eventName,parameters);
+            CoreManager.instance.EventManager.InvokeEvent(eventName, parameters);
             yield return new WaitForSeconds(interval);
         }
     }
@@ -70,24 +78,31 @@ public class TimeManager
     }
 
     // Update the elapsed time (to be called every frame)
-    public void UpdateTime(float deltaTime)
+    public IEnumerator UpdateTime()
     {
-        if (!_isPaused)
+        while (true)
         {
-            _elapsedTime += deltaTime;
+            if (!_isPaused)
+            {
+                _elapsedTime += Time.deltaTime;
+            }
+
+            yield return null;
         }
     }
 
     // Pause time
-    public void PauseTime()
+    public void PauseGame()
     {
         _isPaused = true;
+        Time.timeScale = 0;
     }
 
     // Resume time
     public void ResumeTime()
     {
         _isPaused = false;
+        Time.timeScale = 1;
     }
 
     // Reset time
@@ -97,12 +112,13 @@ public class TimeManager
     }
 
     // Cancel all running coroutines
-    public void CancelAllCoroutines()
+    public void CancelAllCoroutines(object obj)
     {
         foreach (var coroutine in _runningCoroutines)
         {
             _coroutineRunner.StopCoroutine(coroutine);
         }
+
         _runningCoroutines.Clear();
     }
 }

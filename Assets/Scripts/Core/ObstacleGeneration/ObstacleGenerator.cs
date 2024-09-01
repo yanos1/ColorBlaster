@@ -30,6 +30,27 @@ namespace Core.ObstacleGeneration
             currentObstacle = GenerateObstacle();
             StartCoroutine(ActiveObstaclesUpdate());
         }
+        //
+        // private void OnEnable()
+        // {
+        //     CoreManager.instance.EventManager.AddListener(EventNames.GameOver, ResetObstacles);
+        //
+        // }
+        //
+        // private void OnDisable()
+        // {
+        //     CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, ResetObstacles);
+        //
+        // }
+        // private void ResetObstacles(object obj)
+        // {
+        //     foreach (var obstacle in activeObstacles)
+        //     {
+        //         CoreManager.instance.PoolManager.ReturnToPool(obstacle.PoolType, obstacle.gameObject);
+        //     }
+        //     activeObstacles.Clear();
+        // }
+
 
         private IEnumerator ActiveObstaclesUpdate()
         {

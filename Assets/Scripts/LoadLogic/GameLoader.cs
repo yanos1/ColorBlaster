@@ -169,6 +169,7 @@ namespace LoaderLogic
 
     private void OnLoadData(Scene scene, LoadSceneMode mode)
     {
+        print("called onload data");
         SceneManager.sceneLoaded -= OnLoadData;
         loaderUI.AddProgress(30);
         OnLoadComplete();
@@ -176,6 +177,7 @@ namespace LoaderLogic
 
     private void OnLoadComplete()
     {
+        print("finished loading");
         CoreManager.instance.EventManager.InvokeEvent(EventNames.StartGame, null);
         Destroy(loaderUI.transform.root.gameObject);
         Destroy(gameObject);

@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844a887edee0f5743b6ef54e258d039b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficulty: 1
+  difficulty: 3
   type: 9
   obstacleComponents:
   - {fileID: 1881465546824688108}

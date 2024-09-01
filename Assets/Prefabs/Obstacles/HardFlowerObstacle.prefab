@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 7329379215585767173}
   - component: {fileID: 4564010476227397230}
   m_Layer: 0
-  m_Name: NormalFlowerObstacle
+  m_Name: HardFlowerObstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844a887edee0f5743b6ef54e258d039b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficulty: 1
+  difficulty: 3
   type: 7
   obstacleComponents:
   - {fileID: 8358775430175006341}

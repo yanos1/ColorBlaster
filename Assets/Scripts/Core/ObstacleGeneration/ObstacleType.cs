@@ -9,11 +9,12 @@
         EasyGearWheelObstacle = 4,
         NormalFanObstacle1 = 5,
         NormalRocketObstacle=6,
-        NormalFlowerObstacle = 7,
+        HardFlowerObstacle = 7,
         NormalWallObstacle1 = 8,
         HardWallObstacle1 = 9,
+        HardChasingObstacle1=10,
         
-        Bullet = 10,
+        Bullet = 11,
         
     }
 }

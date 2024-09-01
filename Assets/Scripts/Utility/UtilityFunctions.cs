@@ -41,6 +41,8 @@ namespace Extentions
             color.a = endValue;
             renderer.material.color = color;
         }
+        
+        
 
     }
 }

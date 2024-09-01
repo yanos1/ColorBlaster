@@ -390,6 +390,7 @@ MonoBehaviour:
   - {fileID: 4564010476227397230, guid: 93007b65b889ced4393c3ab5b5732db1, type: 3}
   - {fileID: 2031825499238378032, guid: 5d789d75d48a6a84ab11a6617d92ce8a, type: 3}
   - {fileID: 1845636849903950649, guid: f7b6f37cf6181c84fb27111b3f2223c9, type: 3}
+  - {fileID: 7546963337934849875, guid: 01bce2e4344c3f5409a52cb585690c91, type: 3}
   poolEntries:
   - type: 1
     prefab: {fileID: 6722398912885778981, guid: e9cc0ce5ffa0e9949b2cb860b20f9196, type: 3}
@@ -412,9 +413,12 @@ MonoBehaviour:
   - type: 8
     prefab: {fileID: 6374342312143154174, guid: f7b6f37cf6181c84fb27111b3f2223c9, type: 3}
     count: 3
-  - type: 10
+  - type: 11
     prefab: {fileID: 2242495670987547168, guid: 17889344a936adf4e8d28dcd666abd2a, type: 3}
     count: 20
+  - type: 10
+    prefab: {fileID: 7094198225102497736, guid: 01bce2e4344c3f5409a52cb585690c91, type: 3}
+    count: 3
   baseObstacleSpeed: 3
 --- !u!4 &1527330090
 Transform:
@@ -425,7 +429,7 @@ Transform:
   m_GameObject: {fileID: 1527330088}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 893.294, y: 395.1512, z: 0.4441605}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Core.Managers
 {
-    
     [System.Serializable]
     public struct PoolEntry
     {
@@ -14,15 +13,23 @@ namespace Core.Managers
         public GameObject prefab;
         public int count; // Number of objects to pre-create
     }
-    public class ObjectPoolManager 
+
+    public class ObjectPoolManager
     {
-        private  PoolEntry[] _entries;
+        private PoolEntry[] _entries;
         private Dictionary<PoolType, Queue<GameObject>> pools;
+        private Dictionary<PoolType, List<GameObject>> activeObjects = new();
 
         public ObjectPoolManager(PoolEntry[] entries)
         {
             _entries = entries;
             InitializePool();
+            CoreManager.instance.EventManager.AddListener(EventNames.GameOver, ResetPool);
+        }
+
+        public void OnDestroy()
+        {
+            CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, ResetPool);
         }
 
         private void InitializePool()
@@ -42,27 +49,29 @@ namespace Core.Managers
                 }
 
                 pools.Add(entry.type, objectQueue);
+                activeObjects[entry.type] = new List<GameObject>(); // Initialize activeObjects list for this type
             }
         }
 
         public GameObject GetFromPool(PoolType type)
         {
-            if (pools.ContainsKey(type))
+            if (pools.TryGetValue(type, out var queue))
             {
-                if (pools[type].Count > 0)
+                if (queue.Count > 0)
                 {
-                    GameObject obj = pools[type].Dequeue();
+                    GameObject obj = queue.Dequeue();
                     obj.SetActive(true);
+                    activeObjects[type].Add(obj);
                     return obj;
                 }
                 else
                 {
-                    Debug.Log($"No available objects of type {type} in pool. Consider increasing initial count.");
+                    Debug.LogWarning($"No available objects of type {type} in pool. Consider increasing initial count.");
                 }
             }
             else
             {
-                Debug.Log($"Object type {type} not found in pool.");
+                Debug.LogError($"Object type {type} not found in pool.");
             }
 
             return null;
@@ -70,14 +79,41 @@ namespace Core.Managers
 
         public void ReturnToPool(PoolType type, GameObject obj)
         {
-            if (pools.ContainsKey(type))
+            if (pools.TryGetValue(type, out var queue))
             {
                 obj.SetActive(false);
-                pools[type].Enqueue(obj);
+                queue.Enqueue(obj);
+
+                // Ensure the object is part of the active list before removing it
+                if (activeObjects.TryGetValue(type, out var activeList))
+                {
+                    if (activeList.Contains(obj))
+                    {
+                        activeList.Remove(obj);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Returned object of type {type} was not found in active objects list.");
+                    }
+                }
             }
             else
             {
                 Debug.LogError($"Object type {type} not found in pool.");
+            }
+        }
+
+        public void ResetPool(object obj)
+        {
+            foreach (var kvp in activeObjects)
+            {
+                var type = kvp.Key;
+                var list = kvp.Value;
+
+                foreach (var item in list.ToArray()) // Use ToArray() to avoid modifying the collection while iterating
+                {
+                    ReturnToPool(type, item);
+                }
             }
         }
     }

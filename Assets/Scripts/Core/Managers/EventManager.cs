@@ -1,4 +1,6 @@
-﻿namespace Core.Managers
+﻿using UnityEngine;
+
+namespace Core.Managers
 {
     using System;
     using System.Collections.Generic;
@@ -35,6 +37,7 @@
 
         public void InvokeEvent(EventNames eventName, object obj)
         {
+
             if (_activeListeners.TryGetValue(eventName, out var listOfEvents))
             {
                 for (int i = 0; i < listOfEvents.Count; i++)
@@ -53,5 +56,8 @@
         Move = 3,
         IncreaseGameDifficulty = 4,
         StartGame = 5,
+        GameOver = 6,
+
+        RestartGame =7,
     }
 }

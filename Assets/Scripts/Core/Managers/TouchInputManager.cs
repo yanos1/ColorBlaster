@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,56 +15,78 @@ namespace Core.Managers
         private float minDistanceBetweenPlayerAndTouch = 0.2f;
         private bool shootTouch = false;
 
-        private void Update()
+
+        private void OnEnable()
         {
-            List<TouchControl> touches = new();
+            CoreManager.instance.EventManager.AddListener(EventNames.StartGame, ActivateGameToucbControl);
+        }
 
-            if (Touchscreen.current != null)
+        private void OnDisable()
+        {
+            CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, ActivateGameToucbControl);
+        }
+        private void ActivateGameToucbControl(object obj)
+        {
+            StartCoroutine(SelfUpdate());
+        }
+
+        private IEnumerator SelfUpdate()
+        {
+            while (CoreManager.instance.GameManager.IsGameActive)
             {
-                // Filter out touches that are not in Began, Moved, or Stationary phases
-                touches = Touchscreen.current.touches
-                    .Where(touch => touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began ||
-                                    touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved ||
-                                    touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Stationary)
-                    .ToList();
+                List<TouchControl> touches = new();
 
-
-                if (touches.Count > 0)
+                if (Touchscreen.current != null)
                 {
-                    // Get the first active touch
-                    Vector2 primaryTouchPosition = touches[0].position.ReadValue();
+                    // Filter out touches that are not in Began, Moved, or Stationary phases
+                    touches = Touchscreen.current.touches
+                        .Where(touch => touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began ||
+                                        touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved ||
+                                        touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Stationary)
+                        .ToList();
 
-                    // Convert touch position to world coordinates
-                    Vector3 touchPosition = new Vector3(primaryTouchPosition.x, primaryTouchPosition.y, Camera.main.nearClipPlane);
-                    Vector3 worldTouchPosition = Camera.main.ScreenToWorldPoint(touchPosition);
 
-                    if (touches.Count == 1)
+                    if (touches.Count > 0)
                     {
-                        HandleSingleTouch(worldTouchPosition);
-                    }
-                    else if (touches.Count > 1)
-                    {
-                        // Handle second touch
-                        Vector2 secondTouchPosition = touches[1].position.ReadValue();
+                        // Get the first active touch
+                        Vector2 primaryTouchPosition = touches[0].position.ReadValue();
 
-                        // Ignore touches at (0, 0)
-                        if (secondTouchPosition != Vector2.zero)
+                        // Convert touch position to world coordinates
+                        Vector3 touchPosition = new Vector3(primaryTouchPosition.x, primaryTouchPosition.y,
+                            Camera.main.nearClipPlane);
+                        Vector3 worldTouchPosition = Camera.main.ScreenToWorldPoint(touchPosition);
+
+                        if (touches.Count == 1)
                         {
-                            Vector3 secondTouchWorldPosition = new Vector3(secondTouchPosition.x, secondTouchPosition.y, Camera.main.nearClipPlane);
-                            secondTouchWorldPosition = Camera.main.ScreenToWorldPoint(secondTouchWorldPosition);
-
-                            HandleMultipleTouches(worldTouchPosition, secondTouchWorldPosition);
+                            HandleSingleTouch(worldTouchPosition);
                         }
+                        else if (touches.Count > 1)
+                        {
+                            // Handle second touch
+                            Vector2 secondTouchPosition = touches[1].position.ReadValue();
+
+                            // Ignore touches at (0, 0)
+                            if (secondTouchPosition != Vector2.zero)
+                            {
+                                Vector3 secondTouchWorldPosition = new Vector3(secondTouchPosition.x,
+                                    secondTouchPosition.y, Camera.main.nearClipPlane);
+                                secondTouchWorldPosition = Camera.main.ScreenToWorldPoint(secondTouchWorldPosition);
+
+                                HandleMultipleTouches(worldTouchPosition, secondTouchWorldPosition);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("No active touches, resetting shootTouch flag.");
+                        shootTouch = false;
                     }
                 }
                 else
                 {
-                    Debug.Log("No active touches, resetting shootTouch flag.");
-                    shootTouch = false;
                 }
-            }
-            else
-            {
+
+                yield return null;
             }
         }
 

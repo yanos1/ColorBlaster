@@ -63,6 +63,7 @@ namespace Core.ObstacleGeneration
         // this method makes generating easy obstacles less likely and harder obstaclers more likely.
         public void AdjustWeights(object obj)
         {
+            print("ADJUST EIGHT");
             // Adjust the numbers with a minimum check to avoid negative values
             float aAdjusted =
                 Mathf.Max((_difficultyToChanceMap[0].second - 5), 0); // First number goes lower, but not below 0

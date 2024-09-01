@@ -7,6 +7,16 @@ using UnityEngine;
 
 namespace Core.Managers
 {
+
+    public class StyleSaver : ISaveData
+    {
+        public string StyleName;
+
+        public StyleSaver(string styleName)
+        {
+            StyleName = styleName;
+        }
+    }
     public class StyleManager
     {
         // [SerializeField] private Volume _volume;
@@ -17,13 +27,28 @@ namespace Core.Managers
         public StyleManager(Style[] styles)
         {
             _styles = styles;
-            currentStyle = styles.First();
-            SetStyle(currentStyle.StyleName);
+
+            // Try to load the saved style, defaulting to Neon if no saved style is found
+            CoreManager.instance.SaveManager.Load<StyleSaver>(savedData =>
+            {
+                if (savedData != null && Enum.TryParse(savedData.StyleName, out StyleName savedStyle))
+                {
+                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == savedStyle);
+                }
+
+                // Fallback to default Neon style if no saved style was found or invalid style saved
+                if (savedData == null)
+                {
+                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == StyleName.Pastel);
+                    CoreManager.instance.SaveManager.Save(new StyleSaver(StyleName.Pastel.ToString()));
+
+                }
+
+                SetStyle(currentStyle.StyleName);
+            });
+        
+
         }
-
-
-        // This is a bad function - CHANGE IT. we need to set the style in a better way
-
 
         public Style GetStyle()
         {
