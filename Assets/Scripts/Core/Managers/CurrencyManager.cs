@@ -1,5 +1,6 @@
 ﻿namespace Core.Managers
 {
+    // currency should be saved on the cloud to prevent cheating !
     public class CurrencyManager
     {
         private int currency;

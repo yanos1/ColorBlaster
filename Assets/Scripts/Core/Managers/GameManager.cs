@@ -9,10 +9,9 @@ namespace Core.Managers
     public class GameManager
     {
         private float lastObstacleUpdateTime;
-        private float ChangeDifficultyInterval = 3f;
+        private float ChangeDifficultyInterval = 18f;
         private bool isGameActive;
-        public bool IsGameActive { get; private set; }
-
+        public bool IsGameActive => isGameActive;
 
 
         public GameManager()

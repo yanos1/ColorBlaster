@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections;
+using TMPro;
+using UnityEngine;
+
+namespace Core.Managers
+{
+    public class ProgressManager : MonoBehaviour
+    {
+        [SerializeField] private TextMeshProUGUI distanceUI;
+        private int _currentDistanceTraveled;
+        private int _bestDistanceTraveled;
+
+        public void Start()
+        {
+            _currentDistanceTraveled = 0;
+            // bestDistanceTraveled = GetFromDataBase();
+        }
+
+        private void OnEnable()
+        {
+            CoreManager.instance.EventManager.AddListener(EventNames.StartGame,StartMeasuringDistance);
+            print("measure distance");
+        }
+
+        private void OnDisable()
+        {
+            CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame,StartMeasuringDistance);
+
+        }
+        
+        private void StartMeasuringDistance(object obj)
+        {
+            print("start measuring");
+            StartCoroutine(SelfUpdate());
+        }
+
+
+        public IEnumerator SelfUpdate()
+        {
+            while (CoreManager.instance.GameManager.IsGameActive)
+            {
+                _currentDistanceTraveled += 1;
+                distanceUI.text = _currentDistanceTraveled + "m";
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+        
+    }
+}
