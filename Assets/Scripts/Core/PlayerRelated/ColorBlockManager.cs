@@ -1,4 +1,6 @@
-﻿using Core.Managers;
+﻿using System;
+using System.Collections;
+using Core.Managers;
 using UnityEngine;
 
 namespace Core.PlayerRelated
@@ -8,7 +10,7 @@ namespace Core.PlayerRelated
     {
         [SerializeField] private ColorBlock[] blocks;
         [SerializeField] float rotationSpeed; // Speed of rotation
-        
+
         private Player player;
 
         private void Start()
@@ -24,6 +26,26 @@ namespace Core.PlayerRelated
             for (int i = 0; i < styleColors.Length; ++i)
             {
                 blocks[i].SetColor(styleColors[i]);
+                print(blocks[i].name);
+            }
+        }
+
+        private void OnEnable()
+        {
+            CoreManager.instance.EventManager.AddListener(EventNames.EndRun, ShatterColorBlocks);
+        }
+
+        private void OnDisable()
+        {
+            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, ShatterColorBlocks);
+        }
+
+        // ReSharper disable Unity.PerformanceAnalysis
+        private void ShatterColorBlocks(object obj)
+        {
+            foreach (var block in blocks)
+            {
+                block.Shatter();
             }
         }
 

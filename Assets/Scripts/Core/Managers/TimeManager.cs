@@ -26,6 +26,7 @@ public class TimeManager
     {
         CoreManager.instance.EventManager.RemoveListener(EventNames.RestartGame, CancelAllCoroutines);
     }
+
     // Run a function X times every Y seconds
     public void RunFunctionXTImes(EventNames eventName, object parameters, int repeatitions, float interval)
     {
@@ -82,36 +83,33 @@ public class TimeManager
     {
         while (true)
         {
-            if (!_isPaused)
-            {
-                _elapsedTime += Time.deltaTime;
-            }
-
+            _elapsedTime += Time.deltaTime;
             yield return null;
         }
     }
 
-    // Pause time
+
+// Pause time
     public void PauseGame()
     {
         _isPaused = true;
         Time.timeScale = 0;
     }
 
-    // Resume time
+// Resume time
     public void ResumeTime()
     {
         _isPaused = false;
         Time.timeScale = 1;
     }
 
-    // Reset time
+// Reset time
     public void ResetTime()
     {
         _elapsedTime = 0;
     }
 
-    // Cancel all running coroutines
+// Cancel all running coroutines
     public void CancelAllCoroutines(object obj)
     {
         foreach (var coroutine in _runningCoroutines)

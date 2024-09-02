@@ -93,7 +93,7 @@ namespace Core.Managers
                     }
                     else
                     {
-                        Debug.LogWarning($"Returned object of type {type} was not found in active objects list.");
+                        Debug.Log($"Returned object of type {type} was not found in active objects list.");
                     }
                 }
             }

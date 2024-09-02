@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using Core.Managers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,7 +12,7 @@ namespace UI
         [SerializeField] private GameObject gameOverPanel;
         void Start()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.GameOver, OpenPanel);
+            CoreManager.instance.EventManager.AddListener(EventNames.GameOver, ShowGameOverPanel);
 
         }
 
@@ -18,12 +20,21 @@ namespace UI
 
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, OpenPanel);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, ShowGameOverPanel);
         }
 
-        private void OpenPanel(object obj)
+        private void ShowGameOverPanel(object obj)
         {
+            StartCoroutine(ShowGameOverPanelAfterDelay());
+        }
+
+        private IEnumerator ShowGameOverPanelAfterDelay()
+        {
+            yield return new WaitForSeconds(1.4f);
             gameOverPanel.SetActive(true);
+            CoreManager.instance.TimeManager.PauseGame();
+
+            
         }
 
 

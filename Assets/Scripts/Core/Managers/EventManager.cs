@@ -59,5 +59,6 @@ namespace Core.Managers
         GameOver = 6,
 
         RestartGame =7,
+        EndRun = 8,
     }
 }

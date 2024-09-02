@@ -31,14 +31,16 @@ namespace Core.PlayerRelated
             {
                 invincible = !invincible;
             }
+            
+            
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (invincible) return;
-            if (other.gameObject.GetComponent<ObstaclePart>() != null) {
-                CoreManager.instance.TimeManager.PauseGame();
-                CoreManager.instance.EventManager.InvokeEvent(EventNames.GameOver, null);
+            ObstaclePart part = other.gameObject.GetComponent<ObstaclePart>();
+            if (part != null) {
+                CoreManager.instance.EventManager.InvokeEvent(EventNames.EndRun, null);
             }
         }
     }

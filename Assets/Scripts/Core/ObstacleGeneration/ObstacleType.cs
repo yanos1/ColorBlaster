@@ -13,8 +13,8 @@
         NormalWallObstacle1 = 8,
         HardWallObstacle1 = 9,
         HardChasingObstacle1=10,
-        
-        Bullet = 11,
+        PastelShatterPrefab=11,
+        Bullet = 12,
         
     }
 }

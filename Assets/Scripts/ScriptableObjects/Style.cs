@@ -1,4 +1,5 @@
 ﻿using Core.Managers;
+using ObstacleGeneration;
 using UnityEngine;
 
 namespace ScriptableObjects
@@ -11,7 +12,7 @@ namespace ScriptableObjects
         [SerializeField] private Material material;
         [SerializeField] private Texture texture;
         [SerializeField] private Shader shader;
-        [SerializeField] private GameObject shatterPrefab; // Prefab for shatter effect
+        [SerializeField] private PoolType shatterType; // Prefab for shatter effect
         [SerializeField] private AudioClip shatterSound;
 
         // Public read-only properties to access private fields
@@ -20,7 +21,7 @@ namespace ScriptableObjects
         public Material Material => material;
         public Texture Texture => texture;
         public Shader Shader => shader;
-        public GameObject ShatterPrefab => shatterPrefab;
+        public PoolType ShatterType => shatterType;
         public AudioClip ShatterSound => shatterSound;
 
         // Probably add stats for the volume (to change glow and stuff)

@@ -53,7 +53,6 @@ namespace Core.PlayerRelated
             ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();
             if (obstacle is not null)
             {
-                print($"{obstacle.GetColor()}  {_renderer.color}");
                 if (_renderer.color == obstacle.GetColor())
                 {
                     obstacle.Shatter();
