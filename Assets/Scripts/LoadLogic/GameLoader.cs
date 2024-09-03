@@ -137,7 +137,7 @@ namespace LoaderLogic
         // loaderUI.AddProgress(50);
 
         SceneManager.sceneLoaded += OnLoadData;
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("MainMenu");
         yield return null;
     }
 
@@ -178,7 +178,6 @@ namespace LoaderLogic
     private void OnLoadComplete()
     {
         print("finished loading");
-        CoreManager.instance.EventManager.InvokeEvent(EventNames.StartGame, null);
         Destroy(loaderUI.transform.root.gameObject);
         Destroy(gameObject);
     }
