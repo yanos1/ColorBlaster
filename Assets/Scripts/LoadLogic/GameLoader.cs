@@ -20,6 +20,7 @@ namespace LoaderLogic
         [SerializeField] private Style[] stylesList;
         [SerializeField] private Obstacle[] obstaclesList;
         [SerializeField] private PoolEntry[] poolEntries;
+        [SerializeField] private TextAsset itemCosts;
 
         [SerializeField] private float baseObstacleSpeed;
 
@@ -40,7 +41,7 @@ namespace LoaderLogic
         private void LoadCoreManager()
         {
            var coreManager =  new CoreManager();
-           coreManager.InitializeManagers(stylesList, obstaclesList, poolEntries, baseObstacleSpeed, OnCoreManagersLoaded);
+           coreManager.InitializeManagers(itemCosts, stylesList, obstaclesList, poolEntries, baseObstacleSpeed, OnCoreManagersLoaded);
             
         }
 

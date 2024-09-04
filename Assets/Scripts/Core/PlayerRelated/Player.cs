@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Core.Managers;
+using Extentions;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,11 +13,21 @@ namespace Core.PlayerRelated
         public Shooter Shooter => shooter;
         public PlayerMovement PlayerMovement => playerMovement;
 
+        public bool IsDead
+        {
+            get => isDead;
+            set => isDead = value;
+        }
+
         [SerializeField] private Shooter shooter;
         [SerializeField] private PlayerMovement playerMovement;
 
+        private Vector3 startPos;
+        private bool isDead;
         private static float fallMagnitude => 2f;
-        private static float outOfBounds => -8f;
+        private static float outOfBounds => -6.5f;
+        private static float reviveDuration => 0.5f; // time for player to return to position after death
+
 
         private Rigidbody2D rb;
 
@@ -22,40 +35,58 @@ namespace Core.PlayerRelated
         private void Awake()
         {
             CoreManager.instance.Player = this;
-            
             rb = GetComponent<Rigidbody2D>();
+            startPos = transform.position;
+            isDead = false;
         }
 
         private void OnEnable()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.EndRun, Fall);
-            CoreManager.instance.EventManager.AddListener(EventNames.StartGame, ResetGameObject);
+            CoreManager.instance.EventManager.AddListener(EventNames.KillPlayer, Fall);
+            CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, MakeAlive);
+            CoreManager.instance.EventManager.AddListener(EventNames.Revive, ResetGameObject);
         }
 
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, Fall);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, ResetGameObject);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.KillPlayer, Fall);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, MakeAlive);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.Revive, ResetGameObject);
         }
 
         private void Fall(object obj)
         {
-            rb.gravityScale = fallMagnitude;
+            isDead = true;
+            StartCoroutine(UtilityFunctions.MoveObjectOverTime(
+                gameObject, 
+                transform.position, 
+                Quaternion.identity,
+                transform.position + Vector3.up * GetFallDistance(), 
+                Quaternion.identity, 
+                reviveDuration, 
+                () => 
+                {
+                    CoreManager.instance.EventManager.InvokeEvent(EventNames.EndRun, null);
+                   
+                }
+            ));
         }
-        
+
+        private float GetFallDistance()
+        {
+            return outOfBounds - transform.position.y;
+        }
+
 
         public void ResetGameObject(object obj)
         {
-            rb.gravityScale = 0;
+            StartCoroutine(UtilityFunctions.MoveObjectOverTime(gameObject, transform.position, Quaternion.identity,
+                startPos, Quaternion.identity, reviveDuration));
         }
 
-        private void Update()
+        private void MakeAlive(object obj)
         {
-            if (transform.position.y < outOfBounds)
-            {
-                CoreManager.instance.EventManager.InvokeEvent(EventNames.GameOver, null);
-
-            }
+            isDead = false;
         }
     }
 }

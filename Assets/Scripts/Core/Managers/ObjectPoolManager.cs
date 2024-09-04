@@ -24,12 +24,12 @@ namespace Core.Managers
         {
             _entries = entries;
             InitializePool();
-            CoreManager.instance.EventManager.AddListener(EventNames.GameOver, ResetPool);
+            CoreManager.instance.EventManager.AddListener(EventNames.EndRun, ResetPool);
         }
 
         public void OnDestroy()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, ResetPool);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, ResetPool);
         }
 
         private void InitializePool()

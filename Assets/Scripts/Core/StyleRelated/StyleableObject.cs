@@ -42,9 +42,8 @@ namespace Core.StyleRelated
         {
             // Play the shatter sound *ADD LATER*
             // _audioSource.Play();
-
+            print("SHATTER");
             // Instantiate the shatter effect at the part's position
-            print($" name is {name}");
             CoreManager.instance.PoolManager.GetFromPool(CoreManager.instance.StyleManager.GetStyle()
                 .ShatterType).GetComponent<ShatterParticles>().Init(this);
 

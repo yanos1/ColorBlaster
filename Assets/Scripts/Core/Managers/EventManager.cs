@@ -51,14 +51,22 @@ namespace Core.Managers
     public enum EventNames
     {
         None = 0,
+        
         SetStyle = 1,
+        
         Shoot = 2,
         Move = 3,
+        
         IncreaseGameDifficulty = 4,
+        
         StartGame = 5,
         GameOver = 6,
-
         RestartGame =7,
         EndRun = 8,
+        Revive = 9,
+        
+        AddCurrency = 10,
+        KillPlayer =11,
+        FinishedReviving = 12,
     }
 }

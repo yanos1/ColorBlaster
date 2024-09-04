@@ -22,5 +22,7 @@ namespace Core.ObstacleGeneration
             gameObject.SetActive(true);
         }
         
+   
+        
     }
 }

@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Unity.VisualScripting;
+using Unity.VisualScripting.FullSerializer;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +24,8 @@ namespace Extentions
             return copy;
         }
 
-        public static IEnumerator FadeImage(Renderer renderer, float startValue, float endValue, float imageFadeDuration)
+        public static IEnumerator FadeImage(Renderer renderer, float startValue, float endValue,
+            float imageFadeDuration)
         {
             float elapsedTime = 0f;
 
@@ -30,9 +35,9 @@ namespace Extentions
             {
                 elapsedTime += Time.deltaTime;
                 float currentAlpha = Mathf.Lerp(startValue, endValue, elapsedTime / imageFadeDuration);
-        
+
                 color.a = currentAlpha;
-        
+
                 renderer.material.color = color;
 
                 yield return null;
@@ -41,8 +46,27 @@ namespace Extentions
             color.a = endValue;
             renderer.material.color = color;
         }
-        
-        
+
+        public static IEnumerator MoveObjectOverTime(GameObject obj, Vector3 startingPos, Quaternion startingRotation,
+            Vector3 endingPos, Quaternion endingRotation, float duration, Action onComplete = null)
+        {
+            float timeElapsed = 0;
+            float percentageCompleted = 0;
+            while (percentageCompleted < 1)
+            {
+                timeElapsed += Time.deltaTime;
+                percentageCompleted = timeElapsed / duration;
+                obj.transform.position = Vector3.Lerp(startingPos, endingPos, percentageCompleted);
+                obj.transform.rotation = Quaternion.Lerp(startingRotation, endingRotation, percentageCompleted);
+                yield return null;
+            }
+
+            obj.transform.position = endingPos;
+            obj.transform.rotation = endingRotation;
+    
+            // Invoke the callback if provided
+            onComplete?.Invoke();
+        }
 
     }
 }

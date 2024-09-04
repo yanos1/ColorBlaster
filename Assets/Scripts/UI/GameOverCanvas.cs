@@ -10,49 +10,41 @@ namespace UI
     {
         // Start is called before the first frame update
         [SerializeField] private GameObject gameOverPanel;
+        [SerializeField] private GameObject oneMoreAttemptPanel;
         void Start()
         {
             CoreManager.instance.EventManager.AddListener(EventNames.GameOver, ShowGameOverPanel);
+            CoreManager.instance.EventManager.AddListener(EventNames.EndRun, ShowOneMoreAttemptMenu);
 
         }
-
-        // Update is called once per frame
 
         private void OnDisable()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, ShowGameOverPanel);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, ShowOneMoreAttemptMenu);
         }
 
         private void ShowGameOverPanel(object obj)
         {
-            StartCoroutine(ShowGameOverPanelAfterDelay());
+            StartCoroutine(ShowGamePanelPanelAfterDelay(gameOverPanel, 0.7f));
         }
 
-        private IEnumerator ShowGameOverPanelAfterDelay()
+        private void ShowOneMoreAttemptMenu(object obj)
         {
-            yield return new WaitForSeconds(1.4f);
-            gameOverPanel.SetActive(true);
-            CoreManager.instance.TimeManager.PauseGame();
-
-            
+            StartCoroutine(ShowGamePanelPanelAfterDelay(oneMoreAttemptPanel, 1.2f,true));
         }
 
-
-        // will be called by a UI button
-        public void RestartGame()
+        private IEnumerator ShowGamePanelPanelAfterDelay(GameObject panel, float delay, bool pause=false)
         {
-            CoreManager.instance.EventManager.InvokeEvent(EventNames.RestartGame, null);
-            SceneManager.sceneLoaded += OnGameReset;
-            SceneManager.LoadScene("GameScene");
-            
+            yield return new WaitForSeconds(delay);
+            panel.SetActive(true);
+            if (pause)
+            {
+                CoreManager.instance.TimeManager.PauseGame();
+            }
         }
 
-        private void OnGameReset(Scene arg0, LoadSceneMode arg1)
-        {
-            SceneManager.sceneLoaded -= OnGameReset;
-            CoreManager.instance.TimeManager.ResumeTime();
-            CoreManager.instance.EventManager.InvokeEvent(EventNames.StartGame, null);
 
-        }
+  
     }
 }

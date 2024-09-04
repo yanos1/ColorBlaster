@@ -1,4 +1,6 @@
-﻿namespace Core.PlayerRelated
+﻿using Core.Managers;
+
+namespace Core.PlayerRelated
 {
     using UnityEngine;
 
@@ -11,6 +13,7 @@
         
         void Update()
         {
+            if(CoreManager.instance.Player.IsDead) return;
             // Get the vertical input (up and down arrows or W/S keys)
             float verticalInput = Input.GetAxis("Vertical");
 
@@ -25,7 +28,7 @@
         public void Move(Vector3 direction)
         {
             // Move the player up
-            Vector3 newPosition = transform.position + direction * moveSpeed * Time.deltaTime;
+            Vector3 newPosition = transform.position + direction * (moveSpeed * Time.deltaTime);
 
             // Clamp the player's position within the bounds
             newPosition.y = Mathf.Clamp(newPosition.y, minYPosition, maxYPosition);

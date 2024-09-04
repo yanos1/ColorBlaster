@@ -18,6 +18,7 @@ namespace Core.Managers
         public StyleManager StyleManager { get; private set; }
         public CurrencyManager CurrencyManager { get; private set; }
         public ObstacleManager ObstacleManager { get; private set; }
+        public ItemCostManager CostManager { get; private set; }
         public Player Player { get; set; }
         public MonoRunner MonoRunner { get; private set; }
 
@@ -35,7 +36,7 @@ namespace Core.Managers
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
         }
 
-        public void InitializeManagers(Style[] styles, Obstacle[] obstacles, PoolEntry[] poolEntries, float baseObstacleSpeed, Action onComplete)
+        public void InitializeManagers(TextAsset itemCosts, Style[] styles, Obstacle[] obstacles, PoolEntry[] poolEntries, float baseObstacleSpeed, Action onComplete)
         {
             // Initialize all the managers here
             GameManager = new GameManager();
@@ -44,6 +45,8 @@ namespace Core.Managers
             CurrencyManager = new CurrencyManager();
             PoolManager = new ObjectPoolManager(poolEntries);
             ObstacleManager = new ObstacleManager(obstacles, baseObstacleSpeed);
+            CostManager = new ItemCostManager(itemCosts);
+            
             
 
             // Notify that initialization is complete

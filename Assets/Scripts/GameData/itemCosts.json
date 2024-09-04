@@ -1,0 +1,52 @@
+﻿{
+  "items": [
+    {
+      "item": "Revive",
+      "cost": 100
+    },
+    {
+      "item": "Style1",
+      "cost": 200
+    },
+    {
+      "item": "Style2",
+      "cost": 400
+    },
+    {
+      "item": "Style3",
+      "cost": 600
+    },
+    {
+      "item": "Colors1",
+      "cost": 100
+    },
+    {
+      "item": "Colors2",
+      "cost": 100
+    },
+    {
+      "item": "Colors3",
+      "cost": 100
+    },
+    {
+      "item": "Character1",
+      "cost": 300
+    },
+    {
+      "item": "Character2",
+      "cost": 300
+    },
+    {
+      "item": "Character3",
+      "cost": 300
+    },
+    {
+      "item": "Boost1",
+      "cost": 70
+    },
+    {
+      "item": "Boost2",
+      "cost": 140
+    }
+  ]
+}

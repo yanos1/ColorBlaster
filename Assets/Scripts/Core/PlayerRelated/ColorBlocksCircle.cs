@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections;
 using Core.Managers;
+using Core.ObstacleGeneration;
+using Extentions;
+using UnityEditor.Playables;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Core.PlayerRelated
 {
@@ -12,7 +16,11 @@ namespace Core.PlayerRelated
         [SerializeField] float rotationSpeed; // Speed of rotation
         [SerializeField] private GameObject rotationAxis;
 
-        private void Start()
+        private bool invincible;
+        private bool playerDead;
+
+
+        private void Awake()
         {
             Color[] styleColors = CoreManager.instance.StyleManager.GetStyle().ColorPalette;
 
@@ -25,32 +33,78 @@ namespace Core.PlayerRelated
             {
                 blocks[i].SetColor(styleColors[i]);
             }
+            
+            invincible = false;
+            playerDead = false;
+
+
         }
 
         private void OnEnable()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.EndRun, ShatterColorBlocks);
+            CoreManager.instance.EventManager.AddListener(EventNames.Revive, RestoreBlocks);
+            CoreManager.instance.EventManager.AddListener(EventNames.KillPlayer, ShatterColorBlocks);
+
         }
 
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, ShatterColorBlocks);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.Revive, RestoreBlocks);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.KillPlayer, ShatterColorBlocks);
         }
 
+
+        private void RestoreBlocks(object obj)
+        {
+            float maxReviveDuration = 0;
+            float baseReviveDuration = 0.5f;
+            for (int i=0; i < blocks.Length ; ++i)
+            {
+                float curReviveDuration = Random.value + baseReviveDuration;
+                maxReviveDuration = Mathf.Max(curReviveDuration, maxReviveDuration);
+                blocks[i].gameObject.SetActive(true);
+                StartCoroutine(UtilityFunctions.MoveObjectOverTime(
+                    blocks[i].gameObject, 
+                    blocks[i].transform.position,
+                    blocks[i].transform.rotation, 
+                    blocks[i].StartingPosition, 
+                    blocks[i].StartingRotation, 
+                    curReviveDuration, i == blocks.Length-1 ? null : () => StartCoroutine(SetPlayerDeadAfterDelay(maxReviveDuration)) // Call the method
+                ));
+            }
+        }
+
+    
+        private IEnumerator SetPlayerDeadAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.FinishedReviving, null);
+            playerDead = false;
+        }
         // ReSharper disable Unity.PerformanceAnalysis
         private void ShatterColorBlocks(object obj)
         {
+            playerDead = true;
             foreach (var block in blocks)
             {
                 block.Shatter();
+                block.transform.position = block.EndGamePosition;
             }
         }
 
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                invincible = !invincible;
+            }
+
+
+            if (playerDead) return;
             RotateAroundPlayer();
         }
+
 
         private void RotateAroundPlayer()
         {
@@ -63,5 +117,7 @@ namespace Core.PlayerRelated
                 }
             }
         }
+
+     
     }
 }

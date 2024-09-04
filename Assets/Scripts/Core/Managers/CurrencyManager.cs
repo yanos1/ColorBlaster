@@ -23,11 +23,13 @@
                     currency = 0; // Default starting currency
                 }
             });
+            currency = 10000; // cheats
         }
 
         public void AddCurrency(int amount)
         {
             currency += amount;
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.AddCurrency, currency);
             SaveCurrency();
         }
 
