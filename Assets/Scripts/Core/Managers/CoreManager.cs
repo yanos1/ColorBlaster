@@ -36,15 +36,15 @@ namespace Core.Managers
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
         }
 
-        public void InitializeManagers(TextAsset itemCosts, Style[] styles, Obstacle[] obstacles, PoolEntry[] poolEntries, float baseObstacleSpeed, Action onComplete)
+        public void InitializeManagers(TextAsset itemCosts, Style[] styles, Obstacle[] obstacles, PoolEntry[] poolEntries, float baseObjectSpeed, Action onComplete)
         {
             // Initialize all the managers here
-            GameManager = new GameManager();
+            GameManager = new GameManager(baseObjectSpeed);
             TimeManager = new TimeManager();
             StyleManager = new StyleManager(styles);
             CurrencyManager = new CurrencyManager();
             PoolManager = new ObjectPoolManager(poolEntries);
-            ObstacleManager = new ObstacleManager(obstacles, baseObstacleSpeed);
+            ObstacleManager = new ObstacleManager(obstacles);
             CostManager = new ItemCostManager(itemCosts);
             
             

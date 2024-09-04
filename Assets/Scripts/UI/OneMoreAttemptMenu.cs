@@ -57,8 +57,10 @@ public class OneMoreAttemptMenu : MonoBehaviour
         }
     }
 
-    public void EndRun()
+    public void EndGame()
     {
+        // TODO add close panel animation here
+        gameObject.SetActive(false);
         CoreManager.instance.EventManager.InvokeEvent(EventNames.GameOver, null);
     }
 }

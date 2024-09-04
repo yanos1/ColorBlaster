@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core.Managers;
 using Extentions;
 using ObstacleGeneration;
 using Unity.VisualScripting;
@@ -15,13 +16,14 @@ namespace Core.ObstacleGeneration
     {
         [SerializeField] private Vector2 spawnYPositionRange;
         [SerializeField] private SpriteRenderer _alertRenderer;
-        [SerializeField] private float speed; // Forward speed of the rocket
         [SerializeField] private float frequency; // Frequency of the sine wave motion
         [SerializeField] private float amplitude; // Amplitude of the sine wave motion
 
         private float imageFadeDuration;
         private int numOfAlerts;
         private int startDirection;
+        private float speedMultiplier; // Multiplier of the baseobstacleSpeed.
+
 
         private void Awake()
         {
@@ -29,6 +31,7 @@ namespace Core.ObstacleGeneration
             numOfAlerts = 3;
             startDirection = Random.value > 0.5 ? 1: -1;
             _alertRenderer.color = _renderer.color;
+            speedMultiplier = 8f;
         }
 
         private IEnumerator AlertThenLaunch()
@@ -48,7 +51,7 @@ namespace Core.ObstacleGeneration
         {
             while (gameObject.activeInHierarchy)
             {
-                Vector3 forwardMovement = Vector3.right * (speed * Time.deltaTime);
+                Vector3 forwardMovement = Vector3.right * (CoreManager.instance.GameManager.CurrentObjectsSpeed * Time.deltaTime);
                 Vector3 sineWaveMotion = Vector3.up * (Mathf.Sin(Time.deltaTime * frequency*startDirection) * amplitude);
 
                 transform.position -= forwardMovement + sineWaveMotion;

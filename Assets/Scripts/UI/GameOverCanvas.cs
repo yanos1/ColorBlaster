@@ -26,6 +26,7 @@ namespace UI
 
         private void ShowGameOverPanel(object obj)
         {
+            print("show panel!");
             StartCoroutine(ShowGamePanelPanelAfterDelay(gameOverPanel, 0.7f));
         }
 
@@ -38,10 +39,10 @@ namespace UI
         {
             yield return new WaitForSeconds(delay);
             panel.SetActive(true);
-            if (pause)
-            {
-                CoreManager.instance.TimeManager.PauseGame();
-            }
+            // if (pause)
+            // {
+            //     CoreManager.instance.TimeManager.PauseGame();
+            // }
         }
 
 

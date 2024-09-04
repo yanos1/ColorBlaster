@@ -48,7 +48,7 @@ namespace ObstacleGeneration
         
         public virtual void Start()
         {
-            moveSpeed = CoreManager.instance.ObstacleManager.BaseSpeed;
+            moveSpeed = CoreManager.instance.GameManager.CurrentObjectsSpeed;
         }
 
         // Update is called once per frame

@@ -20,21 +20,27 @@ namespace Core.Managers
         private void OnEnable()
         {
             CoreManager.instance.EventManager.AddListener(EventNames.StartGame,StartMeasuringDistance);
-            print("measure distance");
+            CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving,StartMeasuringDistance);
+            CoreManager.instance.EventManager.AddListener(EventNames.EndRun,StopMeasuring);
         }
 
         private void OnDisable()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame,StartMeasuringDistance);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving,StartMeasuringDistance);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun,StopMeasuring);
 
         }
         
         private void StartMeasuringDistance(object obj)
         {
-            print("start measuring");
             StartCoroutine(SelfUpdate());
         }
 
+        private void StopMeasuring(object obj)
+        {
+            StopAllCoroutines();
+        }
 
         public IEnumerator SelfUpdate()
         {

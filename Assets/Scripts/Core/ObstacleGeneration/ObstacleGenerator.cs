@@ -17,7 +17,7 @@ namespace Core.ObstacleGeneration
         private List<Obstacle> activeObstacles;
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> obstacleData;
         private Obstacle currentObstacle;
-        private float maxTimeBetweenObstacles = 8f;
+        private float maxTimeBetweenObstacles = 6f;
         private float lastTimeGenerated;
 
 
@@ -30,26 +30,31 @@ namespace Core.ObstacleGeneration
             currentObstacle = GenerateObstacle();
             StartCoroutine(ActiveObstaclesUpdate());
         }
-        //
-        // private void OnEnable()
-        // {
-        //     CoreManager.instance.EventManager.AddListener(EventNames.GameOver, ResetObstacles);
-        //
-        // }
-        //
-        // private void OnDisable()
-        // {
-        //     CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, ResetObstacles);
-        //
-        // }
-        // private void ResetObstacles(object obj)
-        // {
-        //     foreach (var obstacle in activeObstacles)
-        //     {
-        //         CoreManager.instance.PoolManager.ReturnToPool(obstacle.PoolType, obstacle.gameObject);
-        //     }
-        //     activeObstacles.Clear();
-        // }
+        
+        private void OnEnable()
+        {
+            CoreManager.instance.EventManager.AddListener(EventNames.EndRun, PauseObstacles);
+            CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, ResumeObstacles);
+        
+        }
+        
+        private void OnDisable()
+        {
+            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, PauseObstacles);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, ResumeObstacles);
+        
+        }
+
+        private void PauseObstacles(object obj)
+        {
+            StopAllCoroutines();   // this looks like bad practice !! better to save the coroutine, watch out !
+        }
+
+        private void ResumeObstacles(object obj)
+        {
+            StartCoroutine(ActiveObstaclesUpdate());
+
+        }
 
 
         private IEnumerator ActiveObstaclesUpdate()

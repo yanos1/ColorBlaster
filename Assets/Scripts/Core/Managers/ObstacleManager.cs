@@ -10,21 +10,14 @@ namespace Core.Managers
 {
     public class ObstacleManager
     {
-        public float BaseSpeed
-        {
-            get => baseSpeed;
-            set => baseSpeed = Mathf.Max(0, value); // Ensures speed is not set to a negative value
-        }
 
         private Obstacle[] _obstacleData;
 
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> weightToObstacleMap = new();
-        private float baseSpeed;
 
-        public ObstacleManager(Obstacle[] obstacleData, float obstaclesBaseSpeed)
+        public ObstacleManager(Obstacle[] obstacleData)
         {
             _obstacleData = obstacleData;
-            baseSpeed = obstaclesBaseSpeed;
 
             // Manually handle event subscriptions
             CoreManager.instance.EventManager.AddListener(EventNames.SetStyle, ChangeObstacleStyle);
