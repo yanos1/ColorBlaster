@@ -421,7 +421,7 @@ MonoBehaviour:
     count: 3
   - type: 11
     prefab: {fileID: 7054964674181882870, guid: 0171e53055e8377408c024e0d89379b8, type: 3}
-    count: 7
+    count: 13
   itemCosts: {fileID: 4900000, guid: 4537f4657d3f4262a4c3442c5e3acc61, type: 3}
   baseObstacleSpeed: 3
 --- !u!4 &1527330090

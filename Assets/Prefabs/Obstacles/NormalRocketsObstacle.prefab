@@ -190,11 +190,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: amplitude
-      value: 20
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: frequency
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: spawnYPositionRange.x

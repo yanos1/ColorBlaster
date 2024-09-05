@@ -15,7 +15,8 @@ namespace Core.Managers
             get => currentObjectsSpeed;
             set => currentObjectsSpeed = Mathf.Min(maxObstacleSpeed, value);
         }
-
+        
+        private Coroutine increaseGameDiffucultyCoroutine;
         private static int maxObstacleSpeed => 7;
 
         private float lastObstacleUpdateTime;
@@ -46,14 +47,25 @@ namespace Core.Managers
 
         private void ResumeAllObjects(object obj)
         {
+            if (increaseGameDiffucultyCoroutine == null)
+            {
+                increaseGameDiffucultyCoroutine = CoreManager.instance.MonoRunner.StartCoroutine(
+                    CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, null, ChangeDifficultyInterval));
+            }
             currentObjectsSpeed = savedObjectSpeed;
         }
 
         private void StopAllObjects(object obj)
         {
+            if (increaseGameDiffucultyCoroutine != null)
+            {
+                CoreManager.instance.MonoRunner.StopCoroutine(increaseGameDiffucultyCoroutine);
+                increaseGameDiffucultyCoroutine = null;
+            }
             savedObjectSpeed = CurrentObjectsSpeed;
             currentObjectsSpeed = 0;
         }
+
 
 
         private void OnGameOver(object obj)
@@ -64,8 +76,8 @@ namespace Core.Managers
         private void OnStartGame(object obj)
         {
             isGameActive = true;
-            CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, null,
-                ChangeDifficultyInterval);
+            increaseGameDiffucultyCoroutine = CoreManager.instance.MonoRunner.StartCoroutine(CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, null,
+                ChangeDifficultyInterval));
         }
     }
 }

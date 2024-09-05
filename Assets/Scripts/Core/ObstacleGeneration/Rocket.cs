@@ -51,10 +51,10 @@ namespace Core.ObstacleGeneration
         {
             while (gameObject.activeInHierarchy)
             {
-                Vector3 forwardMovement = Vector3.right * (CoreManager.instance.GameManager.CurrentObjectsSpeed * Time.deltaTime);
+                Vector3 forwardMovement = Vector3.left * (CoreManager.instance.GameManager.CurrentObjectsSpeed * speedMultiplier * Time.deltaTime);
                 Vector3 sineWaveMotion = Vector3.up * (Mathf.Sin(Time.deltaTime * frequency*startDirection) * amplitude);
 
-                transform.position -= forwardMovement + sineWaveMotion;
+                transform.position += forwardMovement + sineWaveMotion;
 
                 yield return null;
             }

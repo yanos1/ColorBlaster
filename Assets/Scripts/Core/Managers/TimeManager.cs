@@ -19,23 +19,13 @@ public class TimeManager
         _isPaused = false;
         _elapsedTime = 0f;
         _coroutineRunner.StopCoroutine(UpdateTime());
-        CoreManager.instance.EventManager.AddListener(EventNames.RestartGame, CancelAllCoroutines);
     }
 
-    public void OnDestroy()
-    {
-        CoreManager.instance.EventManager.RemoveListener(EventNames.RestartGame, CancelAllCoroutines);
-    }
+
 
     // Run a function X times every Y seconds
-    public void RunFunctionXTImes(EventNames eventName, object parameters, int repeatitions, float interval)
-    {
-        Coroutine coroutine =
-            _coroutineRunner.StartCoroutine(RunXTImesCoroutine(eventName, parameters, repeatitions, interval));
-        _runningCoroutines.Add(coroutine);
-    }
 
-    private IEnumerator RunXTImesCoroutine(EventNames eventName, object parameters, int x, float interval)
+    public IEnumerator RunFunctionXTImes(EventNames eventName, object parameters, int x, float interval)
     {
         int count = 0;
         while (count < x)
@@ -52,13 +42,9 @@ public class TimeManager
     }
 
     // Run a function infinitely every Y seconds
-    public void RunFunctionInfinitely(EventNames eventName, object parameters, float interval)
-    {
-        Coroutine coroutine = _coroutineRunner.StartCoroutine(RunInfinitelyCoroutine(eventName, parameters, interval));
-        _runningCoroutines.Add(coroutine);
-    }
+  
 
-    private IEnumerator RunInfinitelyCoroutine(EventNames eventName, object parameters, float interval)
+    public IEnumerator RunFunctionInfinitely(EventNames eventName, object parameters, float interval)
     {
         while (true)
         {
@@ -66,9 +52,9 @@ public class TimeManager
             {
                 yield return null; // Wait until unpaused
             }
+            yield return new WaitForSeconds(interval);
 
             CoreManager.instance.EventManager.InvokeEvent(eventName, parameters);
-            yield return new WaitForSeconds(interval);
         }
     }
 
@@ -109,14 +95,5 @@ public class TimeManager
         _elapsedTime = 0;
     }
 
-// Cancel all running coroutines
-    public void CancelAllCoroutines(object obj)
-    {
-        foreach (var coroutine in _runningCoroutines)
-        {
-            _coroutineRunner.StopCoroutine(coroutine);
-        }
-
-        _runningCoroutines.Clear();
-    }
+ 
 }

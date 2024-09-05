@@ -18,7 +18,7 @@ namespace Core.ObstacleGeneration
         // this dict is arranging all obstacles by difficulty levels (1,2,3),
         // the int in the tuple is reffering to the max index currently available for that list of obstacles
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> _difficultyToObstacleMap;
-
+        
 
         public void Init(Dictionary<int, ValueTuple<int, List<Obstacle>>> difficultyToObstacleMap)
         {

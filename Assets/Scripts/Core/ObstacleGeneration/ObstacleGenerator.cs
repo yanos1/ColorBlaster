@@ -63,7 +63,7 @@ namespace Core.ObstacleGeneration
             {
                 if (Time.time > lastTimeGenerated + maxTimeBetweenObstacles)
                 {
-                    CoreManager.instance.PoolManager.ReturnToPool(currentObstacle.PoolType, currentObstacle.gameObject);
+                    // CoreManager.instance.PoolManager.ReturnToPool(currentObstacle.PoolType, currentObstacle.gameObject);
                     currentObstacle = GenerateObstacle();
                 }
                 
