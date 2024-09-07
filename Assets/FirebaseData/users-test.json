@@ -1,0 +1,9 @@
+﻿{
+  "users": {
+    "yan": {
+      "coinAmount": 500,
+      "stylesOwned": ["Style1", "Style2"],
+      "inGamePurchases": ["Item1", "Item2", "Item3"]
+    }
+  }
+}
