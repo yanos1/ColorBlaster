@@ -11,6 +11,12 @@ Assets/Plugins/iOS/GoogleService-Info.plist
 firebase-debug.log
 .firebase/
 
+# Ignore shared object files (typically used for Linux or Android)
+*.so
+
+# Ignore bundle files (could be used for various purposes)
+*.bundle
+
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/

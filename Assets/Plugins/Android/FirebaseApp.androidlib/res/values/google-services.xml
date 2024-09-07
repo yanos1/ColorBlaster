@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id">
+  <string name="gcm_defaultSenderId" translatable="false">278090535865</string>
+  <string name="google_storage_bucket" translatable="false">colorblaster-8fe62.appspot.com</string>
+  <string name="project_id" translatable="false">colorblaster-8fe62</string>
+  <string name="google_api_key" translatable="false">AIzaSyBypctiAL4MTnW-nmpnUcVpC69ktezfeGQ</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBypctiAL4MTnW-nmpnUcVpC69ktezfeGQ</string>
+  <string name="google_app_id" translatable="false">1:278090535865:android:8b7d3d2faad8fa8f675c68</string>
+</resources>
