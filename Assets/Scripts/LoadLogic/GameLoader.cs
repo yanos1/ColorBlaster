@@ -11,6 +11,7 @@ using UnityEngine.UI;
 // using Firebase.Database;
 // using Firebase.Extensions;
 using ObstacleGeneration;
+using Unity.VisualScripting;
 
 namespace LoaderLogic
 {
@@ -24,6 +25,10 @@ namespace LoaderLogic
 
         [SerializeField] private float baseObstacleSpeed;
 
+        
+        // TEST FIELDS
+        [SerializeField] private bool TEST_MODE;
+        [SerializeField] private Obstacle[] testObstacleList;
         private void Start()
         {
             StartCoroutine(StartLoadingAsync());
@@ -41,7 +46,7 @@ namespace LoaderLogic
         private void LoadCoreManager()
         {
            var coreManager =  new CoreManager();
-           coreManager.InitializeManagers(itemCosts, stylesList, obstaclesList, poolEntries, baseObstacleSpeed, OnCoreManagersLoaded);
+           coreManager.InitializeManagers(itemCosts, stylesList,TEST_MODE ? testObstacleList :obstaclesList, poolEntries, baseObstacleSpeed, OnCoreManagersLoaded);
             
         }
 

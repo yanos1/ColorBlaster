@@ -7,7 +7,6 @@ using ObstacleGeneration;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.WSA;
 using Random = UnityEngine.Random;
 
 namespace Core.ObstacleGeneration

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8873034245712205919}
   - component: {fileID: 7546963337934849875}
   m_Layer: 0
-  m_Name: HardChasingObstacle1
+  m_Name: HardChasingWallObstacle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

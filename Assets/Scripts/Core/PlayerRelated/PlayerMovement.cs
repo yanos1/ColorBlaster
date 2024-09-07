@@ -16,10 +16,10 @@ namespace Core.PlayerRelated
             if(CoreManager.instance.Player.IsDead) return;
             // Get the vertical input (up and down arrows or W/S keys)
             float verticalInput = Input.GetAxis("Vertical");
-
+        
             // Calculate the movement direction
             Vector3 moveDirection = new Vector3(0, verticalInput, 0);
-
+        
             // Apply the movement
             transform.Translate(moveDirection * (moveSpeed * Time.deltaTime));
         }

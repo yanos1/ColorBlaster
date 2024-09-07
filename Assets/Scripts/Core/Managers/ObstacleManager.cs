@@ -57,12 +57,14 @@ namespace Core.Managers
             }
 
             // Make all the obstacles in difficulty 1 available initially
-            if (weightToObstacleMap.ContainsKey(1))
+            for (int i=1; i < weightToObstacleMap.Count; ++i)
             {
-                weightToObstacleMap[1] = (weightToObstacleMap[1].Item2.Count, weightToObstacleMap[1].Item2);
-                weightToObstacleMap[2] = (weightToObstacleMap[2].Item2.Count, weightToObstacleMap[2].Item2);  // test
-                weightToObstacleMap[3] = (weightToObstacleMap[3].Item2.Count, weightToObstacleMap[3].Item2);  // test
+                if (weightToObstacleMap.ContainsKey(i))
+                {
+                    weightToObstacleMap[i] = (weightToObstacleMap[i].Item2.Count, weightToObstacleMap[i].Item2);
+                }
             }
+          
         }
     }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "278090535865",
+    "project_id": "colorblaster-8fe62",
+    "storage_bucket": "colorblaster-8fe62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:278090535865:android:8b7d3d2faad8fa8f675c68",
+        "android_client_info": {
+          "package_name": "com.ColorBlaster"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBypctiAL4MTnW-nmpnUcVpC69ktezfeGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

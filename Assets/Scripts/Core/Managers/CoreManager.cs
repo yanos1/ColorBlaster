@@ -13,6 +13,7 @@ namespace Core.Managers
         public GameManager GameManager { get; private set; }
         public EventManager EventManager { get; private set; }
         public SaveManager SaveManager { get; private set; }
+        public UserDataManager UserDataManager { get; private set; }
         public TimeManager TimeManager { get; private set; }
         public ObjectPoolManager PoolManager { get; private set; }
         public StyleManager StyleManager { get; private set; }
@@ -33,12 +34,14 @@ namespace Core.Managers
             // Initilize CoreManagers
             EventManager = new EventManager();
             SaveManager = new SaveManager();
+            UserDataManager = new UserDataManager(SystemInfo.deviceUniqueIdentifier);
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
         }
 
         public void InitializeManagers(TextAsset itemCosts, Style[] styles, Obstacle[] obstacles, PoolEntry[] poolEntries, float baseObjectSpeed, Action onComplete)
         {
             // Initialize all the managers here
+            
             GameManager = new GameManager(baseObjectSpeed);
             TimeManager = new TimeManager();
             StyleManager = new StyleManager(styles);

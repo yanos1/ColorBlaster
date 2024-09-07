@@ -3,7 +3,6 @@ using System.Collections;
 using Core.Managers;
 using Core.ObstacleGeneration;
 using Extentions;
-using UnityEditor.Playables;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -95,10 +94,10 @@ namespace Core.PlayerRelated
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                invincible = !invincible;
-            }
+            // if (Input.GetKeyDown(KeyCode.I))
+            // {
+            //     invincible = !invincible;
+            // }
 
 
             if (playerDead) return;

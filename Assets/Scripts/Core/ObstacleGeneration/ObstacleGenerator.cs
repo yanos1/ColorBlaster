@@ -95,6 +95,7 @@ namespace Core.ObstacleGeneration
             lastTimeGenerated = Time.time;
             currentObstacle = _generatorHandler.GetRandomObstacle();
             currentObstacle.transform.position = transform.position;
+            print(currentObstacle.transform.position);
             activeObstacles.Add(currentObstacle);
             return currentObstacle;
         }

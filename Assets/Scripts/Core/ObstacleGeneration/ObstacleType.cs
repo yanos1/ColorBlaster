@@ -12,9 +12,14 @@
         HardFlowerObstacle = 7,
         NormalWallObstacle1 = 8,
         HardWallObstacle1 = 9,
-        HardChasingObstacle1=10,
+        HardChasingWallObstacle1=10,
         PastelShatterPrefab=11,
         Bullet = 12,
+        EasyChasingWallObstacle1=13,
+        HardVerticallyMovingObstacle1 =14,
+        
+        
+        
         
     }
 }

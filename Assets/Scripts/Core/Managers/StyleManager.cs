@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Core.StyleRelated;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -17,9 +18,11 @@ namespace Core.Managers
             StyleName = styleName;
         }
     }
+    
     public class StyleManager
     {
         // [SerializeField] private Volume _volume;
+        private List<StyleableObject> _styleableObjects;
         private Style[] _styles;
         private Style currentStyle; // in the future take this from the saved style for the user
 
@@ -54,6 +57,8 @@ namespace Core.Managers
         {
             return currentStyle;
         }
+        
+        
 
         public void SetStyle(StyleName newStyle)
         {
