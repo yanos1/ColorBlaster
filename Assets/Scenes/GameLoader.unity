@@ -425,6 +425,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loaderUI: {fileID: 515359770}
   stylesList:
+  - {fileID: 11400000, guid: 68a3958377c88094fb60914059da531d, type: 2}
   - {fileID: 11400000, guid: b159f557ac1d9424a97aec324c2c9ebd, type: 2}
   obstaclesList:
   - {fileID: 4593088555778702884, guid: e9cc0ce5ffa0e9949b2cb860b20f9196, type: 3}

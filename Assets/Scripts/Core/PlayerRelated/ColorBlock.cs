@@ -49,6 +49,10 @@ namespace Core.PlayerRelated
                 CoreManager.instance.EventManager.InvokeEvent(EventNames.KillPlayer, null);
             }
         }
-   
+
+        public override void ChangeStyle()
+        {
+            ApplyStyle();
+        }
     }
 }

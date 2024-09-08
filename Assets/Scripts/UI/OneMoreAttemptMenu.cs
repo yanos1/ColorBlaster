@@ -1,66 +1,66 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Core.Managers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class OneMoreAttemptMenu : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private TextMeshProUGUI currency;
-
-    [SerializeField] private TextMeshProUGUI coinsToRevive;
-    [SerializeField] private Color insufficientCoinsColor;
-    [SerializeField] private Color sufficientCoinsColor;
-
-    private int costToReviveInt;
-
-    // Start is called before the first frame update
-    void Start()
+    public class OneMoreAttemptMenu : MonoBehaviour
     {
-        Int32.TryParse(coinsToRevive.text, out costToReviveInt);
-        coinsToRevive.text = CoreManager.instance.CostManager.GetItemCost(ItemType.Revive).ToString();
-    }
+        [SerializeField] private TextMeshProUGUI currency;
 
-    private void OnEnable()
-    {
-        currency.text = CoreManager.instance.CurrencyManager.GetCurrency().ToString();
-        coinsToRevive.color = CoreManager.instance.CurrencyManager.GetCurrency() < costToReviveInt
-            ? insufficientCoinsColor
-            : sufficientCoinsColor;
-    }
+        [SerializeField] private TextMeshProUGUI coinsToRevive;
+        [SerializeField] private Color insufficientCoinsColor;
+        [SerializeField] private Color sufficientCoinsColor;
 
+        private int costToReviveInt;
 
-    // Update is called once per frame
-    public void ShowAdThenContinueGame()
-    {
-        // TODO
-        // inset ad here 
-        CoreManager.instance.EventManager.InvokeEvent(EventNames.Revive, null);
-    }
-
-    public void PayCoinsThenContinueGame()
-    {
-        if (Int32.TryParse(coinsToRevive.text, out var cost))
+        // Start is called before the first frame update
+        void Start()
         {
-            if (CoreManager.instance.CurrencyManager.GetCurrency() < cost)
-            {
-                // TODO
-                // insert juice
-                return;
-            }
-            CoreManager.instance.TimeManager.ResumeTime();
-            CoreManager.instance.CurrencyManager.AddCurrency(-cost);
-            CoreManager.instance.EventManager.InvokeEvent(EventNames.Revive, null);
-            gameObject.SetActive(false);
+            Int32.TryParse(coinsToRevive.text, out costToReviveInt);
+            coinsToRevive.text = CoreManager.instance.CostManager.GetItemCost(ItemType.Revive).ToString();
         }
-    }
 
-    public void EndGame()
-    {
-        // TODO add close panel animation here
-        gameObject.SetActive(false);
-        CoreManager.instance.EventManager.InvokeEvent(EventNames.GameOver, null);
+        private void OnEnable()
+        {
+            currency.text = CoreManager.instance.UserDataManager.Coins.ToString();
+            coinsToRevive.color = CoreManager.instance.UserDataManager.Coins < costToReviveInt
+                ? insufficientCoinsColor
+                : sufficientCoinsColor;
+        }
+
+
+        // Update is called once per frame
+        public void ShowAdThenContinueGame()
+        {
+            // TODO
+            // inset ad here 
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.Revive, null);
+        }
+
+        public void PayCoinsThenContinueGame()
+        {
+            if (Int32.TryParse(coinsToRevive.text, out var cost))
+            {
+                if (CoreManager.instance.UserDataManager.Coins < cost)
+                {
+                    // TODO
+                    // insert juice
+                    return;
+                }
+                CoreManager.instance.TimeManager.ResumeTime();
+                CoreManager.instance.UserDataManager.AddCoins(-cost);
+                CoreManager.instance.EventManager.InvokeEvent(EventNames.Revive, null);
+                gameObject.SetActive(false);
+            }
+        }
+
+        public void EndGame()
+        {
+            // TODO add close panel animation here
+            gameObject.SetActive(false);
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.GameOver, null);
+        }
     }
 }

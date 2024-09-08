@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Core.StyleRelated
 {
-    public class StyleableObject : MonoBehaviour
+    public abstract class StyleableObject : MonoBehaviour
     {
         public SpriteRenderer Renderer => _renderer;
 
@@ -18,12 +18,14 @@ namespace Core.StyleRelated
             _audioSource = GetComponent<AudioSource>();
         }
 
+        public abstract void ChangeStyle();
+
         public virtual Style ApplyStyle()
         {
             Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
             // Apply the material from the style
             _renderer.sharedMaterial = currentStyle.Material;
-
+            print($"shared material :   {_renderer.sharedMaterial}");
             // Apply texture and shader from the style (if needed)
             if (currentStyle.Texture != null)
             {

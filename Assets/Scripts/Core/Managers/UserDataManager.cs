@@ -45,7 +45,6 @@ namespace Core.Managers
         {
             userRef.GetValueAsync().ContinueWith(task =>
             {
-                Debug.Log("TASK CALLED");
 
                 if (task.IsFaulted)
                 {
@@ -57,7 +56,6 @@ namespace Core.Managers
                 if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-                    Debug.Log($"Snapshot: {snapshot.ToString()}");
 
                     if (snapshot.Exists)
                     {
@@ -88,17 +86,6 @@ namespace Core.Managers
                         }
 
                         Debug.Log("User data retrieved successfully.");
-                        Debug.Log(coins);
-
-                        foreach (var VARIABLE in colorsOwned)
-                        {
-                            Debug.Log(VARIABLE);
-                        }
-
-                        foreach (var VARIABLE in stylesOwned)
-                        {
-                            Debug.Log(VARIABLE);
-                        }
                     }
                     else
                     {
@@ -118,7 +105,7 @@ namespace Core.Managers
         // Initialize default data for a new user
         private void InitializeUserData(string userId)
         {
-            userRef.Child("coinAmount").SetValueAsync(0); // Default coin amount
+            userRef.Child("coinAmount").SetValueAsync(500); // Default coin amount
             userRef.Child("stylesOwned")
                 .SetValueAsync(new List<string> { StyleName.Pastel.ToString() }); // Default styles
             userRef.Child("colorThemesOwned").SetValueAsync(new List<string>(){"Default"}); // Empty color themes
@@ -130,7 +117,7 @@ namespace Core.Managers
         // Update coins and sync to Firebase
         public void AddCoins(int amount)
         {
-            coins += amount;
+            coins = Mathf.Max(0, coins + amount);
             userRef.Child("coinAmount").SetValueAsync(coins);
             Debug.Log($"Added {amount} coins. New total: {coins}");
         }

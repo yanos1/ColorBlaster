@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.StyleRelated;
 using Extentions;
 using ObstacleGeneration;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Core.Managers
@@ -23,7 +25,7 @@ namespace Core.Managers
         public ObjectPoolManager(PoolEntry[] entries)
         {
             _entries = entries;
-            InitializePool();
+            InitializePoolAndApplyStyle();
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun, ResetPool);
         }
 
@@ -32,7 +34,7 @@ namespace Core.Managers
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, ResetPool);
         }
 
-        private void InitializePool()
+        private void InitializePoolAndApplyStyle()
         {
             pools = new Dictionary<PoolType, Queue<GameObject>>();
 
@@ -43,11 +45,17 @@ namespace Core.Managers
                 for (int i = 0; i < entry.count; i++)
                 {
                     GameObject obj = MonoRunner.InstantiateObject(entry.prefab);
+                    StyleableObject styleableObject = obj.GetComponent<StyleableObject>();
+                    if ( styleableObject is not null)
+                    {
+                        styleableObject.ChangeStyle();
+                        CoreManager.instance.StyleManager.AddStyleableObject(styleableObject);
+                    }
                     MonoRunner.MonoRunnerDontDestroyOnLoad(obj);
                     obj.SetActive(false);
                     objectQueue.Enqueue(obj);
                 }
-
+                
                 pools.Add(entry.type, objectQueue);
                 activeObjects[entry.type] = new List<GameObject>(); // Initialize activeObjects list for this type
             }

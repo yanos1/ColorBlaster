@@ -20,16 +20,11 @@ namespace Core.Managers
             _obstacleData = obstacleData;
 
             // Manually handle event subscriptions
-            CoreManager.instance.EventManager.AddListener(EventNames.SetStyle, ChangeObstacleStyle);
             
             InitializeMap();
         }
 
-        public void OnDestroy()
-        {
-            // Clean up event subscriptions
-            CoreManager.instance.EventManager.RemoveListener(EventNames.SetStyle, ChangeObstacleStyle);
-        }
+    
 
         public Dictionary<int, ValueTuple<int, List<Obstacle>>> GetParsedObstacleData()
         {
@@ -38,6 +33,7 @@ namespace Core.Managers
 
         private void ChangeObstacleStyle(object obj)
         {
+            Debug.Log("change style for obstacles  !!!");
             foreach (var obstacle in _obstacleData)
             {
                 obstacle.ApplyStyle();

@@ -71,5 +71,10 @@ namespace Core.PlayerRelated
         {
             _renderer.color = baseColor;
         }
+
+        public override void ChangeStyle()
+        {
+            ApplyStyle();
+        }
     }
 }

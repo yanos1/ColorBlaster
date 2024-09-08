@@ -9,6 +9,10 @@ namespace Core.ObstacleGeneration
 {
     public class ObstaclePart : StyleableObject, Resetable
     {
+        public override void ChangeStyle()
+        {
+            ApplyStyle();
+        }
 
         public override Style ApplyStyle()
         {

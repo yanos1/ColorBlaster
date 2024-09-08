@@ -45,9 +45,10 @@ namespace Core.Managers
             GameManager = new GameManager(baseObjectSpeed);
             TimeManager = new TimeManager();
             StyleManager = new StyleManager(styles);
+            Debug.Log($" manager : {StyleManager}");
+            ObstacleManager = new ObstacleManager(obstacles);
             CurrencyManager = new CurrencyManager();
             PoolManager = new ObjectPoolManager(poolEntries);
-            ObstacleManager = new ObstacleManager(obstacles);
             CostManager = new ItemCostManager(itemCosts);
             
             

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Core.Managers;
 using Core.ObstacleGeneration;
+using Core.StyleRelated;
 using Extentions;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine.Serialization;
 
 namespace ObstacleGeneration
 {
-    public class Obstacle : MonoBehaviour, Resetable
+    public class Obstacle : StyleableObject, Resetable
     {
         public Vector3 RightMostPosition => rightMostPosition.position;
 
@@ -57,14 +58,13 @@ namespace ObstacleGeneration
             Move();
         }
 
-        public void ApplyStyle()
+        public override void ChangeStyle()
         {
             foreach (var part in obstacleComponents)
             {
-                part.ApplyStyle();
+                part.ChangeStyle();
             }
         }
-
         public void Move()
         {
             transform.position -= new Vector3(moveSpeed * Time.deltaTime, 0, 0);

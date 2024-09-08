@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Managers;
+using Core.StyleRelated;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
 namespace Core.ObstacleGeneration
 {
-    public class ObstacleComponent : MonoBehaviour, Resetable
+    public class ObstacleComponent : StyleableObject, Resetable
     {
         [SerializeField] private List<ObstaclePart> parts;
 
@@ -22,13 +23,14 @@ namespace Core.ObstacleGeneration
             }
         }
 
-        public void ApplyStyle()
+        public override void ChangeStyle()
         {
             foreach (var part in parts)
             {
                 part.ApplyStyle();
             }
         }
+        
 
         public int SetColor(Color[] colors, int index)
         {

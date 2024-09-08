@@ -18,7 +18,7 @@ namespace Core.Managers
             StyleName = styleName;
         }
     }
-    
+
     public class StyleManager
     {
         // [SerializeField] private Volume _volume;
@@ -29,8 +29,9 @@ namespace Core.Managers
 
         public StyleManager(Style[] styles)
         {
+            _styleableObjects = new List<StyleableObject>();
             _styles = styles;
-
+            CoreManager.instance.SaveManager.ClearAllData();
             // Try to load the saved style, defaulting to Neon if no saved style is found
             CoreManager.instance.SaveManager.Load<StyleSaver>(savedData =>
             {
@@ -39,17 +40,18 @@ namespace Core.Managers
                     currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == savedStyle);
                 }
 
-                // Fallback to default Neon style if no saved style was found or invalid style saved
+                // Fallback to default Pastel style if no saved style was found or invalid style saved
                 if (savedData == null)
                 {
-                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == StyleName.Pastel);
-                    CoreManager.instance.SaveManager.Save(new StyleSaver(StyleName.Pastel.ToString()));
+                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == StyleName.Neon);
+
+                    CoreManager.instance.SaveManager.Save(new StyleSaver(currentStyle.StyleName.ToString()));
 
                 }
 
-                SetStyle(currentStyle.StyleName);
+                // SetStyle(currentStyle.StyleName);
             });
-        
+
 
         }
 
@@ -57,23 +59,31 @@ namespace Core.Managers
         {
             return currentStyle;
         }
-        
-        
 
-        public void SetStyle(StyleName newStyle)
+
+
+        // public void SetStyle(StyleName newStyle)
+        // {
+        //     Debug.Log("event called!");
+        //     CoreManager.instance.SaveManager.Save(new StyleSaver(newStyle.ToString()));
+        //     CoreManager.instance.EventManager.InvokeEvent(EventNames.SetStyle, null);
+        // }
+
+
+        public void AddStyleableObject(StyleableObject obj)
         {
-            foreach (var style in _styles)
-            {
-                if (style.GetStyle() == newStyle)
-                {
-                    currentStyle = style;
-                }
-            }
+            _styleableObjects.Add(obj);
+        }
 
-            CoreManager.instance.EventManager.InvokeEvent(EventNames.SetStyle, null);
+        public void ApplyStyle(StyleName newStyle)
+        {
+            currentStyle = _styles.FirstOrDefault(style => style.StyleName == newStyle);
+            foreach (var obj in _styleableObjects)
+            {
+                obj.ChangeStyle();
+            }
         }
     }
-
 
     public enum StyleName
     {
