@@ -54,13 +54,7 @@ namespace Core.PlayerRelated
             CoreManager.instance.EventManager.RemoveListener(EventNames.Revive, ResetGameObject);
         }
 
-        private void Update()
-        {
-            if (Input.GetKey(KeyCode.E))
-            {
-                CoreManager.instance.StyleManager.ApplyStyle(StyleName.Pastel);
-            }
-        }
+       
 
         private void Fall(object obj)
         {

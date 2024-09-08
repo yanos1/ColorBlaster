@@ -427,6 +427,17 @@ MonoBehaviour:
   stylesList:
   - {fileID: 11400000, guid: 68a3958377c88094fb60914059da531d, type: 2}
   - {fileID: 11400000, guid: b159f557ac1d9424a97aec324c2c9ebd, type: 2}
+  colorThemes:
+  - type: 1
+    color1: {r: 0, g: 0.3422258, b: 1, a: 1}
+    color2: {r: 1, g: 0, b: 0, a: 1}
+    color3: {r: 0.96812177, g: 1, b: 0, a: 1}
+    color4: {r: 0, g: 1, b: 0.06365299, a: 1}
+  - type: 2
+    color1: {r: 0.1509505, g: 0.17866613, b: 0.4188679, a: 1}
+    color2: {r: 0.31723195, g: 0.056639317, b: 0.6981132, a: 1}
+    color3: {r: 0.4792453, g: 0.2956853, b: 0.47622952, a: 1}
+    color4: {r: 0.16981131, g: 0.031719457, b: 0.031719457, a: 1}
   obstaclesList:
   - {fileID: 4593088555778702884, guid: e9cc0ce5ffa0e9949b2cb860b20f9196, type: 3}
   - {fileID: 7874923284203621253, guid: 2b5024d3d589dfb4382cb459fbd0f5c9, type: 3}

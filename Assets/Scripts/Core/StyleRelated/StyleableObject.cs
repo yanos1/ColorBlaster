@@ -25,7 +25,6 @@ namespace Core.StyleRelated
             Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
             // Apply the material from the style
             _renderer.sharedMaterial = currentStyle.Material;
-            print($"shared material :   {_renderer.sharedMaterial}");
             // Apply texture and shader from the style (if needed)
             if (currentStyle.Texture != null)
             {

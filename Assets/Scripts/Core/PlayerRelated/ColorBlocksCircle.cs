@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using Core.Managers;
 using Core.ObstacleGeneration;
 using Extentions;
@@ -21,16 +22,17 @@ namespace Core.PlayerRelated
 
         private void Awake()
         {
-            Color[] styleColors = CoreManager.instance.StyleManager.GetStyle().ColorPalette;
+            Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
+            Debug.Log(currentColors.First());
 
-            if (blocks.Length != styleColors.Length)
+            if (blocks.Length != currentColors.Length)
             {
                 Debug.Log("Mismatch between style colors and color blocks");
             }
 
-            for (int i = 0; i < styleColors.Length; ++i)
+            for (int i = 0; i < currentColors.Length; ++i)
             {
-                blocks[i].SetColor(styleColors[i]);
+                blocks[i].SetColor(currentColors[i]);
             }
             
             invincible = false;
@@ -43,6 +45,7 @@ namespace Core.PlayerRelated
         {
             CoreManager.instance.EventManager.AddListener(EventNames.Revive, RestoreBlocks);
             CoreManager.instance.EventManager.AddListener(EventNames.KillPlayer, ShatterColorBlocks);
+            
 
         }
 
@@ -94,10 +97,7 @@ namespace Core.PlayerRelated
 
         private void Update()
         {
-            // if (Input.GetKeyDown(KeyCode.I))
-            // {
-            //     invincible = !invincible;
-            // }
+        
 
 
             if (playerDead) return;

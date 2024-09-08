@@ -22,22 +22,18 @@ namespace Core.PlayerRelated
         {
             startingPosition = transform.position;
             startingRotation = transform.rotation;
+            CoreManager.instance.StyleManager.AddStyleableObject(this);
         }
 
-        private void OnEnable()
+        private void OnDestroy()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.SetStyle, ApplyStyle);
-          
-        }
-        
-        private void OnDisable()
-        {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.SetStyle, ApplyStyle);
+            CoreManager.instance.StyleManager.RemoveStyleableObject(this);
         }
 
-        private void ApplyStyle(object obj)
+        public override Style ApplyStyle()
         {
             Style currentStyle = base.ApplyStyle();
+            return currentStyle;
         }
 
         private void OnTriggerEnter2D(Collider2D other)

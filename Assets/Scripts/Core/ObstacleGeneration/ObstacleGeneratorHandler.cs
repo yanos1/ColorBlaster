@@ -66,7 +66,7 @@ namespace Core.ObstacleGeneration
             print("ADJUST EIGHT");
             // Adjust the numbers with a minimum check to avoid negative values
             float aAdjusted =
-                Mathf.Max((_difficultyToChanceMap[0].second - 5), 0); // First number goes lower, but not below 0
+                Mathf.Max((float)(_difficultyToChanceMap[0].second - 5), 0); // First number goes lower, but not below 0
             float bAdjusted = Mathf.Min(_difficultyToChanceMap[1].second + 5, 90f); // Second number goes bigger
             float cAdjusted =
                 Mathf.Min(_difficultyToChanceMap[2].second + 2.5f, 50f); // Third number goes bigger by a smaller margin

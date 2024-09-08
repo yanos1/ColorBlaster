@@ -72,7 +72,7 @@ namespace ObstacleGeneration
 
         public void ChangeColors()
         {
-            Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.StyleManager.GetStyle().ColorPalette);
+            Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.ColorsManager.CurrentColors);
             int currentColorIndex = 0;
             for (int i = 0; i < obstacleComponents.Count; ++i)
             {

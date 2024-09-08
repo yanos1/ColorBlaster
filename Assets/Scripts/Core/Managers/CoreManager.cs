@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core.PlayerRelated;
 using Extentions;
 using ObstacleGeneration;
@@ -17,7 +18,7 @@ namespace Core.Managers
         public TimeManager TimeManager { get; private set; }
         public ObjectPoolManager PoolManager { get; private set; }
         public StyleManager StyleManager { get; private set; }
-        public CurrencyManager CurrencyManager { get; private set; }
+        public ObstacleColorsManager ColorsManager { get; private set; }
         public ObstacleManager ObstacleManager { get; private set; }
         public ItemCostManager CostManager { get; private set; }
         public Player Player { get; set; }
@@ -38,16 +39,15 @@ namespace Core.Managers
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
         }
 
-        public void InitializeManagers(TextAsset itemCosts, Style[] styles, Obstacle[] obstacles, PoolEntry[] poolEntries, float baseObjectSpeed, Action onComplete)
+        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles, PoolEntry[] poolEntries, float baseObjectSpeed, Action onComplete)
         {
             // Initialize all the managers here
             
             GameManager = new GameManager(baseObjectSpeed);
             TimeManager = new TimeManager();
             StyleManager = new StyleManager(styles);
-            Debug.Log($" manager : {StyleManager}");
+            ColorsManager = new ObstacleColorsManager(colorThemes);
             ObstacleManager = new ObstacleManager(obstacles);
-            CurrencyManager = new CurrencyManager();
             PoolManager = new ObjectPoolManager(poolEntries);
             CostManager = new ItemCostManager(itemCosts);
             

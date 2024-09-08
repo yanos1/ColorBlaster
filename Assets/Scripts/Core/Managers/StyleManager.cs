@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Core.PlayerRelated;
 using Core.StyleRelated;
 using ScriptableObjects;
 using UnityEngine;
@@ -31,7 +32,6 @@ namespace Core.Managers
         {
             _styleableObjects = new List<StyleableObject>();
             _styles = styles;
-            CoreManager.instance.SaveManager.ClearAllData();
             // Try to load the saved style, defaulting to Neon if no saved style is found
             CoreManager.instance.SaveManager.Load<StyleSaver>(savedData =>
             {
@@ -43,7 +43,7 @@ namespace Core.Managers
                 // Fallback to default Pastel style if no saved style was found or invalid style saved
                 if (savedData == null)
                 {
-                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == StyleName.Neon);
+                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == StyleName.Pastel);
 
                     CoreManager.instance.SaveManager.Save(new StyleSaver(currentStyle.StyleName.ToString()));
 
@@ -82,6 +82,11 @@ namespace Core.Managers
             {
                 obj.ChangeStyle();
             }
+        }
+
+        public void RemoveStyleableObject(StyleableObject obj)
+        {
+            _styleableObjects.Remove(obj);
         }
     }
 

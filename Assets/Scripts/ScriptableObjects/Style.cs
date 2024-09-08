@@ -8,7 +8,6 @@ namespace ScriptableObjects
     public class Style : ScriptableObject
     {
         [SerializeField] private StyleName styleName;
-        [SerializeField] private Color[] colorPalette;
         [SerializeField] private Material material;
         [SerializeField] private Texture texture;
         [SerializeField] private Shader shader;
@@ -17,7 +16,6 @@ namespace ScriptableObjects
 
         // Public read-only properties to access private fields
         public StyleName StyleName => styleName;
-        public Color[] ColorPalette => colorPalette;
         public Material Material => material;
         public Texture Texture => texture;
         public Shader Shader => shader;

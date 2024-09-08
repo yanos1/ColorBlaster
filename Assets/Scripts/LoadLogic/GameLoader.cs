@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Core.Managers;
 using Core.PlayerRelated;
 using ScriptableObjects;
@@ -19,6 +20,7 @@ namespace LoaderLogic
     {
         [SerializeField] private GameLoaderUI loaderUI;
         [SerializeField] private Style[] stylesList;
+        [SerializeField] private List<ColorTheme> colorThemes;
         [SerializeField] private Obstacle[] obstaclesList;
         [SerializeField] private PoolEntry[] poolEntries;
         [SerializeField] private TextAsset itemCosts;
@@ -46,7 +48,7 @@ namespace LoaderLogic
         private void LoadCoreManager()
         {
            var coreManager =  new CoreManager();
-           coreManager.InitializeManagers(itemCosts, stylesList,TEST_MODE ? testObstacleList :obstaclesList, poolEntries, baseObstacleSpeed, OnCoreManagersLoaded);
+           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, TEST_MODE ? testObstacleList :obstaclesList, poolEntries, baseObstacleSpeed, OnCoreManagersLoaded);
             
         }
 
