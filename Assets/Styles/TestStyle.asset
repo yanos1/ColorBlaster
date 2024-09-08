@@ -18,7 +18,7 @@ MonoBehaviour:
   - {r: 0.5169811, g: 0.13558558, b: 0.4878262, a: 1}
   - {r: 1, g: 0.2840327, b: 0.081131995, a: 1}
   - {r: 0.512975, g: 0.29585615, b: 0.9169811, a: 1}
-  material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  material: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
   texture: {fileID: 0}
   shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
   shatterType: 11

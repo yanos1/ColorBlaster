@@ -21,7 +21,6 @@ namespace Core.PlayerRelated
         private void Start()
         {
             startingPosition = transform.position;
-            print($"color block starting pos: {startingPosition}");
             startingRotation = transform.rotation;
         }
 

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Firebase;
 using Firebase.Database;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Core.Managers
@@ -9,7 +11,7 @@ namespace Core.Managers
         public int Coins => coins;
         public List<string> StylesOwned => stylesOwned;
         public List<string> ColorsOwned => colorsOwned;
-        
+
         private DatabaseReference _dbReference;
         private DatabaseReference userRef;
         private string _id;
@@ -26,8 +28,14 @@ namespace Core.Managers
             itemPurchases = new Dictionary<string, int>();
 
             _id = id;
-            _dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+            FirebaseApp app = FirebaseApp.DefaultInstance;
+            FirebaseDatabase database = FirebaseDatabase.GetInstance(app,
+                "https://colorblaster-8fe62-default-rtdb.europe-west1.firebasedatabase.app/");
+            _dbReference = database.RootReference;
+
             userRef = _dbReference.Child("users").Child(_id);
+            Debug.Log($"user ref : {userRef.ToString()}");
+            Debug.Log($"id : {_id}");
 
             RetrieveDataFromFirebase(_id);
         }
@@ -37,9 +45,20 @@ namespace Core.Managers
         {
             userRef.GetValueAsync().ContinueWith(task =>
             {
+                Debug.Log("TASK CALLED");
+
+                if (task.IsFaulted)
+                {
+                    // Handle any errors here
+                    Debug.LogError($"Error retrieving data: {task.Exception}");
+                    return;
+                }
+
                 if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
+                    Debug.Log($"Snapshot: {snapshot.ToString()}");
+
                     if (snapshot.Exists)
                     {
                         // Retrieve coins
@@ -69,6 +88,17 @@ namespace Core.Managers
                         }
 
                         Debug.Log("User data retrieved successfully.");
+                        Debug.Log(coins);
+
+                        foreach (var VARIABLE in colorsOwned)
+                        {
+                            Debug.Log(VARIABLE);
+                        }
+
+                        foreach (var VARIABLE in stylesOwned)
+                        {
+                            Debug.Log(VARIABLE);
+                        }
                     }
                     else
                     {
@@ -77,15 +107,21 @@ namespace Core.Managers
                         InitializeUserData(userId);
                     }
                 }
+                else
+                {
+                    Debug.Log("Task not completed successfully.");
+                }
             });
         }
+
 
         // Initialize default data for a new user
         private void InitializeUserData(string userId)
         {
             userRef.Child("coinAmount").SetValueAsync(0); // Default coin amount
-            userRef.Child("stylesOwned").SetValueAsync(new List<string> { StyleName.Pastel.ToString() }); // Default styles
-            userRef.Child("colorThemesOwned").SetValueAsync(new List<string>()); // Empty color themes
+            userRef.Child("stylesOwned")
+                .SetValueAsync(new List<string> { StyleName.Pastel.ToString() }); // Default styles
+            userRef.Child("colorThemesOwned").SetValueAsync(new List<string>(){"Default"}); // Empty color themes
             userRef.Child("inGamePurchases").SetValueAsync(new Dictionary<string, int>()); // Empty purchases
 
             Debug.Log("New user data initialized.");
@@ -136,7 +172,5 @@ namespace Core.Managers
             userRef.Child("inGamePurchases").SetValueAsync(itemPurchases);
             Debug.Log($"Added {quantity} of {itemName}. New total: {itemPurchases[itemName]}");
         }
-
-     
     }
 }
