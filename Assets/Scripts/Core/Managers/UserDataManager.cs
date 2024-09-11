@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Firebase;
 using Firebase.Database;
 using Unity.VisualScripting;
@@ -105,6 +107,7 @@ namespace Core.Managers
         // Initialize default data for a new user
         private void InitializeUserData(string userId)
         {
+            userRef.Child("highScore").SetValueAsync(0);
             userRef.Child("coinAmount").SetValueAsync(500); // Default coin amount
             userRef.Child("stylesOwned")
                 .SetValueAsync(new List<string> { StyleName.Pastel.ToString() }); // Default styles
@@ -112,6 +115,23 @@ namespace Core.Managers
             userRef.Child("inGamePurchases").SetValueAsync(new Dictionary<string, int>()); // Empty purchases
 
             Debug.Log("New user data initialized.");
+        }
+
+        public void SetNewHighScore(int newHighScore)
+        {
+            Debug.Log("new high score set!");
+            userRef.Child("highScore").SetValueAsync(newHighScore);
+        }
+
+        public async Task<int> GetHighScore()
+        {
+            var highScoreSnapshot = await userRef.Child("highScore").GetValueAsync();
+            if (highScoreSnapshot.Exists)
+            {
+                return int.Parse(highScoreSnapshot.Value.ToString());
+            }
+
+            return 0;
         }
 
         // Update coins and sync to Firebase
@@ -159,5 +179,20 @@ namespace Core.Managers
             userRef.Child("inGamePurchases").SetValueAsync(itemPurchases);
             Debug.Log($"Added {quantity} of {itemName}. New total: {itemPurchases[itemName]}");
         }
+
+        public async void UpdateGemsOwned(int gemsCollected)
+        {
+            var snapshot = await userRef.Child("gemsOwned").GetValueAsync();
+            if (snapshot.Exists)
+            {
+                int currentGems = Convert.ToInt32(snapshot.Value) + gemsCollected;
+                await userRef.Child("gemsOwned").SetValueAsync(currentGems);  // Sets gemsOwned to its current value
+            }
+            else
+            {
+                Debug.Log("gemsOwned does not exist.");
+            }
+        }
+
     }
 }

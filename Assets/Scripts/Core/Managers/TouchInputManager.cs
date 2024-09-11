@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Core.PlayerRelated;
 using System.Linq;
+using GameLogic.PlayerRelated;
 using UnityEngine.InputSystem.Controls;
 
 namespace Core.Managers

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.StyleRelated;
 using Extentions;
-using ObstacleGeneration;
+using GameLogic.ObstacleGeneration;
+using GameLogic.StyleRelated;
 using Unity.VisualScripting;
 using UnityEngine;
 

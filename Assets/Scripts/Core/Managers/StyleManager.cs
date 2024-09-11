@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Core.PlayerRelated;
-using Core.StyleRelated;
+using GameLogic.StyleRelated;
 using ScriptableObjects;
 using UnityEngine;
 

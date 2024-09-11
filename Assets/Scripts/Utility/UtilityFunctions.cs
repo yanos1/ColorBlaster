@@ -5,6 +5,7 @@ using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Extentions
 {
@@ -68,5 +69,20 @@ namespace Extentions
             onComplete?.Invoke();
         }
 
+        public static void MoveObjectInRandomDirection(Transform obj)
+        {
+            float xAddition = Random.Range(-2f, 2f);
+            float yAddition = Random.Range(-2f, 2f);
+            obj.position += new Vector3(xAddition, yAddition, 0);
+        }
+        
+        // ReSharper disable Unity.PerformanceAnalysis
+        public static IEnumerator WaitAndInvokeAction(float delay, Action onComplete)
+        {
+            yield return new WaitForSeconds(delay);
+            onComplete?.Invoke();
+        }
+
+      
     }
 }

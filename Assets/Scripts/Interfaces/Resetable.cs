@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface Resetable
+namespace Interfaces
 {
-    public void ResetGameObject();
+    public interface IResettable
+    {
+        public void ResetGameObject();
+    }
 }

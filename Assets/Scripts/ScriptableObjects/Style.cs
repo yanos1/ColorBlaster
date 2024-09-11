@@ -1,5 +1,5 @@
 ﻿using Core.Managers;
-using ObstacleGeneration;
+using GameLogic.ObstacleGeneration;
 using UnityEngine;
 
 namespace ScriptableObjects

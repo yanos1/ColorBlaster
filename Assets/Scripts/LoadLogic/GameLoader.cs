@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core.Managers;
-using Core.PlayerRelated;
+using GameLogic.ObstacleGeneration;
 using ScriptableObjects;
 using TMPro;
 using UnityEngine;
@@ -11,7 +11,6 @@ using UnityEngine.UI;
 // using Firebase;
 // using Firebase.Database;
 // using Firebase.Extensions;
-using ObstacleGeneration;
 using Unity.VisualScripting;
 
 namespace LoaderLogic

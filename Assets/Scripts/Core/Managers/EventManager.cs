@@ -63,5 +63,6 @@ namespace Core.Managers
         AddCurrency = 10,
         KillPlayer =11,
         FinishedReviving = 12,
+        GemPickup =13,
     }
 }

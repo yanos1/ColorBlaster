@@ -66,10 +66,7 @@ namespace Core.Managers
                 {
                     // Try to find the color set from the saved theme
                     _currentColorTheme = _colorSets.FirstOrDefault(theme => theme.type == savedColorTheme)?.GetColors();
-                    foreach (var VARIABLE in _currentColorTheme)
-                    {
-                        Debug.Log(VARIABLE);
-                    }
+                   
 
                 }
 

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.PlayerRelated;
 using Extentions;
-using ObstacleGeneration;
+using GameLogic.ObstacleGeneration;
+using GameLogic.PlayerRelated;
 using ScriptableObjects;
 using UnityEngine;
 

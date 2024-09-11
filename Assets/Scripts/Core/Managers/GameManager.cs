@@ -8,33 +8,36 @@ namespace Core.Managers
 {
     public class GameManager
     {
-        public bool IsGameActive => isGameActive;
+        public bool IsGameActive => _isGameActive;
 
         public float CurrentObjectsSpeed
         {
-            get => currentObjectsSpeed;
-            set => currentObjectsSpeed = Mathf.Min(maxObstacleSpeed, value);
+            get => _currentObjectsSpeed;
+            set => _currentObjectsSpeed = Mathf.Min(maxObstacleSpeed, value);
         }
         
         private Coroutine increaseGameDiffucultyCoroutine;
         private static int maxObstacleSpeed => 7;
 
-        private float lastObstacleUpdateTime;
-        private float ChangeDifficultyInterval = 18f;
-        private float currentObjectsSpeed;
-        private float savedObjectSpeed;
-        private bool isGameActive;
+        private float _lastObstacleUpdateTime;
+        private readonly float ChangeDifficultyInterval = 18f;
+        private float _baseObjectSpeed;
+        private float _currentObjectsSpeed;
+        private float _savedObjectSpeed;
+        private bool _isGameActive;
 
 
         public GameManager(float baseObjectSpeed)
         {
-            currentObjectsSpeed = baseObjectSpeed;
-            isGameActive = false;
-            lastObstacleUpdateTime = Time.time;
+            _baseObjectSpeed = baseObjectSpeed;
+            _currentObjectsSpeed = _baseObjectSpeed;
+            _isGameActive = false;
+            _lastObstacleUpdateTime = Time.time;
             CoreManager.instance.EventManager.AddListener(EventNames.StartGame, OnStartGame);
             CoreManager.instance.EventManager.AddListener(EventNames.GameOver, OnGameOver);
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun, StopAllObjects);
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, ResumeAllObjects);
+            CoreManager.instance.EventManager.AddListener(EventNames.IncreaseGameDifficulty, IncreaseObstacleSpeed);
         }
 
         public void OnDestroy()
@@ -43,6 +46,13 @@ namespace Core.Managers
             CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, OnGameOver);
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, StopAllObjects);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, ResumeAllObjects);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.IncreaseGameDifficulty, IncreaseObstacleSpeed);
+
+        }
+
+        private void IncreaseObstacleSpeed(object obj)
+        {
+            _currentObjectsSpeed += 0.7f;
         }
 
         private void ResumeAllObjects(object obj)
@@ -50,9 +60,9 @@ namespace Core.Managers
             if (increaseGameDiffucultyCoroutine == null)
             {
                 increaseGameDiffucultyCoroutine = CoreManager.instance.MonoRunner.StartCoroutine(
-                    CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, null, ChangeDifficultyInterval));
+                    CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, 2, ChangeDifficultyInterval));
             }
-            currentObjectsSpeed = savedObjectSpeed;
+            _currentObjectsSpeed = _savedObjectSpeed;
         }
 
         private void StopAllObjects(object obj)
@@ -62,22 +72,23 @@ namespace Core.Managers
                 CoreManager.instance.MonoRunner.StopCoroutine(increaseGameDiffucultyCoroutine);
                 increaseGameDiffucultyCoroutine = null;
             }
-            savedObjectSpeed = CurrentObjectsSpeed;
-            currentObjectsSpeed = 0;
+            _savedObjectSpeed = CurrentObjectsSpeed;
+            _currentObjectsSpeed = 0;
         }
 
 
 
         private void OnGameOver(object obj)
         {
-            isGameActive = false;
+            _isGameActive = false;
         }
 
         private void OnStartGame(object obj)
         {
-            isGameActive = true;
+            _isGameActive = true;
             increaseGameDiffucultyCoroutine = CoreManager.instance.MonoRunner.StartCoroutine(CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, null,
                 ChangeDifficultyInterval));
+            CurrentObjectsSpeed = _baseObjectSpeed;
         }
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using Core.Managers;
-using Core.StyleRelated;
-using ObstacleGeneration;
+using GameLogic.ObstacleGeneration;
+using GameLogic.StyleRelated;
 using UnityEngine;
 
 namespace Particles

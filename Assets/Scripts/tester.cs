@@ -25,6 +25,7 @@ public class tester : MonoBehaviour
         {
             CoreManager.instance.SaveManager.ClearAllData();
         }
+        
     }
     
 }

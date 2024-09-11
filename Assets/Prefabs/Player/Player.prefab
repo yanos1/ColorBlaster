@@ -254,6 +254,10 @@ PrefabInstance:
       propertyPath: rotationAxis
       value: 
       objectReference: {fileID: 6736890473453859204}
+    - target: {fileID: 5645626009961224440, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
+      propertyPath: rotationSpeedWhileShooting
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 7998751678068865717, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
