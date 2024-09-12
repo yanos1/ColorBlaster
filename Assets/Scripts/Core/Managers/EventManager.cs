@@ -64,5 +64,7 @@ namespace Core.Managers
         KillPlayer =11,
         FinishedReviving = 12,
         GemPickup =13,
+        ActivateColorRush=14,
+        
     }
 }

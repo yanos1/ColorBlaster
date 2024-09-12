@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5709415306548405754}
   - component: {fileID: 1097016430142367000}
   m_Layer: 0
-  m_Name: PastelShatterPrefab
+  m_Name: ColorRushPowerUpParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

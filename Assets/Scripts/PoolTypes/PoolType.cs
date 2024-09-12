@@ -1,4 +1,4 @@
-﻿namespace GameLogic.ObstacleGeneration
+﻿namespace PoolTypes
 {
     public enum PoolType
     {
@@ -20,6 +20,8 @@
         TreasureChestObstacle = 15,
         Gem = 16,
         HardRocketsObstacle1=17,
+        ColorRushPowerUp = 18,
+        
         
         
         

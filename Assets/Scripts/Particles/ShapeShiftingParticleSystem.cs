@@ -2,11 +2,12 @@ using System.Collections;
 using Core.Managers;
 using GameLogic.ObstacleGeneration;
 using GameLogic.StyleRelated;
+using PoolTypes;
 using UnityEngine;
 
 namespace Particles
 {
-    public class ShatterParticles : MonoBehaviour
+    public class ShapeShiftingParticleSystem : MonoBehaviour
     {
         // Start is called before the first frame update
         [SerializeField] private ParticleSystem particles;

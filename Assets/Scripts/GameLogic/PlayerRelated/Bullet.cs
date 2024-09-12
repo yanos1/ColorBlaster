@@ -2,6 +2,7 @@
 using GameLogic.ObstacleGeneration;
 using GameLogic.StyleRelated;
 using Interfaces;
+using PoolTypes;
 using ScriptableObjects;
 using UnityEngine;
 

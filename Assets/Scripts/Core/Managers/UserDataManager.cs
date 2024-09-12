@@ -62,7 +62,8 @@ namespace Core.Managers
                     if (snapshot.Exists)
                     {
                         // Retrieve coins
-                        coins = int.Parse(snapshot.Child("coinAmount").Value.ToString());
+                        coins = int.Parse(snapshot.Child("gemsOwned").Value.ToString());
+                        Debug.Log($"coins in balance: {coins}");
 
                         // Retrieve styles owned
                         stylesOwned.Clear();

@@ -427,6 +427,7 @@ MonoBehaviour:
   stylesList:
   - {fileID: 11400000, guid: 68a3958377c88094fb60914059da531d, type: 2}
   - {fileID: 11400000, guid: b159f557ac1d9424a97aec324c2c9ebd, type: 2}
+  - {fileID: 11400000, guid: e92e6250a2a7ce4449411a29f39b0ee1, type: 2}
   colorThemes:
   - type: 1
     color1: {r: 0, g: 0.3422258, b: 1, a: 1}
@@ -497,6 +498,9 @@ MonoBehaviour:
   - type: 17
     prefab: {fileID: 423088138292595383, guid: 335a29bf0c3cfe24ab87cff3d539575c, type: 3}
     count: 3
+  - type: 18
+    prefab: {fileID: 2924688059518573279, guid: 29e6c03376b23e24d864fa9087296488, type: 3}
+    count: 10
   itemCosts: {fileID: 4900000, guid: 4537f4657d3f4262a4c3442c5e3acc61, type: 3}
   baseObstacleSpeed: 3
   TEST_MODE: 0

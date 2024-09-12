@@ -1,10 +1,11 @@
 ﻿using Core.Managers;
 using GameLogic.ObstacleGeneration;
+using PoolTypes;
 using UnityEngine;
 
 namespace GameLogic.Consumables
 {
-    public class Coin : MonoBehaviour,IConsumable
+    public class Gem : MonoBehaviour,IConsumable
     {
         [SerializeField] private PoolType type;
         public void Consume()

@@ -1,5 +1,6 @@
 using Core.Managers;
 using GameLogic.ObstacleGeneration;
+using PoolTypes;
 using UnityEngine;
 
 namespace GameLogic.PlayerRelated

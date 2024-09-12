@@ -38,6 +38,7 @@ namespace GameLogic.StyleRelated
 
             return currentStyle;
         }
+        
 
         public virtual void Shatter()
         {
@@ -45,7 +46,7 @@ namespace GameLogic.StyleRelated
             // _audioSource.Play();
             // Instantiate the shatter effect at the part's position
             CoreManager.instance.PoolManager.GetFromPool(CoreManager.instance.StyleManager.GetStyle()
-                .ShatterType).GetComponent<ShatterParticles>().Init(this);
+                .ShatterType).GetComponent<ShapeShiftingParticleSystem>().Init(this);
 
             // Disable the part or handle other shatter logic
             gameObject.SetActive(false);

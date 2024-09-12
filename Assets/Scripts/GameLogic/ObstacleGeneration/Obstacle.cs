@@ -3,6 +3,7 @@ using Core.Managers;
 using Extentions;
 using GameLogic.StyleRelated;
 using Interfaces;
+using PoolTypes;
 using UnityEngine;
 
 namespace GameLogic.ObstacleGeneration

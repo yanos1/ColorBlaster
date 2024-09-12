@@ -36,16 +36,9 @@ namespace GameLogic.PlayerRelated
             Style currentStyle = base.ApplyStyle();
             return currentStyle;
         }
+        
 
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            ObstaclePart part = other.GetComponent<ObstaclePart>();
-            if (part is not null && !CoreManager.instance.Player.IsDead)
-            {
-                print("INVOKED DEATH");
-                CoreManager.instance.EventManager.InvokeEvent(EventNames.KillPlayer, null);
-            }
-        }
+
 
         public override void ChangeStyle()
         {
