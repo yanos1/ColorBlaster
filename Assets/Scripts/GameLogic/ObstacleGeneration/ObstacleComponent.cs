@@ -5,11 +5,14 @@ using UnityEngine;
 
 namespace GameLogic.ObstacleGeneration
 {
-    public class ObstacleComponent : StyleableObject, IResettable
+    public class ObstacleComponent :MonoBehaviour, IResettable
     {
+        public List<ObstaclePart> obstacleParts => parts;
+        
         [SerializeField] private List<ObstaclePart> parts;
 
         [SerializeField] private bool isSingleColorComponent;
+        
 
         
 
@@ -20,16 +23,7 @@ namespace GameLogic.ObstacleGeneration
                 part.ResetGameObject();
             }
         }
-
-        public override void ChangeStyle()
-        {
-            foreach (var part in parts)
-            {
-                part.ApplyStyle();
-            }
-        }
         
-
         public int SetColor(Color[] colors, int index)
         {
             foreach (var part in parts)

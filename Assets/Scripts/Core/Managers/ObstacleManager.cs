@@ -28,15 +28,6 @@ namespace Core.Managers
             return weightToObstacleMap;
         }
 
-        private void ChangeObstacleStyle(object obj)
-        {
-            Debug.Log("change style for obstacles  !!!");
-            foreach (var obstacle in _obstacleData)
-            {
-                obstacle.ApplyStyle();
-            }
-        }
-
         private void InitializeMap()
         {
             foreach (var obs in _obstacleData)

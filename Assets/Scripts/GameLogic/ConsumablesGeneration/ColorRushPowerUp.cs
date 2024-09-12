@@ -14,7 +14,7 @@ namespace GameLogic.Consumables
         {
             // CoreManager.instance.PoolManager.GetFromPool(consumeParticles);
             CoreManager.instance.EventManager.InvokeEvent(EventNames.ActivateColorRush,null);
-            CoreManager.instance.PoolManager.ReturnToPool(type, gameObject);
+            CoreManager.instance.PoolManager.ReturnToPool(PoolType, gameObject);
         }
 
         public override void Update()

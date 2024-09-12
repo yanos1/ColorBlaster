@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Core.Managers;
 using Extentions;
@@ -5,10 +6,11 @@ using GameLogic.StyleRelated;
 using Interfaces;
 using PoolTypes;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace GameLogic.ObstacleGeneration
 {
-    public class Obstacle : StyleableObject, IResettable
+    public class Obstacle :MoveableObject, IResettable
     {
         public Vector3 RightMostPosition => rightMostPosition.position;
 
@@ -20,17 +22,16 @@ namespace GameLogic.ObstacleGeneration
             private set => difficulty = value;
         }
 
-        public float MoveSpeed
+        public override void OnEnable()
         {
-            get => moveSpeed;
-            set => moveSpeed = value;
+            base.OnEnable();
         }
 
-        public PoolType PoolType
+        public override void Update()
         {
-            get => type;
-            private set => type = value;
+            base.Update();
         }
+
 
         [SerializeField] private int difficulty;
         [SerializeField] private PoolType type;
@@ -48,31 +49,9 @@ namespace GameLogic.ObstacleGeneration
             }
         }
 
-        public virtual void OnEnable()
-        {
-            print("STARTEDDDDDDDDDDD");
-            moveSpeed = CoreManager.instance.GameManager.CurrentObjectsSpeed;
-        }
-
+       
         // Update is called once per frame
-        public virtual void Update()
-        {
-            Move();
-        }
-
-        public override void ChangeStyle()
-        {
-            foreach (var part in obstacleComponents)
-            {
-                part.ChangeStyle();
-            }
-        }
-
-        public void Move()
-        {
-            transform.position -= new Vector3(moveSpeed * Time.deltaTime, 0, 0);
-        }
-
+      
         public void ChangeColors()
         {
             Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.ColorsManager.CurrentColors);
@@ -81,6 +60,20 @@ namespace GameLogic.ObstacleGeneration
             {
                 currentColorIndex = obstacleComponents[i].SetColor(shuffledColors, currentColorIndex);
             }
+        }
+
+        public List<StyleableObject> ExtractStyleableObjects()
+        {
+            List<StyleableObject> allObstacleParts = new();
+            foreach (var component in obstacleComponents)
+            {
+                foreach (var part in component.obstacleParts)
+                {
+                    allObstacleParts.Add(part);
+                }
+            }
+
+            return allObstacleParts;
         }
     }
 }

@@ -64,7 +64,7 @@ namespace Extentions
 
             obj.transform.position = endingPos;
             obj.transform.rotation = endingRotation;
-    
+
             // Invoke the callback if provided
             onComplete?.Invoke();
         }
@@ -75,7 +75,7 @@ namespace Extentions
             float yAddition = Random.Range(-2f, 2f);
             obj.position += new Vector3(xAddition, yAddition, 0);
         }
-        
+
         // ReSharper disable Unity.PerformanceAnalysis
         public static IEnumerator WaitAndInvokeAction(float delay, Action onComplete)
         {
@@ -83,6 +83,20 @@ namespace Extentions
             onComplete?.Invoke();
         }
 
-      
+        public static IEnumerator ScaleObjectOverTime(GameObject objToScale, Vector3 targetScale, float duration)
+        {
+            Vector3 originalScale = objToScale.transform.localScale;
+
+            // Scale up to the target scale
+            float elapsedTime = 0f;
+            while (elapsedTime < duration)
+            {
+                objToScale.transform.localScale = Vector3.Lerp(originalScale, targetScale, elapsedTime / duration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            objToScale.transform.localScale = targetScale;
+        }
     }
 }

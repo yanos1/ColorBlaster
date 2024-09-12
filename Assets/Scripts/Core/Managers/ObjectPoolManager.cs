@@ -46,12 +46,7 @@ namespace Core.Managers
                 for (int i = 0; i < entry.count; i++)
                 {
                     GameObject obj = MonoRunner.InstantiateObject(entry.prefab);
-                    StyleableObject styleableObject = obj.GetComponent<StyleableObject>();
-                    if ( styleableObject is not null)
-                    {
-                        styleableObject.ChangeStyle();
-                        CoreManager.instance.StyleManager.AddStyleableObject(styleableObject);
-                    }
+                    AddStyleableObjectsIfPossible(obj);
                     MonoRunner.MonoRunnerDontDestroyOnLoad(obj);
                     obj.SetActive(false);
                     objectQueue.Enqueue(obj);
@@ -59,6 +54,19 @@ namespace Core.Managers
                 
                 pools.Add(entry.type, objectQueue);
                 activeObjects[entry.type] = new List<GameObject>(); // Initialize activeObjects list for this type
+            }
+        }
+
+        private static void AddStyleableObjectsIfPossible(GameObject obj)
+        {
+            Obstacle obstacle = obj.GetComponent<Obstacle>();
+            if ( obstacle is not null)
+            {
+                List<StyleableObject> obstacleParts = obstacle.ExtractStyleableObjects();
+                foreach (var part in obstacleParts)
+                {
+                    CoreManager.instance.StyleManager.AddStyleableObject(part);
+                }
             }
         }
 

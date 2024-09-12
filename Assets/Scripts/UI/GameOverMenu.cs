@@ -1,4 +1,6 @@
-﻿using Core.Managers;
+﻿using System;
+using Core.Managers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +8,14 @@ namespace UI
 {
     public class GameOverMenu : MonoBehaviour
     {
+        [SerializeField] private TextMeshProUGUI gemsOwnedText;
+
+
+        private void OnEnable()
+        {
+            CoreManager.instance.EventManager.AddListener(EventNames.GameOver, AddGems);
+        }
+
         public void RestartGame()
         {
             CoreManager.instance.EventManager.InvokeEvent(EventNames.RestartGame, null);

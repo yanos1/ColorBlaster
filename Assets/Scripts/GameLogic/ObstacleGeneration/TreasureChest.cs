@@ -18,7 +18,7 @@ namespace GameLogic.ObstacleGeneration
 
         private int amountOfShotsToBreak;
         private int minAmountOfShots = 2;
-        private int maxAmountOfShots = 6;
+        private int maxAmountOfShots = 8;
         private float ySpawnRange = 2;
 
         private int currentHits;
@@ -29,7 +29,7 @@ namespace GameLogic.ObstacleGeneration
             if (currentHits == amountOfShotsToBreak)
             {
                 print(GemsCollectedUIPosition);
-                Explode(base.Shatter);
+                ExplodeAndEarnGems(base.Shatter);
                 
             }
         }
@@ -51,11 +51,11 @@ namespace GameLogic.ObstacleGeneration
             
         }
 
-        private void Explode(Action onComplete)
+        private void ExplodeAndEarnGems(Action onComplete)
         {
             float maxDuration = 0f;
-
-            for (int i = 0; i < currentHits; ++i)
+            int numberOfGemsToEarn = (int)Random.Range(currentHits, (float)currentHits * 3);
+            for (int i = 0; i < numberOfGemsToEarn; ++i)
             {
                 float duration = Random.Range(0.3f, 0.85f);
                 maxDuration = Mathf.Max(duration, maxDuration);
@@ -77,7 +77,6 @@ namespace GameLogic.ObstacleGeneration
             }
             onComplete.Invoke();
 
-            // StartCoroutine(UtilityFunctions.WaitAndInvokeAction(maxDuration, onComplete));
         }
     }
 }

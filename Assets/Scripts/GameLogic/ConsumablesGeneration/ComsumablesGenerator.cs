@@ -28,7 +28,7 @@ namespace GameLogic.PowerUpGeneration
             {
                 yield return new WaitForSeconds(nextPowerUpDelay);
                 GameObject consumable =
-                    CoreManager.instance.PoolManager.GetFromPool(consumables[Random.Range(0, consumables.Count)].type);
+                    CoreManager.instance.PoolManager.GetFromPool(consumables[Random.Range(0, consumables.Count)].PoolType);
                 GetRandomPosition(consumable);
                 nextPowerUpDelay = RandomWaitInterval();
             }
