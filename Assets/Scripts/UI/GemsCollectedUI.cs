@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Core.Managers;
 using Extentions;
 using TMPro;
@@ -10,21 +11,32 @@ namespace UI
 {
     public class GemsCollectedUI : MonoBehaviour
     {
+        
         [SerializeField] private TextMeshProUGUI gemsCollectedText;
         [SerializeField] private Image gemsImage;
         [SerializeField] private float scaleDuration = 0.2f; // Duration for scale animation
         [SerializeField] private Vector3 targetScale = new Vector3(1.2f, 1.2f, 1.2f);
         private Vector3 originalScale = new Vector3(1, 1, 1);
         private Coroutine scaleCoroutine;
+        private List<Color> gemColorsCollected = new();
 
         private void OnEnable()
         {
             CoreManager.instance.EventManager.AddListener(EventNames.GemPickup, UpdateGemUI);
+            CoreManager.instance.EventManager.AddListener(EventNames.GameOverPanelActive, OnGameOver);
         }
+
 
         private void OnDisable()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.GemPickup, UpdateGemUI);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.GameOverPanelActive, OnGameOver);
+        }
+        
+        
+        private void OnGameOver(object obj)
+        {
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.BroadcastGemsPicked, gemColorsCollected);
         }
 
         private void UpdateGemUI(object obj)
@@ -44,8 +56,11 @@ namespace UI
             // Multiply the image color by the color passed in the object
             if (obj is Color gemColor)
             {
-                gemsImage.color *= gemColor/10;
+                gemsImage.color += gemColor;
+                gemColorsCollected.Add(gemColor);  // add gem color for later use (for transfering coins to the wallet)
+
             }
+            
         }
 
         private IEnumerator UpdateUIOverTime()

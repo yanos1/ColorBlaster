@@ -63,7 +63,6 @@ namespace GameLogic.ObstacleGeneration
                 GameObject gem = CoreManager.instance.PoolManager.GetFromPool(explodeType);
                 gem.transform.position = transform.position;
                 UtilityFunctions.MoveObjectInRandomDirection(gem.transform);
-                print(gem.transform.position);
                 gem.GetComponent<SpriteRenderer>().color = Renderer.color;
                 gem.GetComponent<TrailRenderer>().startColor = Renderer.color;
 

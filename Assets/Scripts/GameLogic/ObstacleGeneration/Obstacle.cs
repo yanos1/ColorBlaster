@@ -10,17 +10,21 @@ using UnityEngine.UIElements;
 
 namespace GameLogic.ObstacleGeneration
 {
-    public class Obstacle :MoveableObject, IResettable
+    public class Obstacle : MoveableObject, IResettable
     {
         public Vector3 RightMostPosition => rightMostPosition.position;
-
-        public List<ObstacleComponent> ObstacleComponents => obstacleComponents;
 
         public int Difficulty
         {
             get => difficulty;
             private set => difficulty = value;
         }
+
+
+        [SerializeField] private int difficulty;
+        [SerializeField] private List<ObstacleComponent> obstacleComponents;
+        [SerializeField] private Transform rightMostPosition;
+
 
         public override void OnEnable()
         {
@@ -32,15 +36,6 @@ namespace GameLogic.ObstacleGeneration
             base.Update();
         }
 
-
-        [SerializeField] private int difficulty;
-        [SerializeField] private PoolType type;
-        [SerializeField] private List<ObstacleComponent> obstacleComponents;
-        [SerializeField] private Transform rightMostPosition;
-
-        private float moveSpeed;
-        private bool stop;
-
         public void ResetGameObject()
         {
             foreach (var part in obstacleComponents)
@@ -49,9 +44,9 @@ namespace GameLogic.ObstacleGeneration
             }
         }
 
-       
+
         // Update is called once per frame
-      
+
         public void ChangeColors()
         {
             Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.ColorsManager.CurrentColors);

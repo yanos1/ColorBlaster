@@ -494,7 +494,7 @@ MonoBehaviour:
     count: 2
   - type: 16
     prefab: {fileID: 3694219356360321770, guid: 74dba86f013f48642887310866f026a6, type: 3}
-    count: 8
+    count: 100
   - type: 17
     prefab: {fileID: 423088138292595383, guid: 335a29bf0c3cfe24ab87cff3d539575c, type: 3}
     count: 3

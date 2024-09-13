@@ -48,6 +48,7 @@ namespace Extentions
             renderer.material.color = color;
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public static IEnumerator MoveObjectOverTime(GameObject obj, Vector3 startingPos, Quaternion startingRotation,
             Vector3 endingPos, Quaternion endingRotation, float duration, Action onComplete = null)
         {

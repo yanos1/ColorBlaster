@@ -24,8 +24,8 @@ namespace UI
 
         private void OnEnable()
         {
-            currency.text = CoreManager.instance.UserDataManager.Coins.ToString();
-            coinsToRevive.color = CoreManager.instance.UserDataManager.Coins < costToReviveInt
+            currency.text = CoreManager.instance.UserDataManager.GemsOwned.ToString();
+            coinsToRevive.color = CoreManager.instance.UserDataManager.GemsOwned < costToReviveInt
                 ? insufficientCoinsColor
                 : sufficientCoinsColor;
         }
@@ -43,7 +43,7 @@ namespace UI
         {
             if (Int32.TryParse(coinsToRevive.text, out var cost))
             {
-                if (CoreManager.instance.UserDataManager.Coins < cost)
+                if (CoreManager.instance.UserDataManager.GemsOwned < cost)
                 {
                     // TODO
                     // insert juice

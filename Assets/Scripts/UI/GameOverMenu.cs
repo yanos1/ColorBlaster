@@ -8,12 +8,10 @@ namespace UI
 {
     public class GameOverMenu : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI gemsOwnedText;
-
-
-        private void OnEnable()
+        [SerializeField] private TextMeshProUGUI gemsOwned;
+        private void Awake()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.GameOver, AddGems);
+            gemsOwned.text = CoreManager.instance.UserDataManager.GemsOwned.ToString();
         }
 
         public void RestartGame()
@@ -21,7 +19,6 @@ namespace UI
             CoreManager.instance.EventManager.InvokeEvent(EventNames.RestartGame, null);
             SceneManager.sceneLoaded += OnGameReset;
             SceneManager.LoadScene("GameScene");
-            
         }
 
         private void OnGameReset(Scene arg0, LoadSceneMode arg1)
@@ -29,7 +26,6 @@ namespace UI
             SceneManager.sceneLoaded -= OnGameReset;
             CoreManager.instance.TimeManager.ResumeTime();
             CoreManager.instance.EventManager.InvokeEvent(EventNames.StartGame, null);
-
         }
     }
 }

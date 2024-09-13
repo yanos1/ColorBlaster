@@ -10,7 +10,7 @@ namespace Core.Managers
 {
     public class UserDataManager
     {
-        public int Coins => coins;
+        public int GemsOwned => gemsOwned;
         public List<string> StylesOwned => stylesOwned;
         public List<string> ColorsOwned => colorsOwned;
 
@@ -18,7 +18,7 @@ namespace Core.Managers
         private DatabaseReference userRef;
         private string _id;
 
-        private int coins;
+        private int gemsOwned;
         private List<string> stylesOwned;
         private List<string> colorsOwned;
         private Dictionary<string, int> itemPurchases; // item name -> quantity purchased
@@ -62,8 +62,8 @@ namespace Core.Managers
                     if (snapshot.Exists)
                     {
                         // Retrieve coins
-                        coins = int.Parse(snapshot.Child("gemsOwned").Value.ToString());
-                        Debug.Log($"coins in balance: {coins}");
+                        gemsOwned = int.Parse(snapshot.Child("gemsOwned").Value.ToString());
+                        Debug.Log($"coins in balance: {gemsOwned}");
 
                         // Retrieve styles owned
                         stylesOwned.Clear();
@@ -138,9 +138,9 @@ namespace Core.Managers
         // Update coins and sync to Firebase
         public void AddCoins(int amount)
         {
-            coins = Mathf.Max(0, coins + amount);
-            userRef.Child("coinAmount").SetValueAsync(coins);
-            Debug.Log($"Added {amount} coins. New total: {coins}");
+            gemsOwned = Mathf.Max(0, gemsOwned + amount);
+            userRef.Child("coinAmount").SetValueAsync(gemsOwned);
+            Debug.Log($"Added {amount} coins. New total: {gemsOwned}");
         }
 
         // Add a new style and sync to Firebase

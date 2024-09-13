@@ -65,6 +65,10 @@ namespace Core.Managers
         FinishedReviving = 12,
         GemPickup =13,
         ActivateColorRush=14,
+
+        BroadcastGemsPicked = 15,
+
+        GameOverPanelActive = 16,
         
     }
 }
