@@ -1,4 +1,5 @@
-﻿using Core.Managers;
+﻿using System.Collections.Generic;
+using Core.Managers;
 using GameLogic.ObstacleGeneration;
 using GameLogic.StyleRelated;
 using Interfaces;
@@ -12,7 +13,7 @@ namespace GameLogic.PlayerRelated
     {
         [SerializeField] private float moveSpeed;
         [SerializeField] private Color baseColor;
-        private float outOfScreenPosition = 11f;
+        private float outOfScreenPosition = 10.2f;
 
         private void OnEnable()
         {
@@ -39,7 +40,9 @@ namespace GameLogic.PlayerRelated
             ColorBlock colorBlock = other.gameObject.GetComponent<ColorBlock>();
             if (colorBlock is not null)
             {
-                Renderer.color = colorBlock.GetColor();
+                Color color = colorBlock.GetColor();
+                Renderer.color = color;
+                CoreManager.instance.EventManager.InvokeEvent(EventNames.Shoot, color);
             }
 
             ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();
@@ -51,8 +54,11 @@ namespace GameLogic.PlayerRelated
                 }
                 else
                 {
-                    Color[] colors = CoreManager.instance.ColorsManager.CurrentColors;
-                    obstacle.SetColor(colors[UnityEngine.Random.Range(0, colors.Length)]);
+                    List<Color> filteredColors = new List<Color>(CoreManager.instance.ColorsManager.CurrentColors);
+                    filteredColors.Remove(_renderer.color);  // Remove the current color
+                    
+                    obstacle.SetColor(filteredColors[Random.Range(0, filteredColors.Count)]);
+                    
                 }
 
                 CoreManager.instance.PoolManager.ReturnToPool(PoolType.Bullet, gameObject);

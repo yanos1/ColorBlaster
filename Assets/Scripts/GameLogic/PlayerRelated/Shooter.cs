@@ -12,18 +12,22 @@ namespace GameLogic.PlayerRelated
         // Start is called before the first frame update
         private PoolType bullet = PoolType.Bullet;
         private Color lastShotColor;
+        private float shootingCoolDown = 0.1f;
+        private float lastTimeShot;
     
         void Start()
         {
-        
+            lastTimeShot = Time.time;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space) && Time.time > shootingCoolDown + lastTimeShot)
             {
+                
                 Shoot();
+                lastTimeShot = Time.time;
             }
         }
 

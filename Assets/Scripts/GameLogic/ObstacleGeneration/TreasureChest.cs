@@ -15,6 +15,7 @@ namespace GameLogic.ObstacleGeneration
         [SerializeField] private TextMeshProUGUI numberOfShotsUI;
         [SerializeField] private PoolType explodeType;
         [SerializeField] private Transform GemsCollectedUIPosition;
+        private Vector3 playerPosition;
 
         private int amountOfShotsToBreak;
         private int minAmountOfShots = 2;
@@ -22,6 +23,11 @@ namespace GameLogic.ObstacleGeneration
         private float ySpawnRange = 2;
 
         private int currentHits;
+
+        private void Start()
+        {
+            playerPosition = CoreManager.instance.Player.transform.position;
+        }
 
         public override void Shatter()
         {
