@@ -50,7 +50,7 @@ namespace UI
                     return;
                 }
                 CoreManager.instance.TimeManager.ResumeTime();
-                CoreManager.instance.UserDataManager.AddCoins(-cost);
+                CoreManager.instance.UserDataManager.AddGems(-cost);
                 CoreManager.instance.EventManager.InvokeEvent(EventNames.Revive, null);
                 gameObject.SetActive(false);
             }

@@ -1,0 +1,9 @@
+develop powerups - 2-4 days
+store - 1-2 weeks
+develop obstacles & improve obstacle system - 1 week
+develop styles - 1-2 weeks
+animations and art to add - 1-2 weeks
+polish & lastminute additions - 1 week
+game analytics gathering - 1 week
+leaderboards - 1 day
+settings - 1 day

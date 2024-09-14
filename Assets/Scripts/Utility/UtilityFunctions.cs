@@ -70,10 +70,10 @@ namespace Extentions
             onComplete?.Invoke();
         }
 
-        public static void MoveObjectInRandomDirection(Transform obj)
+        public static void MoveObjectInRandomDirection(Transform obj, float magnitude=1f)
         {
-            float xAddition = Random.Range(-2f, 2f);
-            float yAddition = Random.Range(-2f, 2f);
+            float xAddition = Random.Range(-magnitude, magnitude);
+            float yAddition = Random.Range(-magnitude, magnitude);
             obj.position += new Vector3(xAddition, yAddition, 0);
         }
 

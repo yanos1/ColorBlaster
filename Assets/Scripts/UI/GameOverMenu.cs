@@ -12,6 +12,8 @@ namespace UI
         private void Awake()
         {
             gemsOwned.text = CoreManager.instance.UserDataManager.GemsOwned.ToString();
+            print($" gems owned : {gemsOwned.text}");
+
         }
 
         public void RestartGame()

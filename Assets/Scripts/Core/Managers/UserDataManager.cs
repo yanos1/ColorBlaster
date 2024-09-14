@@ -63,24 +63,21 @@ namespace Core.Managers
                     {
                         // Retrieve coins
                         gemsOwned = int.Parse(snapshot.Child("gemsOwned").Value.ToString());
-                        Debug.Log($"coins in balance: {gemsOwned}");
+                        Debug.Log($"gems in balance: {GemsOwned}");
 
                         // Retrieve styles owned
-                        stylesOwned.Clear();
                         foreach (DataSnapshot styleSnapshot in snapshot.Child("stylesOwned").Children)
                         {
                             stylesOwned.Add(styleSnapshot.Value.ToString());
                         }
 
                         // Retrieve colors owned
-                        colorsOwned.Clear();
                         foreach (DataSnapshot colorThemeSnapShot in snapshot.Child("colorThemesOwned").Children)
                         {
                             colorsOwned.Add(colorThemeSnapShot.Value.ToString());
                         }
 
                         // Retrieve item purchases
-                        itemPurchases.Clear();
                         foreach (DataSnapshot purchaseSnapshot in snapshot.Child("inGamePurchases").Children)
                         {
                             string item = purchaseSnapshot.Key;
@@ -136,10 +133,10 @@ namespace Core.Managers
         }
 
         // Update coins and sync to Firebase
-        public void AddCoins(int amount)
+        public void AddGems(int amount)
         {
             gemsOwned = Mathf.Max(0, gemsOwned + amount);
-            userRef.Child("coinAmount").SetValueAsync(gemsOwned);
+            userRef.Child("gemsOwned").SetValueAsync(gemsOwned);
             Debug.Log($"Added {amount} coins. New total: {gemsOwned}");
         }
 

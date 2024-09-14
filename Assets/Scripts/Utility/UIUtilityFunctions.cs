@@ -1,18 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 namespace UI
 {
-    public static class UtilityUIFunctions
+    public static class UIUtilityFunctions
     {
         public static IEnumerator TransferNumberCoroutine(TextMeshProUGUI transferringText,
             TextMeshProUGUI receivingText, int amount,
-            float transferDuration)
+            float transferDuration, Action onComplete)
         {
             float elapsedTime = 0f;
             int startValueTransferring = int.Parse(transferringText.text);
-            int startValueReceiving = int.Parse(transferringText.text);
+            int startValueReceiving = int.Parse(receivingText.text);
             int finalTransferringValue = startValueTransferring - amount;
             int finalReceivingValue = startValueReceiving + amount;
 
@@ -37,6 +39,7 @@ namespace UI
             // Ensure final values are set precisely at the end
             transferringText.text = finalTransferringValue.ToString();
             receivingText.text = finalReceivingValue.ToString();
+            onComplete?.Invoke();
         }
 
         private static IEnumerator SpawnParticlesCoroutine(ParticleSystem transferParticles, Vector3 startPos,

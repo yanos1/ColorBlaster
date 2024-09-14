@@ -60,7 +60,6 @@ namespace GameLogic.ObstacleGeneration
             StopAllCoroutines();
             transform.position = new Vector3(transform.parent.parent.position.x,   // I DONT LIKE THIS AT ALL !!
                 Random.Range(spawnYPositionRange.x, spawnYPositionRange.y), 0);
-            print(transform.position);
             _alertRenderer.color = _renderer.color;
             startDirection = Random.value > 0.5 ? 1 : -1;
             StartCoroutine(AlertThenLaunch());
