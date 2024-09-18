@@ -102,7 +102,6 @@ MonoBehaviour:
   _renderer: {fileID: 6079879153047998493}
   spawnYPositionRange: {x: -4, y: 0}
   _alertRenderer: {fileID: 8243873470070445517}
-  speed: 20
   frequency: 0.1
   amplitude: 0.1
 --- !u!70 &287804063563267679
@@ -150,6 +149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3210522349617719833}
   - component: {fileID: 8243873470070445517}
+  - component: {fileID: 8545998781256885921}
   m_Layer: 0
   m_Name: Alert
   m_TagString: Untagged
@@ -224,6 +224,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8545998781256885921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2854923496878920332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca239bd9cff9a047963f1f4ef8599a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _renderer: {fileID: 8243873470070445517}
 --- !u!1 &6328422824158210871
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,3 +284,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parts:
   - {fileID: 2030237594264377420}
+  - {fileID: 8545998781256885921}
+  isSingleColorComponent: 1

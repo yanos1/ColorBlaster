@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5713591632356667686}
   - component: {fileID: 5398553068990333001}
-  - component: {fileID: 4835337788400140573}
   - component: {fileID: 4396400077456219110}
   m_Layer: 0
   m_Name: ColorRushPowerup
@@ -86,19 +85,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4835337788400140573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2924688059518573279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4649233f174f49b28007bf58344064f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 18
 --- !u!61 &4396400077456219110
 BoxCollider2D:
   m_ObjectHideFlags: 0

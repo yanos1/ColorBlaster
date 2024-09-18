@@ -25,8 +25,8 @@ namespace GameLogic.ObstacleGeneration
 
         private Obstacle[] InitNewObstacleBatch()
         {
-            var newBatch = new Obstacle[NumObstaclesInBatch];
-            int numTreasureObstacles = Random.Range(1, 3);
+            int numTreasureObstacles = Random.Range(2,4);
+            var newBatch = new Obstacle[NumObstaclesInBatch + numTreasureObstacles];
 
             // Fill with regular obstacles
             for (int i = 0; i < NumObstaclesInBatch; ++i)
@@ -35,7 +35,7 @@ namespace GameLogic.ObstacleGeneration
             }
 
             // Add treasure obstacles from difficulty 0
-            for (int i = 0; i < numTreasureObstacles; i++)
+            for (int i = NumObstaclesInBatch; i < numTreasureObstacles+ NumObstaclesInBatch; i++)
             {
                 newBatch[i] = GenerateTreasureObstacle();
             }
@@ -65,12 +65,12 @@ namespace GameLogic.ObstacleGeneration
             {
                 if (chance >= currentNumber)
                 {
-                    print($"chance: {chance} number: {currentNumber}  {difficulty}");
+                    // print($"chance: {chance} number: {currentNumber}  {difficulty}");
                     return difficulty;
                 }
                 currentNumber -= chance;
             }
-            print($"{currentNumber}  {0}");
+            // print($"{currentNumber}  {0}");
             return 0; // Fallback to easiest difficulty if nothing matches
         }
 

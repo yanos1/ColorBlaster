@@ -502,6 +502,10 @@ MonoBehaviour:
     prefab: {fileID: 2924688059518573279, guid: 29e6c03376b23e24d864fa9087296488, type: 3}
     count: 10
   itemCosts: {fileID: 4900000, guid: 4537f4657d3f4262a4c3442c5e3acc61, type: 3}
+  treasureChestBuffs:
+  - {fileID: 11400000, guid: 06d5de28f82987e44a72c4fc92582adf, type: 2}
+  - {fileID: 11400000, guid: c4cadf29f5eee3f49b5a306d1f062661, type: 2}
+  - {fileID: 11400000, guid: e0c378a455b84c8458ef620584d8c0f7, type: 2}
   baseObstacleSpeed: 3
   TEST_MODE: 0
   testObstacleList:

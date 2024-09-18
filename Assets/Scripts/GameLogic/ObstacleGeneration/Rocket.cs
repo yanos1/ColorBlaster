@@ -24,7 +24,6 @@ namespace GameLogic.ObstacleGeneration
             imageFadeDuration = 0.5f;
             numOfAlerts = 3;
             startDirection = Random.value > 0.5 ? 1: -1;
-            _alertRenderer.color = _renderer.color;
             speedMultiplier = 8f;
         }
 
@@ -60,7 +59,7 @@ namespace GameLogic.ObstacleGeneration
             StopAllCoroutines();
             transform.position = new Vector3(transform.parent.parent.position.x,   // I DONT LIKE THIS AT ALL !!
                 Random.Range(spawnYPositionRange.x, spawnYPositionRange.y), 0);
-            _alertRenderer.color = _renderer.color;
+            print($"color: {Renderer.color}");
             startDirection = Random.value > 0.5 ? 1 : -1;
             StartCoroutine(AlertThenLaunch());
         }

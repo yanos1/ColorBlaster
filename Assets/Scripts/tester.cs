@@ -25,6 +25,12 @@ public class tester : MonoBehaviour
         {
             CoreManager.instance.SaveManager.ClearAllData();
         }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.ActivateColorRush, (new Color(0.968f, 1.0f, 0.0f, 1.0f),10f));  // RGB values with alpha
+                
+        }
         
     }
     

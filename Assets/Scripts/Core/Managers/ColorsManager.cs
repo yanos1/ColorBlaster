@@ -43,7 +43,7 @@ namespace Core.Managers
         // Cyber =5,
     }
 
-    public class ObstacleColorsManager
+    public class ColorsManager
     {
         public Color[] CurrentColors => _currentColorTheme;
         
@@ -54,7 +54,7 @@ namespace Core.Managers
 
         // Dictionary where each enum key maps to an array of 4 colors
 
-        public ObstacleColorsManager(List<ColorTheme> colorSets)
+        public ColorsManager(List<ColorTheme> colorSets)
         {
             _colorSets = colorSets;
 

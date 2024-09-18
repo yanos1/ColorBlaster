@@ -70,7 +70,28 @@ namespace Extentions
             onComplete?.Invoke();
         }
 
-        public static void MoveObjectInRandomDirection(Transform obj, float magnitude=1f)
+        public static IEnumerator MoveObjectOverTime(GameObject obj, Vector3 startingPos, Quaternion startingRotation,
+            Transform endingPos, Quaternion endingRotation, float duration, Action onComplete = null)
+        {
+            float timeElapsed = 0;
+            float percentageCompleted = 0;
+            while (percentageCompleted < 1)
+            {
+                timeElapsed += Time.deltaTime;
+                percentageCompleted = timeElapsed / duration;
+                obj.transform.position = Vector3.Lerp(startingPos, endingPos.position, percentageCompleted);
+                obj.transform.rotation = Quaternion.Lerp(startingRotation, endingRotation, percentageCompleted);
+                yield return null;
+            }
+
+            obj.transform.position = endingPos.position;
+            obj.transform.rotation = endingRotation;
+
+            // Invoke the callback if provided
+            onComplete?.Invoke();
+        }
+
+        public static void MoveObjectInRandomDirection(Transform obj, float magnitude = 1f)
         {
             float xAddition = Random.Range(-magnitude, magnitude);
             float yAddition = Random.Range(-magnitude, magnitude);
@@ -98,6 +119,48 @@ namespace Extentions
             }
 
             objToScale.transform.localScale = targetScale;
+        }
+
+
+        public static void StopAndStartCoroutine(this MonoBehaviour monoBehaviour, ref Coroutine coroutine,
+            IEnumerator routine)
+        {
+            if (coroutine != null)
+            {
+                monoBehaviour.StopCoroutine(coroutine);
+            }
+
+            coroutine = monoBehaviour.StartCoroutine(routine);
+        }
+
+
+        public static bool CompareColors(Color color1, Color color2, int decimalPlaces = 2)
+        {
+            // Round each component to the specified number of decimal places
+            float color1R = (float)Math.Round(color1.r, decimalPlaces);
+            float color1G = (float)Math.Round(color1.g, decimalPlaces);
+            float color1B = (float)Math.Round(color1.b, decimalPlaces);
+            float color1A = (float)Math.Round(color1.a, decimalPlaces);
+
+            float color2R = (float)Math.Round(color2.r, decimalPlaces);
+            float color2G = (float)Math.Round(color2.g, decimalPlaces);
+            float color2B = (float)Math.Round(color2.b, decimalPlaces);
+            float color2A = (float)Math.Round(color2.a, decimalPlaces);
+
+            // Compare rounded values directly
+            bool redEqual = color1R == color2R;
+            bool greenEqual = color1G == color2G;
+            bool blueEqual = color1B == color2B;
+            bool alphaEqual = color1A == color2A;
+
+            // Print results for each color channel
+            Debug.Log($"Red Comparison: {color1R} vs {color2R} -> {redEqual}");
+            Debug.Log($"Green Comparison: {color1G} vs {color2G} -> {greenEqual}");
+            Debug.Log($"Blue Comparison: {color1B} vs {color2B} -> {blueEqual}");
+            Debug.Log($"Alpha Comparison: {color1A} vs {color2A} -> {alphaEqual}");
+
+            // Return true only if all channels are equal
+            return redEqual && greenEqual && blueEqual && alphaEqual;
         }
     }
 }

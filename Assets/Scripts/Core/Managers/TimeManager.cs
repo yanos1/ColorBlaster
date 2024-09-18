@@ -9,6 +9,7 @@ public class TimeManager
 {
     private bool _isPaused;
     private float _elapsedTime;
+    private float _currentRunElapsedTime;
     private List<Coroutine> _runningCoroutines;
     private MonoBehaviour _coroutineRunner;
 
@@ -18,22 +19,43 @@ public class TimeManager
         _runningCoroutines = new List<Coroutine>();
         _isPaused = false;
         _elapsedTime = 0f;
-        _coroutineRunner.StopCoroutine(UpdateTime());
+        _currentRunElapsedTime = 0f;
+
+        _coroutineRunner.StartCoroutine(UpdateTime());
+        CoreManager.instance.EventManager.AddListener(EventNames.GameOver, ResetRunTime);
+   
+    }
+
+    public void OnDestroy()
+    {
+        CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, ResetRunTime);
+
+    }
+
+    private void ResetRunTime(object obj)
+    {
+        _currentRunElapsedTime = 0;
     }
 
 
-
     // Run a function X times every Y seconds
+
+    private void ResumeRunTimer(object obj)
+    {
+        _isPaused = false;
+    }
+
+    private void PauseRunTimer(object obj)
+    {
+        _isPaused = true;
+    }
 
     public IEnumerator RunFunctionXTImes(EventNames eventName, object parameters, int x, float interval)
     {
         int count = 0;
         while (count < x)
         {
-            while (_isPaused)
-            {
-                yield return null; // Wait until unpaused
-            }
+        
 
             CoreManager.instance.EventManager.InvokeEvent(eventName, parameters);
             count++;
@@ -42,16 +64,12 @@ public class TimeManager
     }
 
     // Run a function infinitely every Y seconds
-  
+
 
     public IEnumerator RunFunctionInfinitely(EventNames eventName, object parameters, float interval)
     {
         while (true)
         {
-            while (_isPaused)
-            {
-                yield return null; // Wait until unpaused
-            }
             yield return new WaitForSeconds(interval);
 
             CoreManager.instance.EventManager.InvokeEvent(eventName, parameters);
@@ -59,9 +77,14 @@ public class TimeManager
     }
 
     // Track the elapsed time
-    public float GetElapsedTime()
+    public float GetGameElapsedTime()
     {
         return _elapsedTime;
+    }
+
+    public float GetRunElapsedTime()
+    {
+        return _currentRunElapsedTime;
     }
 
     // Update the elapsed time (to be called every frame)
@@ -70,6 +93,11 @@ public class TimeManager
         while (true)
         {
             _elapsedTime += Time.deltaTime;
+            if (CoreManager.instance.GameManager.IsRunActive)
+            {
+                _currentRunElapsedTime += Time.deltaTime;
+            }
+
             yield return null;
         }
     }
@@ -88,12 +116,5 @@ public class TimeManager
         _isPaused = false;
         Time.timeScale = 1;
     }
-
-// Reset time
-    public void ResetTime()
-    {
-        _elapsedTime = 0;
-    }
-
- 
+    
 }

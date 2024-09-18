@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Extentions;
+using GameLogic.ConsumablesGeneration;
 using GameLogic.ObstacleGeneration;
 using GameLogic.PlayerRelated;
 using ScriptableObjects;
@@ -18,7 +19,8 @@ namespace Core.Managers
         public TimeManager TimeManager { get; private set; }
         public ObjectPoolManager PoolManager { get; private set; }
         public StyleManager StyleManager { get; private set; }
-        public ObstacleColorsManager ColorsManager { get; private set; }
+        public ColorsManager ColorsManager { get; private set; }
+        public BuffManager BuffManager { get; private set; }
         public ObstacleManager ObstacleManager { get; private set; }
         public ItemCostManager CostManager { get; private set; }
         public Player Player { get; set; }
@@ -39,14 +41,15 @@ namespace Core.Managers
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
         }
 
-        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles, PoolEntry[] poolEntries, float baseObjectSpeed, Action onComplete)
+        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles, PoolEntry[] poolEntries, TreasureChestBuff[] rewards, float baseObjectSpeed, Action onComplete)
         {
             // Initialize all the managers here
             
             GameManager = new GameManager(baseObjectSpeed);
             TimeManager = new TimeManager();
             StyleManager = new StyleManager(styles);
-            ColorsManager = new ObstacleColorsManager(colorThemes);
+            ColorsManager = new ColorsManager(colorThemes);
+            BuffManager = new BuffManager(rewards);
             ObstacleManager = new ObstacleManager(obstacles);
             PoolManager = new ObjectPoolManager(poolEntries);
             CostManager = new ItemCostManager(itemCosts);

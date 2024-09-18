@@ -9,6 +9,7 @@ namespace Core.Managers
     public class GameManager
     {
         public bool IsGameActive => _isGameActive;
+        public bool IsRunActive => _isRunActive;
 
         public float CurrentObjectsSpeed
         {
@@ -25,6 +26,7 @@ namespace Core.Managers
         private float _currentObjectsSpeed;
         private float _savedObjectSpeed;
         private bool _isGameActive;
+        private bool _isRunActive;
 
 
         public GameManager(float baseObjectSpeed)
@@ -32,6 +34,7 @@ namespace Core.Managers
             _baseObjectSpeed = baseObjectSpeed;
             _currentObjectsSpeed = _baseObjectSpeed;
             _isGameActive = false;
+            _isRunActive = false;
             _lastObstacleUpdateTime = Time.time;
             CoreManager.instance.EventManager.AddListener(EventNames.StartGame, OnStartGame);
             CoreManager.instance.EventManager.AddListener(EventNames.GameOver, OnGameOver);
@@ -63,6 +66,7 @@ namespace Core.Managers
                     CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, 2, ChangeDifficultyInterval));
             }
             _currentObjectsSpeed = _savedObjectSpeed;
+            _isRunActive = true;
         }
 
         private void StopAllObjects(object obj)
@@ -74,6 +78,8 @@ namespace Core.Managers
             }
             _savedObjectSpeed = CurrentObjectsSpeed;
             _currentObjectsSpeed = 0;
+
+            _isRunActive = false;
         }
 
 
@@ -86,6 +92,7 @@ namespace Core.Managers
         private void OnStartGame(object obj)
         {
             _isGameActive = true;
+            _isRunActive = true;
             increaseGameDiffucultyCoroutine = CoreManager.instance.MonoRunner.StartCoroutine(CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, null,
                 ChangeDifficultyInterval));
             CurrentObjectsSpeed = _baseObjectSpeed;

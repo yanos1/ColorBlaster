@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using Core.Managers;
 using Extentions;
@@ -25,6 +26,8 @@ namespace GameLogic.PlayerRelated
         private bool isShooting;
         private Coroutine shootingCoroutine;
         private Coroutine colorRushCoroutine;
+        private static int RotationSpeedAdditionPerAdjusment => 16;
+
 
 
         private void Awake()
@@ -52,7 +55,7 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.AddListener(EventNames.Revive, RestoreBlocks);
             CoreManager.instance.EventManager.AddListener(EventNames.IncreaseGameDifficulty, RotateFaster);
             CoreManager.instance.EventManager.AddListener(EventNames.Shoot, SetIsShooting);
-            CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, ActicateColorRush);
+            CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, OnColorRushPickUp);
         }
 
         private void OnDisable()
@@ -60,30 +63,32 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.RemoveListener(EventNames.Revive, RestoreBlocks);
             CoreManager.instance.EventManager.RemoveListener(EventNames.IncreaseGameDifficulty, RotateFaster);
             CoreManager.instance.EventManager.RemoveListener(EventNames.Shoot, SetIsShooting);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, ActicateColorRush);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, OnColorRushPickUp);
         }
 
-        private void ActicateColorRush(object obj)
+        private void OnColorRushPickUp(object obj)
         {
-            colorRushCoroutine = StartCoroutine(ActivateColorRushForDuration());
+            if (obj is (Color color, float duration))
+            {
+                Debug.Log(CoreManager.instance.BuffManager);
+                CoreManager.instance.BuffManager.AddBuff(color,(ActivateColorRush,DeactivateColorRush), duration);
+            }
         }
 
-        private IEnumerator ActivateColorRushForDuration()
+        private void ActivateColorRush(Color color)
         {
             foreach (var block in blocks)
             {
-                block.Renderer.color = Color.white;
+                block.Renderer.color = color;
                 block.Renderer.material = colorRushStyle.Material;
                 block.Renderer.material.shader = colorRushStyle.Shader;
             }
-
-            yield return new WaitForSeconds(10f);
-            DeactivateColorRush();
         }
 
         private void DeactivateColorRush()
         {
             int i = 0;
+            print("DEACTIVATE !!!!!!!!!!");
             foreach (var block in blocks)
             {
                 Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
@@ -133,16 +138,13 @@ namespace GameLogic.PlayerRelated
 
         private void RotateFaster(object obj)
         {
-            rotationSpeed += 16;
+            rotationSpeed += RotationSpeedAdditionPerAdjusment;
         }
+
 
 
         private void RestoreBlocks(object obj)
         {
-            if (colorRushCoroutine is not null)
-            {
-                DeactivateColorRush();
-            }
             float maxReviveDuration = 0;
             float baseReviveDuration = 0.5f;
             for (int i = 0; i < blocks.Length; ++i)

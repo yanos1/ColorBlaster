@@ -26,7 +26,6 @@ namespace UI
         private void OnGameReset(Scene arg0, LoadSceneMode arg1)
         {
             SceneManager.sceneLoaded -= OnGameReset;
-            CoreManager.instance.TimeManager.ResumeTime();
             CoreManager.instance.EventManager.InvokeEvent(EventNames.StartGame, null);
         }
     }

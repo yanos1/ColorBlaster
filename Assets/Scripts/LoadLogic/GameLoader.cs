@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Core.Managers;
+using GameLogic.ConsumablesGeneration;
 using GameLogic.ObstacleGeneration;
 using ScriptableObjects;
 using TMPro;
@@ -23,6 +24,7 @@ namespace LoaderLogic
         [SerializeField] private Obstacle[] obstaclesList;
         [SerializeField] private PoolEntry[] poolEntries;
         [SerializeField] private TextAsset itemCosts;
+        [SerializeField] private TreasureChestBuff[] treasureChestBuffs;
 
         [SerializeField] private float baseObstacleSpeed;
 
@@ -47,7 +49,7 @@ namespace LoaderLogic
         private void LoadCoreManager()
         {
            var coreManager =  new CoreManager();
-           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, TEST_MODE ? testObstacleList :obstaclesList, poolEntries, baseObstacleSpeed, OnCoreManagersLoaded);
+           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, TEST_MODE ? testObstacleList :obstaclesList, poolEntries,treasureChestBuffs, baseObstacleSpeed, OnCoreManagersLoaded);
             
         }
 

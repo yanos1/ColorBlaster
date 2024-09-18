@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core.Managers;
+using Extentions;
 using GameLogic.ObstacleGeneration;
 using GameLogic.StyleRelated;
 using Interfaces;
@@ -48,7 +49,9 @@ namespace GameLogic.PlayerRelated
             ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();
             if (obstacle is not null)
             {
-                if (_renderer.color == obstacle.GetColor())
+                print($"see difference : {_renderer.color} {obstacle.GetColor()}");
+                print($"is different:   {_renderer.color == obstacle.GetColor()}");
+                if (UtilityFunctions.CompareColors(_renderer.color,obstacle.GetColor()))
                 {
                     obstacle.Shatter();
                 }

@@ -12,6 +12,8 @@ namespace GameLogic.ObstacleGeneration
 {
     public class Obstacle : MoveableObject, IResettable
     {
+
+        public List<ObstacleComponent> ObstacleComponents => obstacleComponents;
         public Vector3 RightMostPosition => rightMostPosition.position;
 
         public int Difficulty
