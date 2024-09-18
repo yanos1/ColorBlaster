@@ -20,24 +20,29 @@ namespace GameLogic.ConsumablesGeneration
             colorToBuffMap = new Dictionary<Color, TreasureChestBuff>();
             activeBuffsDurationsLeft = new Dictionary<Color, ((EventNames, EventNames), float)>();
             InitColorToRewardMap(allBuffs);
-            CoreManager.instance.MonoRunner.StartCoroutine(SelfUpdate());
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun,StopBuffs);
+            CoreManager.instance.EventManager.AddListener(EventNames.StartGame,StartUpdate);
         }
 
-      
-
+        
         public void OnDestroy()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun,StopBuffs);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame,StartUpdate);
 
         }
-        
+
+        private void StartUpdate(object obj)
+        {
+            CoreManager.instance.MonoRunner.StartCoroutine(SelfUpdate());
+
+        }
      
         private IEnumerator SelfUpdate()   // can be optimised using events that trigger when a buff is called
         {
             List<Color> keysToRemove = new List<Color>();
 
-            while (true) 
+            while (CoreManager.instance.GameManager.IsRunActive) 
             {
                 keysToRemove.Clear();
                 Debug.Log(activeBuffsDurationsLeft.Count);
@@ -153,6 +158,20 @@ namespace GameLogic.ConsumablesGeneration
             }
             
 
+        }
+
+        public void StopBuff(Color color)
+        {
+            foreach (var pair in activeBuffsDurationsLeft)
+            {
+                if (UtilityFunctions.CompareColors(pair.Key,color))
+                {
+                    CoreManager.instance.EventManager.InvokeEvent(activeBuffsDurationsLeft[pair.Key].Item1.Item2,null);
+                    activeBuffsDurationsLeft.Remove(pair.Key);
+                    return;
+
+                } 
+            }
         }
         
         private void StopBuffs(object obj)

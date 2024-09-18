@@ -17,6 +17,7 @@ namespace GameLogic.PlayerRelated
 
         [SerializeField] private Shooter shooter;
         [SerializeField] private PlayerMovement playerMovement;
+        [SerializeField] private Shield shieldBuff;
 
         private Vector3 startPos;
         private bool isDead;
@@ -41,16 +42,36 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.AddListener(EventNames.KillPlayer, Fall);
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, MakeAlive);
             CoreManager.instance.EventManager.AddListener(EventNames.Revive, ResetGameObject);
-        }
+            CoreManager.instance.EventManager.AddListener(EventNames.ActivateShield, ActivateShield);
+            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateShield, DeactivateShield);
 
+        }
+ 
         private void OnDisable()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.KillPlayer, Fall);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, MakeAlive);
             CoreManager.instance.EventManager.RemoveListener(EventNames.Revive, ResetGameObject);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateShield, ActivateShield);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateShield, DeactivateShield);
+
         }
 
-       
+        private void DeactivateShield(object obj)
+        {
+            shieldBuff.gameObject.SetActive(false);
+        }
+
+        private void ActivateShield(object obj)
+        {
+            if (obj is Color color)
+            {
+                shieldBuff.gameObject.SetActive(true);
+                shieldBuff.SetColor(color);
+            }
+        }
+        
+        
 
         private void Fall(object obj)
         {
@@ -65,7 +86,6 @@ namespace GameLogic.PlayerRelated
                 () => 
                 {
                     CoreManager.instance.EventManager.InvokeEvent(EventNames.EndRun, null);
-                   
                 }
             ));
         }

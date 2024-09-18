@@ -58,7 +58,7 @@ namespace GameLogic.StyleRelated
         }
 
 
-        public void SetColor(Color newColor)
+        public virtual void SetColor(Color newColor)
         {
             _renderer.color = newColor;
         }

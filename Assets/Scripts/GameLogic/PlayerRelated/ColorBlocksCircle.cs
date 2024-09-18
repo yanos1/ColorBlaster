@@ -42,6 +42,7 @@ namespace GameLogic.PlayerRelated
             for (int i = 0; i < currentColors.Length; ++i)
             {
                 blocks[i].SetColor(currentColors[i]);
+                print(currentColors[i]);
             }
 
             invincible = false;

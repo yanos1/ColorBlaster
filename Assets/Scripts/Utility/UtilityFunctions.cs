@@ -140,18 +140,15 @@ namespace Extentions
             float color1R = (float)Math.Round(color1.r, decimalPlaces);
             float color1G = (float)Math.Round(color1.g, decimalPlaces);
             float color1B = (float)Math.Round(color1.b, decimalPlaces);
-            float color1A = (float)Math.Round(color1.a, decimalPlaces);
 
             float color2R = (float)Math.Round(color2.r, decimalPlaces);
             float color2G = (float)Math.Round(color2.g, decimalPlaces);
             float color2B = (float)Math.Round(color2.b, decimalPlaces);
-            float color2A = (float)Math.Round(color2.a, decimalPlaces);
 
             // Compare rounded values directly
             bool redEqual = color1R == color2R;
             bool greenEqual = color1G == color2G;
             bool blueEqual = color1B == color2B;
-            bool alphaEqual = color1A == color2A;
 
             // Print results for each color channel
             // Debug.Log($"Red Comparison: {color1R} vs {color2R} -> {redEqual}");
@@ -160,7 +157,7 @@ namespace Extentions
             // Debug.Log($"Alpha Comparison: {color1A} vs {color2A} -> {alphaEqual}");
 
             // Return true only if all channels are equal
-            return redEqual && greenEqual && blueEqual && alphaEqual;
+            return redEqual && greenEqual && blueEqual;
         }
     }
 }

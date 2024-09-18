@@ -71,5 +71,7 @@ namespace Core.Managers
         GameOverPanelActive = 16,
 
         DeactivateColorRush = 17,
+        ActivateShield = 18,
+        DeactivateShield = 19,
     }
 }

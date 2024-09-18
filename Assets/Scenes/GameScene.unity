@@ -130,14 +130,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3463701521628004471, guid: 1c5a45c523002cf45bc1f95b82c4c609, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 1013142602}
-    - target: {fileID: 3463701521628004471, guid: 1c5a45c523002cf45bc1f95b82c4c609, type: 3}
-      propertyPath: rotationSpeedWhileShooting
-      value: 75
-      objectReference: {fileID: 0}
     - target: {fileID: 3565078855427421127, guid: 1c5a45c523002cf45bc1f95b82c4c609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.92
@@ -181,10 +173,6 @@ PrefabInstance:
     - target: {fileID: 6736890473453859204, guid: 1c5a45c523002cf45bc1f95b82c4c609, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 7534212888197949404, guid: 1c5a45c523002cf45bc1f95b82c4c609, type: 3}
-      propertyPath: m_Name
-      value: ColorBlockCircle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1369,17 +1357,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1013142602 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4225177448512863297, guid: 1c5a45c523002cf45bc1f95b82c4c609, type: 3}
-  m_PrefabInstance: {fileID: 57220823}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5b03fff502e45f2a4caf28b7227a197, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1130033506
 GameObject:
   m_ObjectHideFlags: 0

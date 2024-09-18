@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buffType: 2
   poolType: 16
-  eventToInvoke: 0
+  activatonEvent: 18
+  deactivationEvent: 19
+  prefabReachTargetEvent: 0

@@ -35,6 +35,7 @@ namespace GameLogic.ObstacleGeneration
                 // float buffMultiplier = buff.buffType == BuffType.GemBuff ? currentHits * GetGemMultyplier() : 1.5f;
                 // CoreManager.instance.BuffManager.MoveParticlesToPlayer(transform.position, buff.poolType,
                 //     Renderer.color, buffMultiplier, buff.activatonEvent,buff.deactivationEvent, base.Shatter);
+                base.Shatter();
             }
         }
 
