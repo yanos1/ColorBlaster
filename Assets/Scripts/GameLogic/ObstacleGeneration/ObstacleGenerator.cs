@@ -40,6 +40,8 @@ namespace GameLogic.ObstacleGeneration
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun, PauseObstacles);
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, ResumeObstacles);
             CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, PaintActiveObstacles);
+            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateColorRush, RestoreActiveObstacles);
+
         
         }
 
@@ -49,37 +51,30 @@ namespace GameLogic.ObstacleGeneration
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, PauseObstacles);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, ResumeObstacles);
-            CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, PaintActiveObstacles);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, PaintActiveObstacles);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, RestoreActiveObstacles);
+        }
+
+        private void RestoreActiveObstacles(object obj)
+        {
+            // later add restoring obstacles if we want.
+            isColorRushActive = false;
         }
 
         private void PaintActiveObstacles(object obj)
         {
-            print("event called IndED");
-            if (obj is ValueTuple<Color,float> pair)
+            if (obj is Color color)
             {
-                print(this); // will be null if i play again and dont put this object on dont destroy on load.
-                
-                this.StopAndStartCoroutine(ref colorRushCoroutine,PaintActiveObstaclesForDuration(pair.Item1,pair.Item2));
-            }
-        }
-
-        private IEnumerator PaintActiveObstaclesForDuration(Color color, float duration)
-        {
-            isColorRushActive = true;
-            foreach (var obstacle in activeObstacles)
-            {
-                print("obstace");
-                foreach (var part in obstacle.ExtractStyleableObjects())
+                isColorRushActive = true;
+                foreach (var obstacle in activeObstacles)
                 {
-                    print("paining part");
-                    part.Renderer.color = color;
-                    colorRushColor = color;
+                    foreach (var part in obstacle.ExtractStyleableObjects())
+                    {
+                        part.Renderer.color = color;
+                        colorRushColor = color;
+                    }
                 }
             }
-
-            yield return new WaitForSeconds(duration);
-            isColorRushActive = false;
-
         }
 
         private void PauseObstacles(object obj)

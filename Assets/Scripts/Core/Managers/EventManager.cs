@@ -69,6 +69,7 @@ namespace Core.Managers
         BroadcastGemsPicked = 15,
 
         GameOverPanelActive = 16,
-        
+
+        DeactivateColorRush = 17,
     }
 }

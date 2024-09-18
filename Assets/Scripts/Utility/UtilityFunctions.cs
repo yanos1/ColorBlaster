@@ -154,10 +154,10 @@ namespace Extentions
             bool alphaEqual = color1A == color2A;
 
             // Print results for each color channel
-            Debug.Log($"Red Comparison: {color1R} vs {color2R} -> {redEqual}");
-            Debug.Log($"Green Comparison: {color1G} vs {color2G} -> {greenEqual}");
-            Debug.Log($"Blue Comparison: {color1B} vs {color2B} -> {blueEqual}");
-            Debug.Log($"Alpha Comparison: {color1A} vs {color2A} -> {alphaEqual}");
+            // Debug.Log($"Red Comparison: {color1R} vs {color2R} -> {redEqual}");
+            // Debug.Log($"Green Comparison: {color1G} vs {color2G} -> {greenEqual}");
+            // Debug.Log($"Blue Comparison: {color1B} vs {color2B} -> {blueEqual}");
+            // Debug.Log($"Alpha Comparison: {color1A} vs {color2A} -> {alphaEqual}");
 
             // Return true only if all channels are equal
             return redEqual && greenEqual && blueEqual && alphaEqual;

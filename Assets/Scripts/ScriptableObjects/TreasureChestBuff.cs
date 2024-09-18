@@ -13,7 +13,9 @@ namespace GameLogic.ConsumablesGeneration
     {
         public BuffType buffType;  // Name for the reward
         public PoolType poolType;  // Icon if needed for UI
-        public EventNames eventToInvoke;
+        public EventNames activatonEvent;
+        public EventNames deactivationEvent;
+        public EventNames prefabReachTargetEvent; //will be used for power ups that trigger ui change (like gem pickup)
     }
 
     public enum BuffType

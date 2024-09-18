@@ -28,8 +28,8 @@ public class tester : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            CoreManager.instance.EventManager.InvokeEvent(EventNames.ActivateColorRush, (new Color(0.968f, 1.0f, 0.0f, 1.0f),10f));  // RGB values with alpha
-                
+            CoreManager.instance.BuffManager.ActivateBuff(new Vector3(0,0,0), new Color(0.968f, 1.0f, 0.0f, 1.0f), 6f);
+
         }
         
     }

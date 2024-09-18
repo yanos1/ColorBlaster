@@ -24,21 +24,17 @@ namespace GameLogic.ObstacleGeneration
 
         private int currentHits;
 
-        private void OnEnable()
-        {
-            
-        }
 
         public override void Shatter()
         {
             TakeHit();
             if (currentHits == amountOfShotsToBreak)
             {
-                print(GemsCollectedUIPosition);
-                TreasureChestBuff buff = CoreManager.instance.BuffManager.GetReward(Renderer.color);
-                
-                float buffMultiplier = buff.buffType == BuffType.GemBuff ?currentHits * GetGemMultyplier() : 1.5f;
-                CoreManager.instance.BuffManager.MoveParticlesToPlayer(transform.position, buff.poolType, Renderer.color, buffMultiplier, buff.eventToInvoke,base.Shatter);
+                CoreManager.instance.BuffManager.ActivateBuff(transform.position, Renderer.color, currentHits);
+                // TreasureChestBuff buff = CoreManager.instance.BuffManager.GetReward(Renderer.color);
+                // float buffMultiplier = buff.buffType == BuffType.GemBuff ? currentHits * GetGemMultyplier() : 1.5f;
+                // CoreManager.instance.BuffManager.MoveParticlesToPlayer(transform.position, buff.poolType,
+                //     Renderer.color, buffMultiplier, buff.activatonEvent,buff.deactivationEvent, base.Shatter);
             }
         }
 

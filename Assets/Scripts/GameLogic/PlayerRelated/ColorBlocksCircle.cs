@@ -29,7 +29,6 @@ namespace GameLogic.PlayerRelated
         private static int RotationSpeedAdditionPerAdjusment => 16;
 
 
-
         private void Awake()
         {
             Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
@@ -56,6 +55,7 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.AddListener(EventNames.IncreaseGameDifficulty, RotateFaster);
             CoreManager.instance.EventManager.AddListener(EventNames.Shoot, SetIsShooting);
             CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, OnColorRushPickUp);
+            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateColorRush, OnColorRushEnd);
         }
 
         private void OnDisable()
@@ -64,28 +64,23 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.RemoveListener(EventNames.IncreaseGameDifficulty, RotateFaster);
             CoreManager.instance.EventManager.RemoveListener(EventNames.Shoot, SetIsShooting);
             CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, OnColorRushPickUp);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, OnColorRushEnd);
         }
 
         private void OnColorRushPickUp(object obj)
         {
-            if (obj is (Color color, float duration))
+            if (obj is (Color color))
             {
-                Debug.Log(CoreManager.instance.BuffManager);
-                CoreManager.instance.BuffManager.AddBuff(color,(ActivateColorRush,DeactivateColorRush), duration);
+                foreach (var block in blocks)
+                {
+                    block.Renderer.color = color;
+                    block.Renderer.material = colorRushStyle.Material;
+                    block.Renderer.material.shader = colorRushStyle.Shader;
+                }
             }
         }
 
-        private void ActivateColorRush(Color color)
-        {
-            foreach (var block in blocks)
-            {
-                block.Renderer.color = color;
-                block.Renderer.material = colorRushStyle.Material;
-                block.Renderer.material.shader = colorRushStyle.Shader;
-            }
-        }
-
-        private void DeactivateColorRush()
+        private void OnColorRushEnd(object obj)
         {
             int i = 0;
             print("DEACTIVATE !!!!!!!!!!");
@@ -140,7 +135,6 @@ namespace GameLogic.PlayerRelated
         {
             rotationSpeed += RotationSpeedAdditionPerAdjusment;
         }
-
 
 
         private void RestoreBlocks(object obj)
