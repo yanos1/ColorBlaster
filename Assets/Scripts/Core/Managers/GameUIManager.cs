@@ -11,9 +11,13 @@ namespace UI
 {
     public class GameUIManager : MonoBehaviour
     {
+
+        public static GameUIManager instance;
+        
         [SerializeField] private Canvas gameUICanvas;
         [SerializeField] private GameObject gameOverPanel;
         [SerializeField] private GameObject oneMoreAttemptPanel;
+        [SerializeField] private GemsCollectedUI gemsCollectedUI;
         [SerializeField] private TextMeshProUGUI gemsCollectedText;
         [SerializeField] private TextMeshProUGUI gemsOwnedText;
         [SerializeField] private GameObject playAgainButton;
@@ -22,10 +26,19 @@ namespace UI
         [SerializeField] private PanelManager panelManager; // Reference to the new PanelManager
         [SerializeField] private GemTransferManager gemTransferManager; // Reference to the new GemTransferManager
 
+
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+            }
+        }
+
         private void OnEnable()
         {
             CoreManager.instance.EventManager.AddListener(EventNames.GameOver, ShowGameOverPanel);
-            CoreManager.instance.EventManager.AddListener(EventNames.BroadcastGemsPicked, TransferGems);
+            CoreManager.instance.EventManager.AddListener(EventNames.BroadcastGemsPicked, TransferGemsText);
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun, ShowOneMoreAttemptMenu);
         }
 
@@ -33,12 +46,18 @@ namespace UI
         private void OnDisable()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, ShowGameOverPanel);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.BroadcastGemsPicked, TransferGems);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.BroadcastGemsPicked, TransferGemsText);
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, ShowOneMoreAttemptMenu);
         }
 
+        public Vector3 GetGemsCollectedUIPosition()
+        {
+            return UIUtilityFunctions.GetWorldPositionFromUI(gemsCollectedUI.GemsCollectedIcon.rectTransform, gameUICanvas,
+                CameraManager.instance.MainCamera);
+        }
 
-        private void TransferGems(object obj)
+
+        private void TransferGemsText(object obj)
         {
             string gemsOwned = CoreManager.instance.UserDataManager.GemsOwned.ToString();
             gemsOwnedText.text = gemsOwned;

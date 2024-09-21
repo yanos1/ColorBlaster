@@ -2377,6 +2377,7 @@ MonoBehaviour:
   gameUICanvas: {fileID: 1717802555}
   gameOverPanel: {fileID: 959311827}
   oneMoreAttemptPanel: {fileID: 173576918}
+  gemsCollectedUI: {fileID: 404513556}
   gemsCollectedText: {fileID: 1774130792}
   gemsOwnedText: {fileID: 124577416}
   playAgainButton: {fileID: 1144369368}

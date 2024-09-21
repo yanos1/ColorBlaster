@@ -6,14 +6,17 @@ using GameLogic.StyleRelated;
 using Interfaces;
 using PoolTypes;
 using ScriptableObjects;
+using UI;
 using UnityEditor;
 using UnityEditor.Playables;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameLogic.ObstacleGeneration
 {
     public class ObstaclePart : StyleableObject, IResettable
     {
+        [SerializeField] private Image gemUIimage;
      
 
         public override void ChangeStyle()
@@ -31,13 +34,15 @@ namespace GameLogic.ObstacleGeneration
         public virtual void ResetGameObject()
         {
             Color? deleteColorBuffColor = CoreManager.instance.BuffManager.IsBuffActive(BuffType.DeleteColorBuff);
-            if (deleteColorBuffColor is not null && Renderer.color == deleteColorBuffColor) return;
+            if (deleteColorBuffColor is Color color && UtilityFunctions.CompareColors(color,Renderer.color))
+            {
+                return; // we detcted a color that is meant to be inactive, so we return before activating.
+            }
             gameObject.SetActive(true);
         }
 
         public override void Shatter()
         {
-            base.Shatter();
             if (CoreManager.instance.BuffManager.IsBuffActive(BuffType.GemBuff) is not null)
             {
                 print("gem earned from obstacle");
@@ -46,7 +51,7 @@ namespace GameLogic.ObstacleGeneration
                 gem.GetComponent<SpriteRenderer>().color = Renderer.color;
                 gem.GetComponent<TrailRenderer>().startColor = Renderer.color;
                 CoreManager.instance.MonoRunner.StartCoroutine(UtilityFunctions.MoveObjectOverTime(gem, transform.position, transform.rotation,
-                    CoreManager.instance.Player.transform, transform.rotation, speed,
+                    GameUIManager.instance.GetGemsCollectedUIPosition(), transform.rotation, speed,
                     () =>
                     {
                         CoreManager.instance.EventManager.InvokeEvent(EventNames.GemPrefabArrived, null);
@@ -54,6 +59,8 @@ namespace GameLogic.ObstacleGeneration
 
                     }));
             }
+            base.Shatter();
+
             
             
         }

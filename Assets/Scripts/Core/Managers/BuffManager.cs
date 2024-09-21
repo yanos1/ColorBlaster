@@ -125,7 +125,8 @@ namespace GameLogic.ConsumablesGeneration
         public void MoveParticlesToPlayer(TreasureChestBuff buff, Vector3 startPosition, Color color, float strength)
         {
             float maxDuration = 0f;
-            int numberOfGemsToEarn = (int)strength;
+            int numberOfGemsToEarn =(int)(strength*buff.buffMultiPlier);
+            int buffDuration = numberOfGemsToEarn;
             Transform targetPosition = CoreManager.instance.Player.transform;
             bool firstParticleReached = false;
             for (int i = 0; i < numberOfGemsToEarn; ++i)
@@ -148,7 +149,7 @@ namespace GameLogic.ConsumablesGeneration
                             (color, 1f, buff));
                         if (!firstParticleReached)
                         {
-                            AddBuff(color, buff.activatonEvent, buff.deactivationEvent, strength);
+                            AddBuff(color, buff.activatonEvent, buff.deactivationEvent, buffDuration);
                             Debug.Log("INVOKE BUFF");
                             firstParticleReached = true;
                         }

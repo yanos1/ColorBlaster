@@ -27,6 +27,9 @@ namespace GameLogic.ObstacleGeneration
 
         public override void Shatter()
         {
+            
+            
+            
             TakeHit();
             if (currentHits == amountOfShotsToBreak)
             {
@@ -62,6 +65,16 @@ namespace GameLogic.ObstacleGeneration
         private void TakeHit()
         {
             numberOfShotsUI.text = (amountOfShotsToBreak - ++currentHits).ToString();
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            Debug.Log("HIT CHEST");
+            if (other.gameObject.GetComponent<Shield>() is not null)
+            {
+                
+                base.Shatter();
+            }
         }
     }
 }

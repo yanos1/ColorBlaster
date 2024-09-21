@@ -12,6 +12,9 @@ namespace UI
 {
     public class GemsCollectedUI : MonoBehaviour
     {
+
+
+        public Image GemsCollectedIcon => gemsImage;
         
         [SerializeField] private TextMeshProUGUI gemsCollectedText;
         [SerializeField] private Image gemsImage;

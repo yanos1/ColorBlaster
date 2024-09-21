@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Core.Managers;
 using Extentions;
 using GameLogic.ConsumablesGeneration;
+using GameLogic.StyleRelated;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -42,6 +43,7 @@ namespace GameLogic.ObstacleGeneration
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, ResumeObstacles);
             CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, PaintActiveObstacles);
             CoreManager.instance.EventManager.AddListener(EventNames.DeactivateColorRush, RestoreActiveObstacles);
+            CoreManager.instance.EventManager.AddListener(EventNames.ActivateDeleteColor, DisableDeletedColor);
 
         
         }
@@ -54,6 +56,26 @@ namespace GameLogic.ObstacleGeneration
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, ResumeObstacles);
             CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, PaintActiveObstacles);
             CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, RestoreActiveObstacles);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateDeleteColor, DisableDeletedColor);
+
+        }
+
+        private void DisableDeletedColor(object obj)
+        {
+            if (obj is (Color color, float duration, TreasureChestBuff buff))
+            {
+                foreach (var obstacle in activeObstacles)
+                {
+                    List<StyleableObject> obstacleParts = obstacle.ExtractStyleableObjects();
+                    foreach (var part in obstacleParts)
+                    {
+                        if (UtilityFunctions.CompareColors(part.Renderer.color, color))
+                        {
+                            part.gameObject.SetActive(false);
+                        }
+                    }
+                }
+            }
         }
 
         private void RestoreActiveObstacles(object obj)
