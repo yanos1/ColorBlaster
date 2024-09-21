@@ -70,7 +70,7 @@ namespace GameLogic.PlayerRelated
 
         private void OnColorRushPickUp(object obj)
         {
-            if (obj is (Color color))
+            if (obj is (Color color, float duration, TreasureChestBuff buff))
             {
                 foreach (var block in blocks)
                 {

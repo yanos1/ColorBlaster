@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 291898d457e9497c83c9e5bce64bbb30, type: 3}
-  m_Name: ShieldBuff
+  m_Name: DeleteColorBuff
   m_EditorClassIdentifier: 
-  buffType: 2
+  buffType: 4
   poolType: 16
-  activatonEvent: 18
-  deactivationEvent: 19
+  activatonEvent: 0
+  deactivationEvent: 0
   prefabReachTargetEvent: 20
   UIImage: {fileID: 2508768222581782103, guid: 11df89a1bd4735640a6f5c97a6d3ff27, type: 3}

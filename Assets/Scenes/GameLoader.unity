@@ -506,6 +506,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 06d5de28f82987e44a72c4fc92582adf, type: 2}
   - {fileID: 11400000, guid: c4cadf29f5eee3f49b5a306d1f062661, type: 2}
   - {fileID: 11400000, guid: e0c378a455b84c8458ef620584d8c0f7, type: 2}
+  - {fileID: 11400000, guid: 21f6e984a76620b4ab19ac85ec23f225, type: 2}
   baseObstacleSpeed: 3
   TEST_MODE: 0
   testObstacleList:

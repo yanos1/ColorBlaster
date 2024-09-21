@@ -14,7 +14,7 @@ namespace GameLogic.PlayerRelated
     {
         [SerializeField] private float moveSpeed;
         [SerializeField] private Color baseColor;
-        private float outOfScreenPosition = 10.2f;
+        private float BulletOutOfBoundsXPosition = 7f;
 
         private void OnEnable()
         {
@@ -30,7 +30,7 @@ namespace GameLogic.PlayerRelated
         private void Update()
         {
             transform.Translate(Vector3.right * (Time.deltaTime * moveSpeed));
-            if (transform.position.x > outOfScreenPosition)
+            if (transform.position.x > BulletOutOfBoundsXPosition)
             {
                 CoreManager.instance.PoolManager.ReturnToPool(PoolType.Bullet, gameObject);
             }
@@ -57,10 +57,10 @@ namespace GameLogic.PlayerRelated
                 }
                 else
                 {
-                    List<Color> filteredColors = new List<Color>(CoreManager.instance.ColorsManager.CurrentColors);
-                    filteredColors.Remove(_renderer.color);  // Remove the current color
-                    
-                    obstacle.SetColor(filteredColors[Random.Range(0, filteredColors.Count)]);
+                    // List<Color> filteredColors = new List<Color>(CoreManager.instance.ColorsManager.CurrentColors);
+                    // filteredColors.Remove(_renderer.color);  // Remove the current color
+                    //
+                    // obstacle.SetColor(filteredColors[Random.Range(0, filteredColors.Count)]);
                     
                 }
 

@@ -3,6 +3,7 @@ using Core.Managers;
 using PoolTypes;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace GameLogic.ConsumablesGeneration
 {
@@ -16,6 +17,7 @@ namespace GameLogic.ConsumablesGeneration
         public EventNames activatonEvent;
         public EventNames deactivationEvent;
         public EventNames prefabReachTargetEvent; //will be used for power ups that trigger ui change (like gem pickup)
+        public Image UIImage;
     }
 
     public enum BuffType
@@ -24,6 +26,7 @@ namespace GameLogic.ConsumablesGeneration
         GemBuff = 1,
         ShieldBuff = 2,
         ColorRushBuff = 3,
+        DeleteColorBuff = 4,
         
     }
 }

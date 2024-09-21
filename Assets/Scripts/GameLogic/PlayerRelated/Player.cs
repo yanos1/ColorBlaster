@@ -1,5 +1,6 @@
 ﻿using Core.Managers;
 using Extentions;
+using GameLogic.ConsumablesGeneration;
 using UnityEngine;
 
 namespace GameLogic.PlayerRelated
@@ -64,8 +65,9 @@ namespace GameLogic.PlayerRelated
 
         private void ActivateShield(object obj)
         {
-            if (obj is Color color)
+            if (obj is (Color color, float duration, TreasureChestBuff buff))
             {
+                print("SET SHIELD ACTIVE");
                 shieldBuff.gameObject.SetActive(true);
                 shieldBuff.SetColor(color);
             }

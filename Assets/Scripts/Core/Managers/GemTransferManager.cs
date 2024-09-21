@@ -14,13 +14,13 @@ namespace Core.Managers
     {
         [SerializeField] private Canvas gameUICanvas;
 
-        public void TransferGems(TextMeshProUGUI collectedText, TextMeshProUGUI ownedText, List<Color> colors,
+        public void TransferGemsText(TextMeshProUGUI collectedText, TextMeshProUGUI ownedText, List<Color> colors,
             PoolType gemType, float duration)
         {
-            StartCoroutine(TransferGemsOverTime(collectedText, ownedText, colors, gemType, duration));
+            StartCoroutine(TransferGemsTextOverTime(collectedText, ownedText, colors, gemType, duration));
         }
 
-        private IEnumerator TransferGemsOverTime(TextMeshProUGUI collectedText, TextMeshProUGUI ownedText,
+        private IEnumerator TransferGemsTextOverTime(TextMeshProUGUI collectedText, TextMeshProUGUI ownedText,
             List<Color> colors, PoolType gemType, float duration)
         {
             float durationForOneGem = duration / colors.Count;

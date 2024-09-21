@@ -2,7 +2,7 @@
   "items": [
     {
       "item": "Revive",
-      "cost": 100
+      "cost": 1
     },
     {
       "item": "Style1",
@@ -46,7 +46,7 @@
     },
     {
       "item": "Boost2",
-      "cost": 140
+      "cost": 0
     }
   ]
 }

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buffType: 1
   poolType: 16
-  activatonEvent: 0
-  deactivationEvent: 0
-  prefabReachTargetEvent: 13
+  activatonEvent: 22
+  deactivationEvent: 23
+  prefabReachTargetEvent: 20
+  UIImage: {fileID: 2508768222581782103, guid: 11df89a1bd4735640a6f5c97a6d3ff27, type: 3}

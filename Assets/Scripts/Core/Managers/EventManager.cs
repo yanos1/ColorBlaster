@@ -63,15 +63,24 @@ namespace Core.Managers
         AddCurrency = 10,
         KillPlayer =11,
         FinishedReviving = 12,
-        GemPickup =13,
+        GemPrefabArrived =13,
         ActivateColorRush=14,
-
         BroadcastGemsPicked = 15,
-
         GameOverPanelActive = 16,
-
         DeactivateColorRush = 17,
         ActivateShield = 18,
         DeactivateShield = 19,
+        ColorRushPrefabArrived=20,
+        ShieldPrefabArrived=21,
+        ActivateGemRush =22,
+        DeactivateGemRush=23,
+        ActivateDeleteColor=24,
+        DeactivateDeleteColor=25,
+        DeactivateColorPrefabArrived=25,
+        
+        // need to check for prefab arrival events
+
+
+        DeleteColorPrefabArrived
     }
 }

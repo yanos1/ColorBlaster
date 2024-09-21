@@ -16,4 +16,5 @@ MonoBehaviour:
   poolType: 16
   activatonEvent: 14
   deactivationEvent: 17
-  prefabReachTargetEvent: 0
+  prefabReachTargetEvent: 20
+  UIImage: {fileID: 2508768222581782103, guid: 11df89a1bd4735640a6f5c97a6d3ff27, type: 3}

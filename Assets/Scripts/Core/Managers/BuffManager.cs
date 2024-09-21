@@ -1,18 +1,21 @@
-﻿ using System;
- using System.Collections;
- using System.Collections.Generic;
- using Core.Managers;
- using Extentions;
- using PoolTypes;
- using UnityEditor;
- using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using Core.Managers;
+using Extentions;
+using PoolTypes;
+using UnityEditor;
+using UnityEngine;
 
 namespace GameLogic.ConsumablesGeneration
 {
     public class BuffManager
     {
+        
+        public float ParticleTransferDuration => UnityEngine.Random.Range(0.3f, 0.85f);
+
         private Dictionary<Color, TreasureChestBuff> colorToBuffMap;
-        private Dictionary<Color, ValueTuple<ValueTuple<EventNames,EventNames>,float>> activeBuffsDurationsLeft;
+        private Dictionary<Color, ValueTuple<ValueTuple<EventNames, EventNames>, float>> activeBuffsDurationsLeft;
 
 
         public BuffManager(TreasureChestBuff[] allBuffs)
@@ -20,39 +23,38 @@ namespace GameLogic.ConsumablesGeneration
             colorToBuffMap = new Dictionary<Color, TreasureChestBuff>();
             activeBuffsDurationsLeft = new Dictionary<Color, ((EventNames, EventNames), float)>();
             InitColorToRewardMap(allBuffs);
-            CoreManager.instance.EventManager.AddListener(EventNames.EndRun,StopBuffs);
-            CoreManager.instance.EventManager.AddListener(EventNames.StartGame,StartUpdate);
+            CoreManager.instance.EventManager.AddListener(EventNames.EndRun, StopBuffs);
+            CoreManager.instance.EventManager.AddListener(EventNames.StartGame, StartUpdate);
+            CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, StartUpdate);
         }
 
-        
+
         public void OnDestroy()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun,StopBuffs);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame,StartUpdate);
-
+            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, StopBuffs);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, StartUpdate);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, StartUpdate);
         }
 
         private void StartUpdate(object obj)
         {
             CoreManager.instance.MonoRunner.StartCoroutine(SelfUpdate());
-
         }
-     
-        private IEnumerator SelfUpdate()   // can be optimised using events that trigger when a buff is called
+
+        private IEnumerator SelfUpdate() // can be optimised using events that trigger when a buff is called
         {
             List<Color> keysToRemove = new List<Color>();
 
-            while (CoreManager.instance.GameManager.IsRunActive) 
+            while (CoreManager.instance.GameManager.IsRunActive)
             {
                 keysToRemove.Clear();
-                Debug.Log(activeBuffsDurationsLeft.Count);
                 foreach (var kvp in activeBuffsDurationsLeft)
                 {
-                    Debug.Log($"{Time.time}  {kvp.Value.Item2}");
+                    // Debug.Log($"{Time.time}  {kvp.Value.Item2}");
                     if (Time.time > kvp.Value.Item2)
                     {
-                        CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.Item2, null);
-                        Debug.Log($" invoke this event: {kvp.Value.Item1.Item2.ToString()}");
+                        CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.Item2, kvp.Key);
+                        Debug.Log($"CANCEL BUFF!");
                         keysToRemove.Add(kvp.Key);
                     }
                 }
@@ -60,14 +62,14 @@ namespace GameLogic.ConsumablesGeneration
                 // Remove expired buffs
                 foreach (var key in keysToRemove)
                 {
-                    Debug.Log("REMOVINGGGGGGGG");
+                    Debug.Log($"REMOVING {key}");
                     activeBuffsDurationsLeft.Remove(key);
                 }
 
-                yield return new WaitForSeconds(0.5f); 
+                yield return new WaitForSeconds(0.5f);
             }
         }
-        
+
         // addbuff(activation, deactivation, duration, 
 
 
@@ -81,34 +83,30 @@ namespace GameLogic.ConsumablesGeneration
             }
         }
 
-      
 
         // i had a problem with floating point.
         // this can be optimised with greater color control (reducing colors to 2 decimal points)
-        public TreasureChestBuff GetBuff(Color color)   
+        public TreasureChestBuff GetBuff(Color color)
         {
             foreach (var pair in colorToBuffMap)
             {
-                if (UtilityFunctions.CompareColors(pair.Key,color))
+                if (UtilityFunctions.CompareColors(pair.Key, color))
                 {
                     return colorToBuffMap[pair.Key];
-
-                } 
+                }
             }
 
             return null; // should never reac hehre
         }
-        
-        public void AddBuff(Color color,EventNames activationEvent, EventNames deactivationEvent, float duration)
+
+        private void AddBuff(Color color, EventNames activationEvent, EventNames deactivationEvent, float duration)
         {
-            
-            
             if (activeBuffsDurationsLeft.ContainsKey(color))
             {
                 Debug.Log("CONTAINED KEY!!!");
                 // Update the remaining duration for the existing buff
                 var valueTuple = activeBuffsDurationsLeft[color];
-                valueTuple.Item2 +=  duration;  // Set the new expiration time
+                valueTuple.Item2 += duration; // Set the new expiration time
                 activeBuffsDurationsLeft[color] = valueTuple;
             }
             else
@@ -116,15 +114,15 @@ namespace GameLogic.ConsumablesGeneration
                 Debug.Log("Did not contain key");
                 // Set the expiration time as current Time + duration
                 float expirationTime = Time.time + duration;
-                activeBuffsDurationsLeft[color] = new ValueTuple<ValueTuple<EventNames,EventNames>,float>(
+                activeBuffsDurationsLeft[color] = new ValueTuple<ValueTuple<EventNames, EventNames>, float>(
                     (activationEvent, deactivationEvent), expirationTime);
-                CoreManager.instance.EventManager.InvokeEvent(activationEvent, color);
-
+                CoreManager.instance.EventManager.InvokeEvent(activationEvent,
+                    (color, duration, GetBuff(color)));
             }
-        } 
+        }
 
 
-        public void MoveParticlesToPlayer(TreasureChestBuff buff, Vector3 startPosition,Color color, float strength)
+        public void MoveParticlesToPlayer(TreasureChestBuff buff, Vector3 startPosition, Color color, float strength)
         {
             float maxDuration = 0f;
             int numberOfGemsToEarn = (int)strength;
@@ -132,7 +130,7 @@ namespace GameLogic.ConsumablesGeneration
             bool firstParticleReached = false;
             for (int i = 0; i < numberOfGemsToEarn; ++i)
             {
-                float duration = UnityEngine.Random.Range(0.3f, 0.85f);
+                var duration = ParticleTransferDuration;
                 maxDuration = Mathf.Max(duration, maxDuration);
 
                 GameObject gem = CoreManager.instance.PoolManager.GetFromPool(buff.poolType);
@@ -146,50 +144,71 @@ namespace GameLogic.ConsumablesGeneration
                     targetPosition, Quaternion.identity, duration, () =>
                     {
                         CoreManager.instance.PoolManager.ReturnToPool(buff.poolType, gem);
-                        CoreManager.instance.EventManager.InvokeEvent(buff.prefabReachTargetEvent, null);
+                        CoreManager.instance.EventManager.InvokeEvent(buff.prefabReachTargetEvent,
+                            (color, 1f, buff));
                         if (!firstParticleReached)
                         {
-                            AddBuff(color,buff.activatonEvent, buff.deactivationEvent, strength);
+                            AddBuff(color, buff.activatonEvent, buff.deactivationEvent, strength);
                             Debug.Log("INVOKE BUFF");
                             firstParticleReached = true;
                         }
                         // TODO: Play earn sound
                     }));
             }
-            
-
         }
+
 
         public void StopBuff(Color color)
         {
             foreach (var pair in activeBuffsDurationsLeft)
             {
-                if (UtilityFunctions.CompareColors(pair.Key,color))
+                if (UtilityFunctions.CompareColors(pair.Key, color))
                 {
-                    CoreManager.instance.EventManager.InvokeEvent(activeBuffsDurationsLeft[pair.Key].Item1.Item2,null);
+                    CoreManager.instance.EventManager.InvokeEvent(activeBuffsDurationsLeft[pair.Key].Item1.Item2,
+                        color);
                     activeBuffsDurationsLeft.Remove(pair.Key);
                     return;
-
-                } 
+                }
             }
         }
-        
+
         private void StopBuffs(object obj)
         {
             foreach (var kvp in activeBuffsDurationsLeft)
             {
-                CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.Item2,null); // call stop function
+                CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.Item2, kvp.Key); // call stop function
             }
-            
+
             activeBuffsDurationsLeft.Clear();
         }
-
 
         public void ActivateBuff(Vector3 startPosition, Color color, float buffStrength)
         {
             TreasureChestBuff buff = GetBuff(color);
-            MoveParticlesToPlayer(buff,startPosition,color,buffStrength);
-            
+            MoveParticlesToPlayer(buff, startPosition, color, buffStrength);
+        }
+
+        public Color? IsBuffActive(BuffType buffType) // can be optimised
+        {
+            Color buffColor = default;
+
+            foreach (var (color, buff) in colorToBuffMap)
+            {
+                if (buff.buffType == buffType)
+                {
+                    buffColor = color;
+                    foreach (var kvp in activeBuffsDurationsLeft)
+                    {
+                        if (UtilityFunctions.CompareColors(kvp.Key, buffColor))
+                        {
+                            return buffColor;
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
+

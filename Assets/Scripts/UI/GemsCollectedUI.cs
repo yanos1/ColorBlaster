@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Core.Managers;
 using Extentions;
+using GameLogic.ConsumablesGeneration;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,14 +23,14 @@ namespace UI
 
         private void OnEnable()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.GemPickup, UpdateGemUI);
+            CoreManager.instance.EventManager.AddListener(EventNames.GemPrefabArrived, UpdateGemUI);
             CoreManager.instance.EventManager.AddListener(EventNames.GameOverPanelActive, OnGameOver);
         }
 
 
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.GemPickup, UpdateGemUI);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.GemPrefabArrived, UpdateGemUI);
             CoreManager.instance.EventManager.RemoveListener(EventNames.GameOverPanelActive, OnGameOver);
         }
         
@@ -54,7 +55,7 @@ namespace UI
             // Scale the image with a quick bounce effect
 
             // Multiply the image color by the color passed in the object
-            if (obj is Color gemColor)
+            if (obj is (Color gemColor, float duration, TreasureChestBuff buff))
             {
                 gemsImage.color += gemColor;
                 gemColorsCollected.Add(gemColor);  // add gem color for later use (for transfering coins to the wallet)

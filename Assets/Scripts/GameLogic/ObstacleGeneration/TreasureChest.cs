@@ -51,7 +51,7 @@ namespace GameLogic.ObstacleGeneration
 
         public override void ResetGameObject()
         {
-            base.ResetGameObject();
+            gameObject.SetActive(true);
             amountOfShotsToBreak = Random.Range(minAmountOfShots, maxAmountOfShots);
             numberOfShotsUI.text = amountOfShotsToBreak.ToString();
             currentHits = 0;

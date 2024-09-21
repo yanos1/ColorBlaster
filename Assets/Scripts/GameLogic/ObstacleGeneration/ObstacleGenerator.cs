@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Core.Managers;
 using Extentions;
+using GameLogic.ConsumablesGeneration;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -63,7 +64,7 @@ namespace GameLogic.ObstacleGeneration
 
         private void PaintActiveObstacles(object obj)
         {
-            if (obj is Color color)
+            if (obj is (Color color,float duration, TreasureChestBuff buff))
             {
                 isColorRushActive = true;
                 foreach (var obstacle in activeObstacles)

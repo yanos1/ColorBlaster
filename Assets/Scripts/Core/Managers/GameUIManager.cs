@@ -42,14 +42,12 @@ namespace UI
         {
             string gemsOwned = CoreManager.instance.UserDataManager.GemsOwned.ToString();
             gemsOwnedText.text = gemsOwned;
-            print(gemsOwnedText.text);
-            print(")))))))");
 
             if (obj is List<Color> colorsList)
             {
                 float duration = 1.7f;
                 int amount = int.Parse(gemsCollectedText.text);
-                gemTransferManager.TransferGems(gemsCollectedText, gemsOwnedText, colorsList, gemType, duration);
+                gemTransferManager.TransferGemsText(gemsCollectedText, gemsOwnedText, colorsList, gemType, duration);
                 StartCoroutine(UIUtilityFunctions.TransferNumberCoroutine(gemsCollectedText, gemsOwnedText,
                     amount, duration, () => { CoreManager.instance.UserDataManager.AddGems(amount); }));
                 StartCoroutine(ActivatePlayAgainButtonAfterDelay(duration));

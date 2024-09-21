@@ -150,14 +150,28 @@ namespace Extentions
             bool greenEqual = color1G == color2G;
             bool blueEqual = color1B == color2B;
 
-            // Print results for each color channel
             // Debug.Log($"Red Comparison: {color1R} vs {color2R} -> {redEqual}");
             // Debug.Log($"Green Comparison: {color1G} vs {color2G} -> {greenEqual}");
             // Debug.Log($"Blue Comparison: {color1B} vs {color2B} -> {blueEqual}");
-            // Debug.Log($"Alpha Comparison: {color1A} vs {color2A} -> {alphaEqual}");
 
             // Return true only if all channels are equal
             return redEqual && greenEqual && blueEqual;
+        }
+        
+        public static IEnumerator ReduceFillRoutine(Image image, float initialFillAmount, float timeFrame)
+        {
+            float elapsedTime = 0f;
+            float startFill = initialFillAmount;
+            image.fillAmount = startFill;
+
+            while (elapsedTime < timeFrame)
+            {
+                elapsedTime += Time.deltaTime;
+                image.fillAmount = Mathf.Lerp(startFill, 0, elapsedTime / timeFrame);
+                yield return null;
+            }
+
+            image.fillAmount = 0;
         }
     }
 }

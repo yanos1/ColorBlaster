@@ -55,7 +55,7 @@ namespace Core.Managers
 
         private void IncreaseObstacleSpeed(object obj)
         {
-            _currentObjectsSpeed += 0.7f;
+            _currentObjectsSpeed += 0.5f;
         }
 
         private void ResumeAllObjects(object obj)
