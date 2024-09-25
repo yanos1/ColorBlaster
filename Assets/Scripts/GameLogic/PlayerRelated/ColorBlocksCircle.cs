@@ -45,7 +45,7 @@ namespace GameLogic.PlayerRelated
                 print(currentColors[i]);
             }
 
-            invincible = false;
+            invincible = true;
             playerDead = false;
             isShooting = false;
         }
@@ -97,6 +97,7 @@ namespace GameLogic.PlayerRelated
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (invincible) return;
             ObstaclePart part = other.GetComponent<ObstaclePart>();
             if (part is not null && !CoreManager.instance.Player.IsDead)
             {
@@ -124,6 +125,10 @@ namespace GameLogic.PlayerRelated
             }
         }
 
+        /// <summary>
+        /// this grants us cooldown of .2 seconds for each bullet
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator SetIsShootingForShortDuration()
         {
             isShooting = true;

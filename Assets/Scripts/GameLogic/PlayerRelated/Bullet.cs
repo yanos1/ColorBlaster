@@ -14,7 +14,7 @@ namespace GameLogic.PlayerRelated
     {
         [SerializeField] private float moveSpeed;
         [SerializeField] private Color baseColor;
-        private float BulletOutOfBoundsXPosition = 7f;
+        private float BulletOutOfBoundsYPosition = 10f;
 
         private void OnEnable()
         {
@@ -29,8 +29,8 @@ namespace GameLogic.PlayerRelated
 
         private void Update()
         {
-            transform.Translate(Vector3.right * (Time.deltaTime * moveSpeed));
-            if (transform.position.x > BulletOutOfBoundsXPosition)
+            transform.Translate(Vector3.up * (Time.deltaTime * moveSpeed));
+            if (transform.position.y > BulletOutOfBoundsYPosition)
             {
                 CoreManager.instance.PoolManager.ReturnToPool(PoolType.Bullet, gameObject);
             }
@@ -49,8 +49,8 @@ namespace GameLogic.PlayerRelated
             ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();
             if (obstacle is not null)
             {
-                print($"see difference : {_renderer.color} {obstacle.GetColor()}");
-                print($"is different:   {_renderer.color == obstacle.GetColor()}");
+                // print($"see difference : {_renderer.color} {obstacle.GetColor()}");
+                // print($"is different:   {_renderer.color == obstacle.GetColor()}");
                 if (UtilityFunctions.CompareColors(_renderer.color,obstacle.GetColor()))
                 {
                     obstacle.Shatter();

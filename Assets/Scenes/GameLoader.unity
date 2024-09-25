@@ -272,7 +272,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -52, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &770354593
@@ -351,10 +351,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 515359771}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -196.13}
-  m_SizeDelta: {x: 531.6, y: 59.5}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 44.1, y: -1070}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1489501203
 MonoBehaviour:
@@ -507,7 +507,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c4cadf29f5eee3f49b5a306d1f062661, type: 2}
   - {fileID: 11400000, guid: e0c378a455b84c8458ef620584d8c0f7, type: 2}
   - {fileID: 11400000, guid: 21f6e984a76620b4ab19ac85ec23f225, type: 2}
-  baseObstacleSpeed: 3
+  baseObstacleSpeed: 2
   TEST_MODE: 0
   testObstacleList:
   - {fileID: 3944323053696984722, guid: f1d90154d252dfa4e9e0744661ad889c, type: 3}
@@ -599,10 +599,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 515359771}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -196.13}
-  m_SizeDelta: {x: 500, y: 40}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 44.1, y: -1070}
+  m_SizeDelta: {x: 800, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1781288929
 GameObject:

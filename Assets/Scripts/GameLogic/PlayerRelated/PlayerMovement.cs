@@ -13,11 +13,11 @@ namespace GameLogic.PlayerRelated
         void Update()
         {
             if(CoreManager.instance.Player.IsDead) return;
-            // Get the vertical input (up and down arrows or W/S keys)
-            float verticalInput = Input.GetAxis("Vertical");
+            
+            float horizontalInput = Input.GetAxis("Horizontal");
         
             // Calculate the movement direction
-            Vector3 moveDirection = new Vector3(0, verticalInput, 0);
+            Vector3 moveDirection = new Vector3(horizontalInput,0, 0);
         
             // Apply the movement
             transform.Translate(moveDirection * (moveSpeed * Time.deltaTime));

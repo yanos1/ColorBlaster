@@ -30,7 +30,7 @@ namespace GameLogic
 
         public void Move()
         {
-            transform.position -= new Vector3(moveSpeed * Time.deltaTime, 0, 0);
+            transform.position -= new Vector3(0, moveSpeed * Time.deltaTime, 0);
         }
 
     }

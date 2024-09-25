@@ -44,8 +44,8 @@ namespace GameLogic.ObstacleGeneration
         {
             while (gameObject.activeInHierarchy)
             {
-                Vector3 forwardMovement = Vector3.left * (CoreManager.instance.GameManager.CurrentObjectsSpeed * speedMultiplier * Time.deltaTime);
-                Vector3 sineWaveMotion = Vector3.up * (Mathf.Sin(Time.deltaTime * frequency*startDirection) * amplitude);
+                Vector3 forwardMovement = Vector3.down * (CoreManager.instance.GameManager.CurrentObjectsSpeed * speedMultiplier * Time.deltaTime);
+                Vector3 sineWaveMotion = Vector3.left * (Mathf.Sin(Time.deltaTime * frequency*startDirection) * amplitude);
 
                 transform.position += forwardMovement + sineWaveMotion;
 
@@ -57,8 +57,8 @@ namespace GameLogic.ObstacleGeneration
         {
             base.ResetGameObject();
             StopAllCoroutines();
-            transform.position = new Vector3(transform.parent.parent.position.x,   // I DONT LIKE THIS AT ALL !!
-                Random.Range(spawnYPositionRange.x, spawnYPositionRange.y), 0);
+            transform.position = new Vector3(Random.Range(spawnYPositionRange.x, spawnYPositionRange.y),
+                transform.parent.parent.position.y, 0);   // I DONT LIKE THIS AT ALL !!
             print($"color: {Renderer.color}");
             startDirection = Random.value > 0.5 ? 1 : -1;
             StartCoroutine(AlertThenLaunch());

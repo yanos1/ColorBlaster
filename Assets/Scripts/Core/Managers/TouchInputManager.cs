@@ -35,6 +35,7 @@ namespace Core.Managers
         {
             while (CoreManager.instance.GameManager.IsGameActive)
             {
+                yield break;  /// for test purposes
                 List<TouchControl> touches = new();
 
                 if (Touchscreen.current != null)
@@ -55,7 +56,8 @@ namespace Core.Managers
                         // Convert touch position to world coordinates
                         Vector3 touchPosition = new Vector3(primaryTouchPosition.x, primaryTouchPosition.y,
                             Camera.main.nearClipPlane);
-                        Vector3 worldTouchPosition = Camera.main.ScreenToWorldPoint(touchPosition);
+                        Vector3 worldTouchPosition =
+                            CameraManager.instance.MainCamera.ScreenToWorldPoint(touchPosition);
 
                         if (touches.Count == 1)
                         {

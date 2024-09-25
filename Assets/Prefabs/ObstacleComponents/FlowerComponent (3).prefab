@@ -27,8 +27,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.53, y: 3.5, z: 0}
-  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2877722159177155275}
   - {fileID: 4427489524513518459}
@@ -85,7 +85,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.4, y: 0, z: 0}
-  m_LocalScale: {x: 1.57, y: 1.1544117, z: 1.1544117}
+  m_LocalScale: {x: 0.64, y: 0.4705883, z: 0.4705883}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4930466574430688611}
@@ -155,6 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 4155304950554747560}
+  gemUIimage: {fileID: 0}
 --- !u!70 &3398125666679822040
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -219,7 +220,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.4, y: 0, z: 0}
-  m_LocalScale: {x: 1.57, y: 1.1544117, z: 1.1544117}
+  m_LocalScale: {x: 0.64, y: 0.4705883, z: 0.4705883}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4930466574430688611}
@@ -289,6 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 4715811910264766543}
+  gemUIimage: {fileID: 0}
 --- !u!70 &4106041627618693134
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -353,7 +355,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.4, z: 0}
-  m_LocalScale: {x: 1.57, y: 1.1544117, z: 1.1544117}
+  m_LocalScale: {x: 0.64, y: 0.4705883, z: 0.4705883}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4930466574430688611}
@@ -423,6 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 6949314013469922942}
+  gemUIimage: {fileID: 0}
 --- !u!70 &5292824766297699614
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -487,7 +490,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.4, z: 0}
-  m_LocalScale: {x: 1.57, y: 1.1544117, z: 1.1544117}
+  m_LocalScale: {x: 0.64, y: 0.4705883, z: 0.4705883}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4930466574430688611}
@@ -557,6 +560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 8602446630021919114}
+  gemUIimage: {fileID: 0}
 --- !u!70 &7347776507943261604
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -603,7 +607,7 @@ GameObject:
   - component: {fileID: 2877722159177155275}
   - component: {fileID: 7308606733621279919}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -619,7 +623,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.69, y: 0.69, z: 0.69}
+  m_LocalScale: {x: 0.51, y: 0.51, z: 0.51}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4930466574430688611}

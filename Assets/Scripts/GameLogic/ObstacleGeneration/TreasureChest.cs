@@ -20,7 +20,7 @@ namespace GameLogic.ObstacleGeneration
         private int amountOfShotsToBreak;
         private int minAmountOfShots = 2;
         private int maxAmountOfShots = 8;
-        private float ySpawnRange = 2;
+        private float xSpawnRange = 2;
 
         private int currentHits;
 
@@ -58,8 +58,8 @@ namespace GameLogic.ObstacleGeneration
             amountOfShotsToBreak = Random.Range(minAmountOfShots, maxAmountOfShots);
             numberOfShotsUI.text = amountOfShotsToBreak.ToString();
             currentHits = 0;
-            transform.position = new Vector3(transform.position.x, 0, 0); //reset for  y value
-            transform.position += Vector3.up * (ySpawnRange * (Random.value >= 0.5 ? 1 : -1));
+            // transform.position = new Vector3(0, transform.position.y, 0); //reset for  y value
+            // transform.position += Vector3.left * (xSpawnRange * (Random.value >= 0.5 ? 1 : -1));
         }
 
         private void TakeHit()

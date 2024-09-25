@@ -47,9 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ace18a645e4195be342f226d9c229f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _renderer: {fileID: 0}
-  difficulty: 1
   type: 17
+  difficulty: 1
   obstacleComponents:
   - {fileID: 1136886721562217124}
   - {fileID: 1524495708005235145}
@@ -65,7 +64,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1231300464608833138}
   m_Layer: 0
-  m_Name: RightmostPosition
+  m_Name: UpmostPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +79,7 @@ Transform:
   m_GameObject: {fileID: 8011055687515070452}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -3.5000014, z: 0}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

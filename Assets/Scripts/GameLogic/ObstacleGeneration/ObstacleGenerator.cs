@@ -13,7 +13,7 @@ namespace GameLogic.ObstacleGeneration
     public class ObstacleGenerator : MonoBehaviour
     {
         [SerializeField] private ObstacleGeneratorHandler _generatorHandler;
-        [SerializeField] private float generationThreshold = 0f;
+        [SerializeField] private float generationThreshold = -2f;
         [SerializeField] private float returnToPoolThreshold = -11f;
 
         private List<Obstacle> activeObstacles;
@@ -128,13 +128,13 @@ namespace GameLogic.ObstacleGeneration
 
                     // Check if the obstacle crossed the generation threshold
                    
-                    if (obstacle == currentObstacle && obstacle.RightMostPosition.x < generationThreshold)
+                    if (obstacle == currentObstacle && obstacle.RightMostPosition.y < generationThreshold)
                     {
                         currentObstacle = GenerateObstacle();
                     }
 
                     // Check if the obstacle crossed the return-to-pool threshold
-                    if (obstacle.RightMostPosition.x < returnToPoolThreshold)
+                    if (obstacle.RightMostPosition.y < returnToPoolThreshold)
                     {
                         CoreManager.instance.PoolManager.ReturnToPool(obstacle.PoolType, obstacle.gameObject);
                         activeObstacles.RemoveAt(i); // Remove it from the active list

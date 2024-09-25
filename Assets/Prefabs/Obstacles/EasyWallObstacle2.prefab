@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8672116843132010187}
   m_Layer: 0
-  m_Name: RightMostPosition
+  m_Name: UpmostPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 4701251802762852284}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.97, y: -1.23, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -79,8 +79,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844a887edee0f5743b6ef54e258d039b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficulty: 1
   type: 2
+  difficulty: 1
   obstacleComponents:
   - {fileID: 5344309606392707137}
   - {fileID: 3267380312931031119}
@@ -100,15 +100,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.35
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1.46
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.31
+      value: 1.31
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -141,6 +141,10 @@ PrefabInstance:
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.6666666
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1395759996456165925, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
@@ -203,6 +207,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 3625089310229398777}
+  gemUIimage: {fileID: 0}
 --- !u!1001 &7159567708952787983
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -217,7 +222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.35
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -225,7 +230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.07
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -259,6 +264,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.6666666
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1395759996456165925, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
     - {fileID: 8295498733474562862, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
@@ -290,6 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 4930179830131099297}
+  gemUIimage: {fileID: 0}
 --- !u!212 &4930179830131099297 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 2823863115819416238, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
@@ -334,15 +344,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.35
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.76
+      value: -1.63
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -377,8 +387,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.6666666
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.53
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1395759996456165925, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
@@ -411,6 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 5203362055471955850}
+  gemUIimage: {fileID: 0}
 --- !u!212 &5203362055471955850 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 2823863115819416238, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}

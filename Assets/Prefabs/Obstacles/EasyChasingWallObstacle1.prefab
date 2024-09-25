@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2100332795149505576}
   m_Layer: 0
-  m_Name: RightmostPosition
+  m_Name: UpmostPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,8 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844a887edee0f5743b6ef54e258d039b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficulty: 1
   type: 13
+  difficulty: 1
   obstacleComponents:
   - {fileID: 4583718596864265690}
   rightMostPosition: {fileID: 2100332795149505576}
@@ -136,7 +136,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3.64
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2084105168619154934, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
@@ -167,6 +187,7 @@ MonoBehaviour:
   parts:
   - {fileID: 8265040615490171798}
   isSingleColorComponent: 0
+  verticalSpeed: 2
 --- !u!4 &7011906585535721212 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
