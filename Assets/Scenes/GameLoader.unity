@@ -313,7 +313,7 @@ Transform:
   m_GameObject: {fileID: 770354593}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.4235115, y: 8.0369, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -507,7 +507,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c4cadf29f5eee3f49b5a306d1f062661, type: 2}
   - {fileID: 11400000, guid: e0c378a455b84c8458ef620584d8c0f7, type: 2}
   - {fileID: 11400000, guid: 21f6e984a76620b4ab19ac85ec23f225, type: 2}
-  baseObstacleSpeed: 2
+  baseObjectSpeed: 2
   TEST_MODE: 0
   testObstacleList:
   - {fileID: 3944323053696984722, guid: f1d90154d252dfa4e9e0744661ad889c, type: 3}

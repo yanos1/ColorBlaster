@@ -10,9 +10,9 @@ namespace GameLogic.ObstacleGeneration
 
         private void Update()
         {
-            if (transform.position.x - CoreManager.instance.Player.transform.position.x > minDistanceToMove)
+            if (Mathf.Abs(transform.position.x - CoreManager.instance.Player.transform.position.x) > minDistanceToMove)
             {
-                int direction = transform.position.x > CoreManager.instance.Player.transform.position.x ? -1 : 1;
+                int direction = transform.position.x > CoreManager.instance.Player.transform.position.x ? 1 : -1;
 
                 transform.position += Vector3.left * (verticalSpeed * Time.deltaTime * direction);
             }

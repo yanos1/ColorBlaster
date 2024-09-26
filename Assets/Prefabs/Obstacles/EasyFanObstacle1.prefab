@@ -126,7 +126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2162202559332025734, guid: dc388f4c0c02ba145bc7869e326c8751, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.47
+      value: -0.85
       objectReference: {fileID: 0}
     - target: {fileID: 2162202559332025734, guid: dc388f4c0c02ba145bc7869e326c8751, type: 3}
       propertyPath: m_LocalPosition.y
@@ -241,7 +241,7 @@ MonoBehaviour:
   - {fileID: 5967324422535455002}
   - {fileID: 3709470259037480890}
   isSingleColorComponent: 0
-  RotationSpeed: {x: 0, y: 0, z: 25}
+  RotationSpeed: {x: 0, y: 0, z: 45}
 --- !u!1001 &1607988532744036463
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -284,11 +284,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2162202559332025734, guid: dc388f4c0c02ba145bc7869e326c8751, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.47
+      value: 0.98
       objectReference: {fileID: 0}
     - target: {fileID: 2162202559332025734, guid: dc388f4c0c02ba145bc7869e326c8751, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2162202559332025734, guid: dc388f4c0c02ba145bc7869e326c8751, type: 3}
       propertyPath: m_LocalPosition.z
@@ -388,7 +388,7 @@ MonoBehaviour:
   - {fileID: 5459710603184321903}
   - {fileID: 3057477558134059983}
   isSingleColorComponent: 0
-  RotationSpeed: {x: 0, y: 0, z: 25}
+  RotationSpeed: {x: 0, y: 0, z: 45}
 --- !u!114 &5459710603184321903 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6743138584865281280, guid: dc388f4c0c02ba145bc7869e326c8751, type: 3}

@@ -55,7 +55,8 @@ namespace Core.Managers
 
         private void IncreaseObstacleSpeed(object obj)
         {
-            _currentObjectsSpeed += 0.3f;
+            _currentObjectsSpeed += 0.25f;
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.UpdateObjectMovespeed,null);
         }
 
         private void ResumeAllObjects(object obj)

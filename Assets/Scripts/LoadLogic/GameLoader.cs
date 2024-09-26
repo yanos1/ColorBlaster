@@ -13,6 +13,7 @@ using UnityEngine.UI;
 // using Firebase.Database;
 // using Firebase.Extensions;
 using Unity.VisualScripting;
+using UnityEngine.Serialization;
 
 namespace LoaderLogic
 {
@@ -26,12 +27,14 @@ namespace LoaderLogic
         [SerializeField] private TextAsset itemCosts;
         [SerializeField] private TreasureChestBuff[] treasureChestBuffs;
 
-        [SerializeField] private float baseObstacleSpeed;
+        [SerializeField] private float baseObjectSpeed;
 
         
         // TEST FIELDS
         [SerializeField] private bool TEST_MODE;
         [SerializeField] private Obstacle[] testObstacleList;
+        
+        
         private void Start()
         {
             StartCoroutine(StartLoadingAsync());
@@ -49,7 +52,7 @@ namespace LoaderLogic
         private void LoadCoreManager()
         {
            var coreManager =  new CoreManager();
-           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, TEST_MODE ? testObstacleList :obstaclesList, poolEntries,treasureChestBuffs, baseObstacleSpeed, OnCoreManagersLoaded);
+           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, TEST_MODE ? testObstacleList :obstaclesList, poolEntries,treasureChestBuffs, baseObjectSpeed, OnCoreManagersLoaded);
             
         }
 

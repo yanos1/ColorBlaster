@@ -26,7 +26,7 @@ namespace GameLogic.PlayerRelated
         private bool isShooting;
         private Coroutine shootingCoroutine;
         private Coroutine colorRushCoroutine;
-        private static int RotationSpeedAdditionPerAdjusment => 16;
+        private static int RotationSpeedAdditionPerAdjusment => 15;
 
 
         private void Awake()
@@ -97,7 +97,7 @@ namespace GameLogic.PlayerRelated
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (invincible) return;
+            // if (invincible) return;
             ObstaclePart part = other.GetComponent<ObstaclePart>();
             if (part is not null && !CoreManager.instance.Player.IsDead)
             {
