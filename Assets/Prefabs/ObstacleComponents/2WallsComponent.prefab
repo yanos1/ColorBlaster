@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.21, y: 10.06, z: 1}
+  m_LocalScale: {x: 0.15, y: 10.06, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6426304362504985649}
@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 5665334435708839179}
+  gemUIimage: {fileID: 0}
 --- !u!1 &6214143577501714327
 GameObject:
   m_ObjectHideFlags: 0
@@ -173,7 +174,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.13, y: 0, z: 0}
-  m_LocalScale: {x: 0.21, y: 10.06, z: 1}
+  m_LocalScale: {x: 0.15, y: 10.06, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6426304362504985649}
@@ -288,6 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 4762312529618446360}
+  gemUIimage: {fileID: 0}
 --- !u!1 &7072374068355039013
 GameObject:
   m_ObjectHideFlags: 0

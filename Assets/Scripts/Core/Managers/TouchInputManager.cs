@@ -7,26 +7,25 @@ using System.Linq;
 using GameLogic.PlayerRelated;
 using UnityEngine.InputSystem.Controls;
 
-
 namespace Core.Managers
 {
     public class TouchInputManager : MonoBehaviour
     {
         private Player player; // Reference to the player's Player script
-        private float minDistanceBetweenPlayerAndTouch = 0.2f;
-        private bool shootTouch = false;
-
+        private float minDistanceToMove = 0.2f; // Minimum distance to consider a valid move
+        private bool isShooting = false; // To track if shooting has occurred
 
         private void OnEnable()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.StartGame, ActivateGameToucbControl);
+            CoreManager.instance.EventManager.AddListener(EventNames.StartGame, ActivateGameTouchControl);
         }
 
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, ActivateGameToucbControl);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, ActivateGameTouchControl);
         }
-        private void ActivateGameToucbControl(object obj)
+
+        private void ActivateGameTouchControl(object obj)
         {
             StartCoroutine(SelfUpdate());
         }
@@ -35,58 +34,33 @@ namespace Core.Managers
         {
             while (CoreManager.instance.GameManager.IsGameActive)
             {
-                yield break;  /// for test purposes
                 List<TouchControl> touches = new();
 
                 if (Touchscreen.current != null)
                 {
-                    // Filter out touches that are not in Began, Moved, or Stationary phases
+                    // Filter touches and only consider the first valid touch
                     touches = Touchscreen.current.touches
                         .Where(touch => touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began ||
                                         touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved ||
                                         touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Stationary)
                         .ToList();
 
-
                     if (touches.Count > 0)
                     {
-                        // Get the first active touch
+                        // Only consider the first touch
                         Vector2 primaryTouchPosition = touches[0].position.ReadValue();
 
                         // Convert touch position to world coordinates
-                        Vector3 touchPosition = new Vector3(primaryTouchPosition.x, primaryTouchPosition.y,
-                            Camera.main.nearClipPlane);
-                        Vector3 worldTouchPosition =
-                            CameraManager.instance.MainCamera.ScreenToWorldPoint(touchPosition);
+                        Vector3 touchPosition = new Vector3(primaryTouchPosition.x, primaryTouchPosition.y, Camera.main.nearClipPlane);
+                        Vector3 worldTouchPosition = CameraManager.instance.MainCamera.ScreenToWorldPoint(touchPosition);
 
-                        if (touches.Count == 1)
-                        {
-                            HandleSingleTouch(worldTouchPosition);
-                        }
-                        else if (touches.Count > 1)
-                        {
-                            // Handle second touch
-                            Vector2 secondTouchPosition = touches[1].position.ReadValue();
-
-                            // Ignore touches at (0, 0)
-                            if (secondTouchPosition != Vector2.zero)
-                            {
-                                Vector3 secondTouchWorldPosition = new Vector3(secondTouchPosition.x,
-                                    secondTouchPosition.y, Camera.main.nearClipPlane);
-                                secondTouchWorldPosition = Camera.main.ScreenToWorldPoint(secondTouchWorldPosition);
-
-                                HandleMultipleTouches(worldTouchPosition, secondTouchWorldPosition);
-                            }
-                        }
+                        HandleSingleTouch(worldTouchPosition);
                     }
                     else
                     {
-                        Debug.Log("No active touches, resetting shootTouch flag.");
-                        shootTouch = false;
+                        // No active touches, reset movement and shoot
+                        HandleNoTouch();
                     }
-                }
-                else
-                {
                 }
 
                 yield return null;
@@ -95,74 +69,33 @@ namespace Core.Managers
 
         private void HandleSingleTouch(Vector3 worldTouchPosition)
         {
-            if (worldTouchPosition.x < player.transform.position.x)
+            // Calculate the horizontal distance between the touch position and the player's position
+            float distanceToTouch = Mathf.Abs(worldTouchPosition.x - player.transform.position.x);
+
+            if (distanceToTouch > minDistanceToMove)
             {
-                shootTouch = false;
-                if (Mathf.Abs(worldTouchPosition.y - player.transform.position.y) > minDistanceBetweenPlayerAndTouch)
+                if (worldTouchPosition.x < player.transform.position.x)
                 {
-                    // Move player
-                    Vector3 direction = worldTouchPosition.y > player.transform.position.y ? Vector3.up : Vector3.down;
-                    player.PlayerMovement.Move(direction);
+                    // Move left if the touch is to the left of the player
+                    player.PlayerMovement.Move(Vector3.left);
+                    isShooting = false;
                 }
-            }
-            if (worldTouchPosition.x >= player.transform.position.x)
-            {
-                // Shoot
-                print("entered single shot shot for some reason");
-                if (!shootTouch)
+                else if (worldTouchPosition.x > player.transform.position.x)
                 {
-                    shootTouch = true;
-                    player.Shooter.Shoot();
+                    // Move right if the touch is to the right of the player
+                    player.PlayerMovement.Move(Vector3.right);
+                    isShooting = false;
                 }
             }
         }
 
-        private void HandleMultipleTouches(Vector3 worldTouchPosition1, Vector3 worldTouchPosition2)
+        private void HandleNoTouch()
         {
-            if (worldTouchPosition1.x < player.transform.position.x &&
-                worldTouchPosition2.x < player.transform.position.x &&
-                Mathf.Abs(worldTouchPosition1.y - player.transform.position.y) > minDistanceBetweenPlayerAndTouch)
+            // If no touch is detected and player hasn't shot yet, shoot
+            if (!isShooting)
             {
-                // Move player
-                Vector3 direction = worldTouchPosition1.y > player.transform.position.y ? Vector3.up : Vector3.down;
-                player.PlayerMovement.Move(direction);
-                shootTouch = false; // Allow shooting in the next frame
-            }
-            else if (worldTouchPosition1.x >= player.transform.position.x &&
-                     worldTouchPosition2.x >= player.transform.position.x)
-            {
-                // Shoot
-                if (!shootTouch)
-                {
-                    print("entered multy touch  shot by 2 clicks beyong player");
-
-                    shootTouch = true;
-                    player.Shooter.Shoot();
-                }
-            }
-            else
-            {
-                // Both moving and shooting
-                print("try to shoot and move together");
-                print("entered multy touch  shot by moving and shooting together");
-
-                Vector3 movingPos = worldTouchPosition1.x < player.transform.position.x
-                    ? worldTouchPosition1
-                    : worldTouchPosition2;
-
-                if (Mathf.Abs(movingPos.y - player.transform.position.y) > minDistanceBetweenPlayerAndTouch)
-                {
-
-                    Vector3 direction = movingPos.y > player.transform.position.y + minDistanceBetweenPlayerAndTouch
-                        ? Vector3.up
-                        : Vector3.down;
-                    player.PlayerMovement.Move(direction);
-                }
-                if (!shootTouch)
-                {
-                    shootTouch = true;
-                    player.Shooter.Shoot();
-                }
+                isShooting = true;
+                player.Shooter.Shoot();
             }
         }
     }
