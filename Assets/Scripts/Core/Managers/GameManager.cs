@@ -11,36 +11,51 @@ namespace Core.Managers
         public bool IsGameActive => _isGameActive;
         public bool IsRunActive => _isRunActive;
 
-        public float CurrentObjectsSpeed
+        public int ObstacleCrossedThisLevel
         {
-            get => _currentObjectsSpeed;
-            set => _currentObjectsSpeed = Mathf.Min(maxObstacleSpeed, value);
+            get => obstaclesCrossedThisLevel;
+            set
+            {
+                if (value < 0) throw new ArgumentOutOfRangeException(nameof(value));
+                obstaclesCrossedThisLevel = value;
+                if (ObstacleCrossedThisLevel == CoreManager.instance.ControlPanelManager.obstaclesPerLevel)
+                {
+                    obstaclesCrossedThisLevel = 0;
+                    CoreManager.instance.ControlPanelManager.Level++;
+                    if (CoreManager.instance.ControlPanelManager.Level ==
+                        CoreManager.instance.ControlPanelManager.levelSpeeds.Length)
+                    {
+                        CoreManager.instance.ControlPanelManager.Level = 0;
+                        CoreManager.instance.ControlPanelManager.Session++;
+                        Debug.Log("New Session Is Called!"); 
+
+                    }
+                    CoreManager.instance.EventManager.InvokeEvent(EventNames.LevelUp, (CoreManager.instance.ControlPanelManager.Session, CoreManager.instance.ControlPanelManager.Level));
+
+                }
         }
-        
+    }
+
         private Coroutine increaseGameDiffucultyCoroutine;
-        private static int maxObstacleSpeed => 7;
 
         private float _lastObstacleUpdateTime;
-        private readonly float ChangeDifficultyInterval = 18f;
-        private float _baseObjectSpeed;
-        private float _currentObjectsSpeed;
-        private float _savedObjectSpeed;
         private bool _isGameActive;
         private bool _isRunActive;
 
+        private int _totalObstaclesCrossed;
+        private int obstaclesCrossedThisLevel;
+        
 
-        public GameManager(float baseObjectSpeed)
+
+        public GameManager()
         {
-            _baseObjectSpeed = baseObjectSpeed;
-            _currentObjectsSpeed = _baseObjectSpeed;
-            _isGameActive = false;
-            _isRunActive = false;
+            _isGameActive = false;  // game is active as long as we dont get to the gameover screen
+            _isRunActive = false;   // run is active when the player is currently playing
             _lastObstacleUpdateTime = Time.time;
             CoreManager.instance.EventManager.AddListener(EventNames.StartGame, OnStartGame);
             CoreManager.instance.EventManager.AddListener(EventNames.GameOver, OnGameOver);
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun, StopAllObjects);
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, ResumeAllObjects);
-            CoreManager.instance.EventManager.AddListener(EventNames.IncreaseGameDifficulty, IncreaseObstacleSpeed);
         }
 
         public void OnDestroy()
@@ -49,36 +64,16 @@ namespace Core.Managers
             CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, OnGameOver);
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, StopAllObjects);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, ResumeAllObjects);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.IncreaseGameDifficulty, IncreaseObstacleSpeed);
 
-        }
-
-        private void IncreaseObstacleSpeed(object obj)
-        {
-            _currentObjectsSpeed += 0.25f;
-            CoreManager.instance.EventManager.InvokeEvent(EventNames.UpdateObjectMovespeed,null);
         }
 
         private void ResumeAllObjects(object obj)
         {
-            if (increaseGameDiffucultyCoroutine == null)
-            {
-                increaseGameDiffucultyCoroutine = CoreManager.instance.MonoRunner.StartCoroutine(
-                    CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, 2, ChangeDifficultyInterval));
-            }
-            _currentObjectsSpeed = _savedObjectSpeed;
             _isRunActive = true;
         }
 
         private void StopAllObjects(object obj)
         {
-            if (increaseGameDiffucultyCoroutine != null)
-            {
-                CoreManager.instance.MonoRunner.StopCoroutine(increaseGameDiffucultyCoroutine);
-                increaseGameDiffucultyCoroutine = null;
-            }
-            _savedObjectSpeed = CurrentObjectsSpeed;
-            _currentObjectsSpeed = 0;
 
             _isRunActive = false;
         }
@@ -92,11 +87,11 @@ namespace Core.Managers
 
         private void OnStartGame(object obj)
         {
+            CoreManager.instance.ControlPanelManager.Level = 0;
+            CoreManager.instance.ControlPanelManager.Session = 0;
+            obstaclesCrossedThisLevel = 0;
             _isGameActive = true;
             _isRunActive = true;
-            increaseGameDiffucultyCoroutine = CoreManager.instance.MonoRunner.StartCoroutine(CoreManager.instance.TimeManager.RunFunctionInfinitely(EventNames.IncreaseGameDifficulty, null,
-                ChangeDifficultyInterval));
-            CurrentObjectsSpeed = _baseObjectSpeed;
         }
     }
 }

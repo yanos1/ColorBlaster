@@ -1,12 +1,15 @@
 using Core.Managers;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace UI
 {
     public class MainMenuCanvas : MonoBehaviour
     {
         // Start is called before the first frame update
+        [SerializeField] private GameObject controlPanel;
         void Start()
         {
         
@@ -18,6 +21,11 @@ namespace UI
         
         }
 
+        public void OpenControlPanel()
+        {
+            controlPanel.SetActive(true);
+        }
+        
         public void StartGame()
         {
             // enter juice

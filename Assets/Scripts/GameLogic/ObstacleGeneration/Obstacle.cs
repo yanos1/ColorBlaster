@@ -27,12 +27,6 @@ namespace GameLogic.ObstacleGeneration
         [SerializeField] private List<ObstacleComponent> obstacleComponents;
         [SerializeField] private Transform rightMostPosition;
 
-
-        public override void OnEnable()
-        {
-            base.OnEnable();
-        }
-
         public override void Update()
         {
             base.Update();

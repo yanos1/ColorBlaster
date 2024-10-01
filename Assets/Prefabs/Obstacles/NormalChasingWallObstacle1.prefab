@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 6631538793294530674}
   - component: {fileID: 9013239082066213185}
   m_Layer: 0
-  m_Name: EasyChasingWallObstacle1
+  m_Name: NormalChasingWallObstacle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

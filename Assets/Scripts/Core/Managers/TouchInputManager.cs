@@ -17,6 +17,7 @@ namespace Core.Managers
 
         private void OnEnable()
         {
+            player = CoreManager.instance.Player;
             CoreManager.instance.EventManager.AddListener(EventNames.StartGame, ActivateGameTouchControl);
         }
 
@@ -51,8 +52,10 @@ namespace Core.Managers
                         Vector2 primaryTouchPosition = touches[0].position.ReadValue();
 
                         // Convert touch position to world coordinates
-                        Vector3 touchPosition = new Vector3(primaryTouchPosition.x, primaryTouchPosition.y, Camera.main.nearClipPlane);
-                        Vector3 worldTouchPosition = CameraManager.instance.MainCamera.ScreenToWorldPoint(touchPosition);
+                        Vector3 touchPosition = new Vector3(primaryTouchPosition.x, primaryTouchPosition.y,
+                            CameraManager.instance.MainCamera.nearClipPlane);
+                        Vector3 worldTouchPosition =
+                            CameraManager.instance.MainCamera.ScreenToWorldPoint(touchPosition);
 
                         HandleSingleTouch(worldTouchPosition);
                     }
@@ -70,6 +73,10 @@ namespace Core.Managers
         private void HandleSingleTouch(Vector3 worldTouchPosition)
         {
             // Calculate the horizontal distance between the touch position and the player's position
+            if (player.IsDead)
+            {
+                return;
+            }
             float distanceToTouch = Mathf.Abs(worldTouchPosition.x - player.transform.position.x);
 
             if (distanceToTouch > minDistanceToMove)
@@ -78,25 +85,20 @@ namespace Core.Managers
                 {
                     // Move left if the touch is to the left of the player
                     player.PlayerMovement.Move(Vector3.left);
-                    isShooting = false;
                 }
                 else if (worldTouchPosition.x > player.transform.position.x)
                 {
                     // Move right if the touch is to the right of the player
                     player.PlayerMovement.Move(Vector3.right);
-                    isShooting = false;
                 }
             }
         }
 
         private void HandleNoTouch()
         {
-            // If no touch is detected and player hasn't shot yet, shoot
-            if (!isShooting)
-            {
-                isShooting = true;
-                player.Shooter.Shoot();
-            }
+            if (player.IsDead) return;
+            player.Shooter.TryToShoot();
         }
     }
 }
+

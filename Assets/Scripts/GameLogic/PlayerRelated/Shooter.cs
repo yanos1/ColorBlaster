@@ -12,12 +12,13 @@ namespace GameLogic.PlayerRelated
         // Start is called before the first frame update
         private PoolType bullet = PoolType.Bullet;
         private Color lastShotColor;
-        private float shootingCoolDown = 0.1f;
+        private float shootingCoolDown;
         private float lastTimeShot;
     
         void Start()
         {
             lastTimeShot = Time.time;
+            shootingCoolDown = CoreManager.instance.ControlPanelManager.shootingCooldown;
         }
 
         // Update is called once per frame
@@ -27,7 +28,6 @@ namespace GameLogic.PlayerRelated
             {
                 
                 Shoot();
-                lastTimeShot = Time.time;
             }
         }
 
@@ -35,7 +35,17 @@ namespace GameLogic.PlayerRelated
         {
             GameObject bulletPrefab = CoreManager.instance.PoolManager.GetFromPool(bullet);
             bulletPrefab.transform.position = shootingPosition.position;
+            lastTimeShot = Time.time;
             CoreManager.instance.EventManager.InvokeEvent(EventNames.Shoot, null);
+        }
+
+        public void TryToShoot()
+        {
+            if (Time.time > shootingCoolDown + lastTimeShot)
+            {
+                Shoot();
+                print("SHOOOTT");
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ using Extentions;
 using GameLogic.ConsumablesGeneration;
 using GameLogic.ObstacleGeneration;
 using GameLogic.PlayerRelated;
+using LoaderLogic;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace Core.Managers
     public class CoreManager
     {
         public static CoreManager instance;
+        public ControlPanelManager ControlPanelManager { get; private set; }
         public GameManager GameManager { get; private set; }
         public EventManager EventManager { get; private set; }
         public SaveManager SaveManager { get; private set; }
@@ -35,21 +37,31 @@ namespace Core.Managers
             instance = this;
             
             // Initilize CoreManagers
+            ControlPanelManager = new ControlPanelManager();
             EventManager = new EventManager();
             SaveManager = new SaveManager();
             UserDataManager = new UserDataManager(SystemInfo.deviceUniqueIdentifier);
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
         }
 
-        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles, PoolEntry[] poolEntries, TreasureChestBuff[] rewards, float baseObjectSpeed, Action onComplete)
+        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles, PoolEntry[] poolEntries, TreasureChestBuff[] rewards, float baseObjectSpeed, Action onComplete, GameLoaderUI loaderUI)
         {
             // Initialize all the managers here
             
-            GameManager = new GameManager(baseObjectSpeed);
+            GameManager = new GameManager();
+            loaderUI.AddProgress(10);
             TimeManager = new TimeManager();
+            loaderUI.AddProgress(10);
+
             StyleManager = new StyleManager(styles);
+            loaderUI.AddProgress(10);
+
             ColorsManager = new ColorsManager(colorThemes);
+            loaderUI.AddProgress(10);
+
             BuffManager = new BuffManager(rewards);
+            loaderUI.AddProgress(10);
+
             ObstacleManager = new ObstacleManager(obstacles);
             PoolManager = new ObjectPoolManager(poolEntries);
             CostManager = new ItemCostManager(itemCosts);

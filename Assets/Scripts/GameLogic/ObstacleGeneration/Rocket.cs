@@ -27,6 +27,7 @@ namespace GameLogic.ObstacleGeneration
             speedMultiplier = 8f;
         }
 
+        
         private IEnumerator AlertThenLaunch()
         { 
             for (int i = 0; i < numOfAlerts; i++)
@@ -44,10 +45,10 @@ namespace GameLogic.ObstacleGeneration
         {
             while (gameObject.activeInHierarchy)
             {
-                Vector3 forwardMovement = Vector3.down * (CoreManager.instance.GameManager.CurrentObjectsSpeed * speedMultiplier * Time.deltaTime);
-                Vector3 sineWaveMotion = Vector3.left * (Mathf.Sin(Time.deltaTime * frequency*startDirection) * amplitude);
+                Vector3 forwardMovement = Vector3.down * (CoreManager.instance.ControlPanelManager.GetGameMoveSpeed() * speedMultiplier * Time.deltaTime);
+                // Vector3 sineWaveMotion = Vector3.left * (Mathf.Sin(Time.deltaTime * frequency*startDirection) * amplitude);
 
-                transform.position += forwardMovement + sineWaveMotion;
+                transform.position += forwardMovement;
 
                 yield return null;
             }

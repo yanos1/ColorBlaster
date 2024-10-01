@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Core.Managers;
 using Extentions;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,35 +10,57 @@ namespace GameLogic.ObstacleGeneration
 {
     public class ObstacleGeneratorHandler : MonoBehaviour
     {
-        [SerializeField] private SerializableTuple<int, float>[] _difficultyToChanceMap;
 
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> _difficultyToObstacleMap;
         private Obstacle[] _currentBatch;
-        private int _currentBatchIndex;
-        private const int NumObstaclesInBatch = 8;
+        private int numObstaclesPerLevel;
 
         public void Init(Dictionary<int, ValueTuple<int, List<Obstacle>>> difficultyToObstacleMap)
         {
+            numObstaclesPerLevel = CoreManager.instance.ControlPanelManager.obstaclesPerLevel;
+
             _difficultyToObstacleMap = difficultyToObstacleMap;
+            foreach (var kvp in difficultyToObstacleMap)
+            {
+                print(kvp.Key);
+                foreach (var obs in kvp.Value.Item2)
+                {
+                    print(obs.name);
+                }
+                print("----");
+            }
             _currentBatch = InitNewObstacleBatch();
-            _currentBatchIndex = 0;
+            CoreManager.instance.ControlPanelManager.PrintParametersAtEndOfSession();
+        }
+        
+        private void OnEnable()
+        {
+            CoreManager.instance.EventManager.AddListener(EventNames.LevelUp, AdjustObstacleDifficulty);
+        }
+
+        private void OnDisable()
+        {
+            CoreManager.instance.EventManager.RemoveListener(EventNames.LevelUp, AdjustObstacleDifficulty);
         }
 
         private Obstacle[] InitNewObstacleBatch()
         {
-            int numTreasureObstacles = Random.Range(2,4);
-            var newBatch = new Obstacle[NumObstaclesInBatch + numTreasureObstacles];
-
+            // int numTreasureObstacles = Random.Range(2,4);
+            var newBatch = new Obstacle[numObstaclesPerLevel];
             // Fill with regular obstacles
-            for (int i = 0; i < NumObstaclesInBatch; ++i)
+            for (int i = 0; i < numObstaclesPerLevel; ++i)
             {
                 newBatch[i] = GenerateRandomObstacle();
             }
 
             // Add treasure obstacles from difficulty 0
-            for (int i = NumObstaclesInBatch; i < numTreasureObstacles+ NumObstaclesInBatch; i++)
+            // for (int i = numObstaclesPerLevel; i < numTreasureObstacles+ numObstaclesPerLevel; i++)
+            // {
+            //     newBatch[i] = GenerateTreasureObstacle();
+            // }
+            foreach (var obs in newBatch)
             {
-                newBatch[i] = GenerateTreasureObstacle();
+                print(obs.name);
             }
 
             return UtilityFunctions.ShuffleArray(newBatch);
@@ -46,7 +69,10 @@ namespace GameLogic.ObstacleGeneration
         private Obstacle GenerateRandomObstacle()
         {
             int randomNumber = Random.Range(0, 101);
+            print(randomNumber); ;
             int difficulty = GetRandomObstacleDifficulty(randomNumber);
+            print(difficulty);
+            
 
             var (maxIndex, obstacles) = _difficultyToObstacleMap[difficulty];
             return obstacles[Random.Range(0, maxIndex)];
@@ -60,44 +86,41 @@ namespace GameLogic.ObstacleGeneration
 
         private int GetRandomObstacleDifficulty(int randomNumber)
         {
-            float currentNumber = randomNumber;
-            foreach (var (difficulty, chance) in _difficultyToChanceMap)
+            int level = CoreManager.instance.ControlPanelManager.Level;
+            int[] levelDifficulties = CoreManager.instance.ControlPanelManager.obstacleToDifficultyPerLevel[level];
+            foreach (var d in levelDifficulties)
             {
-                if (chance >= currentNumber)
+                print(d);
+            }
+            print("-------");
+            float currentNumber = randomNumber;
+            for(int i=0;i<levelDifficulties.Length; ++i)
+            {
+                if (levelDifficulties[i] >= currentNumber)
                 {
                     // print($"chance: {chance} number: {currentNumber}  {difficulty}");
-                    return difficulty;
+                    return i+1;
                 }
-                currentNumber -= chance;
+                currentNumber -= levelDifficulties[i];
             }
             // print($"{currentNumber}  {0}");
-            return 0; // Fallback to easiest difficulty if nothing matches
+            return 1; // Fallback to easiest difficulty if nothing matches
         }
 
 
-        private void OnEnable()
-        {
-            CoreManager.instance.EventManager.AddListener(EventNames.IncreaseGameDifficulty, AdjustObstacleDifficulty);
-        }
-
-        private void OnDisable()
-        {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.IncreaseGameDifficulty, AdjustObstacleDifficulty);
-        }
+  
 
         public Obstacle GetNextObstacle()
         {
             // Check if the current batch is exhausted, generate a new one if necessary
-            if (_currentBatchIndex >= _currentBatch.Length)
+            var nextObstacle = _currentBatch[CoreManager.instance.GameManager.ObstacleCrossedThisLevel];
+
+            print($"obstacled crossed so far {CoreManager.instance.GameManager.ObstacleCrossedThisLevel} needed to pass level: {numObstaclesPerLevel}");
+            if (++CoreManager.instance.GameManager.ObstacleCrossedThisLevel >= numObstaclesPerLevel)
             {
                 _currentBatch = InitNewObstacleBatch();
-                print("ADJUST WEIGHT");
-                AdjustWeights();  // make each batch harder then the one before !
-                _currentBatchIndex = 0;
             }
 
-            var nextObstacle = _currentBatch[_currentBatchIndex];
-            _currentBatchIndex++;
             return ResetObstacle(nextObstacle);
         }
 
@@ -123,20 +146,20 @@ namespace GameLogic.ObstacleGeneration
             return newObstacle;
         }
 
-        private void AdjustWeights()
-        {
-
-            float aAdjusted = Mathf.Max(_difficultyToChanceMap[0].second - 10, 0);
-            float bAdjusted = Mathf.Min(_difficultyToChanceMap[1].second + 6, 90f);
-            float cAdjusted = Mathf.Min(_difficultyToChanceMap[2].second + 4, 50f);
-
-            float totalAdjusted = aAdjusted + bAdjusted + cAdjusted;
-
-            // Normalize chances to ensure they sum to 100
-            float scale = 100f / totalAdjusted;
-            _difficultyToChanceMap[0].second = aAdjusted * scale;
-            _difficultyToChanceMap[1].second = bAdjusted * scale;
-            _difficultyToChanceMap[2].second = cAdjusted * scale;
-        }
+        // private void AdjustWeights()
+        // {
+        //
+        //     float aAdjusted = Mathf.Max(_difficultyToChanceMap[0].second - 10, 0);
+        //     float bAdjusted = Mathf.Min(_difficultyToChanceMap[1].second + 6, 90f);
+        //     float cAdjusted = Mathf.Min(_difficultyToChanceMap[2].second + 4, 50f);
+        //
+        //     float totalAdjusted = aAdjusted + bAdjusted + cAdjusted;
+        //
+        //     // Normalize chances to ensure they sum to 100
+        //     float scale = 100f / totalAdjusted;
+        //     _difficultyToChanceMap[0].second = aAdjusted * scale;
+        //     _difficultyToChanceMap[1].second = bAdjusted * scale;
+        //     _difficultyToChanceMap[2].second = cAdjusted * scale;
+        // }
     }
 }

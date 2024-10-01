@@ -8,6 +8,7 @@ namespace GameLogic
     public class MoveableObject : MonoBehaviour
     {
         [SerializeField] private PoolType type;
+        private ControlPanelManager controlPanelManager;
 
         public float MoveSpeed
         {
@@ -21,23 +22,11 @@ namespace GameLogic
 
         private void Start()
         {
-            moveSpeed = CoreManager.instance.GameManager.CurrentObjectsSpeed;
-        }
+            controlPanelManager = CoreManager.instance.ControlPanelManager;
+            // moveSpeed = CoreManager.instance.GameManager.CurrentObjectsSpeed;
+            moveSpeed = controlPanelManager.GetGameMoveSpeed();
 
-        public virtual void OnEnable()
-        {
-            CoreManager.instance.EventManager.AddListener(EventNames.UpdateObjectMovespeed,IncreaseObjectMovespeed);
         }
-        public virtual void OnDisable()
-        {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.UpdateObjectMovespeed,IncreaseObjectMovespeed);
-        }
-
-        private void IncreaseObjectMovespeed(object obj)
-        {
-            moveSpeed = CoreManager.instance.GameManager.CurrentObjectsSpeed;
-        }
-
 
         public virtual void Update()
         {
@@ -46,8 +35,7 @@ namespace GameLogic
 
         public void Move()
         {
-            print(moveSpeed);
-            transform.position -= new Vector3(0, moveSpeed * Time.deltaTime, 0);
+            transform.position -= new Vector3(0, CoreManager.instance.ControlPanelManager.GetGameMoveSpeed() * Time.deltaTime, 0);
         }
 
     }

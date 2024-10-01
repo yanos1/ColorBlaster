@@ -14,7 +14,7 @@ namespace GameLogic.PlayerRelated
     {
         [SerializeField] private float moveSpeed;
         [SerializeField] private Color baseColor;
-        private float BulletOutOfBoundsYPosition = 10f;
+        private float BulletOutOfBoundsYPosition = 4.9f;
 
         private void OnEnable()
         {

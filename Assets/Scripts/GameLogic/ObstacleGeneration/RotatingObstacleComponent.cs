@@ -1,15 +1,18 @@
+using System;
+using Core.Managers;
 using UnityEngine;
 
 namespace GameLogic.ObstacleGeneration
 {
     public class RotatingObstacleComponent : ObstacleComponent
     {
-        [SerializeField] private Vector3 RotationSpeed;
-
         // Update is called once per frame
+    
+
         void Update()
         {
-            transform.Rotate(RotationSpeed * Time.deltaTime);
+            transform.Rotate(new Vector3(0, 0,
+               CoreManager.instance.ControlPanelManager.GetObstacleRotationSpeed()) * Time.deltaTime);
         }
     }
 }

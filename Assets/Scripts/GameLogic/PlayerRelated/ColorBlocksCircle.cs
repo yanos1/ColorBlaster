@@ -17,16 +17,15 @@ namespace GameLogic.PlayerRelated
     {
         [SerializeField] private ColorBlock[] blocks;
         [SerializeField] private Style colorRushStyle;
-        [SerializeField] float rotationSpeed; // Speed of rotation
-        [SerializeField] float rotationSpeedWhileShooting; // Speed of rotation
+
         [SerializeField] private GameObject rotationAxis;
+
 
         private bool invincible;
         private bool playerDead;
         private bool isShooting;
         private Coroutine shootingCoroutine;
         private Coroutine colorRushCoroutine;
-        private static int RotationSpeedAdditionPerAdjusment => 15;
 
 
         private void Awake()
@@ -53,7 +52,6 @@ namespace GameLogic.PlayerRelated
         private void OnEnable()
         {
             CoreManager.instance.EventManager.AddListener(EventNames.Revive, RestoreBlocks);
-            CoreManager.instance.EventManager.AddListener(EventNames.IncreaseGameDifficulty, RotateFaster);
             CoreManager.instance.EventManager.AddListener(EventNames.Shoot, SetIsShooting);
             CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, OnColorRushPickUp);
             CoreManager.instance.EventManager.AddListener(EventNames.DeactivateColorRush, OnColorRushEnd);
@@ -62,7 +60,6 @@ namespace GameLogic.PlayerRelated
         private void OnDisable()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.Revive, RestoreBlocks);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.IncreaseGameDifficulty, RotateFaster);
             CoreManager.instance.EventManager.RemoveListener(EventNames.Shoot, SetIsShooting);
             CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, OnColorRushPickUp);
             CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, OnColorRushEnd);
@@ -137,12 +134,6 @@ namespace GameLogic.PlayerRelated
         }
 
 
-        private void RotateFaster(object obj)
-        {
-            rotationSpeed += RotationSpeedAdditionPerAdjusment;
-        }
-
-
         private void RestoreBlocks(object obj)
         {
             float maxReviveDuration = 0;
@@ -195,12 +186,15 @@ namespace GameLogic.PlayerRelated
 
         private void RotateAroundPlayer()
         {
+
             foreach (var colorBlock in blocks)
             {
                 if (colorBlock != null)
                 {
                     colorBlock.transform.RotateAround(rotationAxis.transform.position, Vector3.back,
-                        (isShooting ? rotationSpeedWhileShooting : rotationSpeed) * Time.deltaTime);
+                        (isShooting
+                            ? CoreManager.instance.ControlPanelManager.GetWheelRotationSpeedWhileShooting()
+                            : CoreManager.instance.ControlPanelManager.GetWheeRotationSpeed()) * Time.deltaTime);
                 }
             }
         }

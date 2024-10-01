@@ -29,7 +29,7 @@ namespace Core.Managers
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun, StopMeasuring);
             CoreManager.instance.EventManager.AddListener(EventNames.GemPrefabArrived, AddCoin);
             CoreManager.instance.EventManager.AddListener(EventNames.GameOver, UpdateStatsIfNeeded);
-            CoreManager.instance.EventManager.AddListener(EventNames.IncreaseGameDifficulty, DecreaseTimeBetweenUpdates);
+            CoreManager.instance.EventManager.AddListener(EventNames.LevelUp, DecreaseTimeBetweenUpdates);
         }
 
 
@@ -40,7 +40,7 @@ namespace Core.Managers
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, StopMeasuring);
             CoreManager.instance.EventManager.RemoveListener(EventNames.GemPrefabArrived, AddCoin);
             CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, UpdateStatsIfNeeded);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.IncreaseGameDifficulty, DecreaseTimeBetweenUpdates);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.LevelUp, DecreaseTimeBetweenUpdates);
 
         }
 

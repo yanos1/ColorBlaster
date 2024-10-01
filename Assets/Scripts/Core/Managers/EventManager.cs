@@ -54,7 +54,7 @@ namespace Core.Managers
         SetStyle = 1,
         Shoot = 2,
         Move = 3,
-        IncreaseGameDifficulty = 4,
+        LevelUp = 4,
         StartGame = 5,
         GameOver = 6,
         RestartGame =7,
@@ -82,6 +82,5 @@ namespace Core.Managers
 
 
         DeleteColorPrefabArrived=26,
-        UpdateObjectMovespeed=27,
     }
 }

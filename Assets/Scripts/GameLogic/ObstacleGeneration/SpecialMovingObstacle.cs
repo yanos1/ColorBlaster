@@ -3,7 +3,7 @@
     public class SpecialMovingObstacle : Obstacle
     {
         // movement will be controlled from the obstacle parts.
-        public override void OnEnable()
+        public void OnEnable()
         {
             MoveSpeed = 0;
         }

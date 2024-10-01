@@ -61,7 +61,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.92, y: 0, z: 0}
-  m_LocalScale: {x: 0.51, y: 0.51, z: 0.51}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1245674770867249722}
@@ -302,7 +302,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.36, y: 0.36, z: 0.36}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3565078855427421127}
@@ -425,7 +425,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3398758869056677532, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.375
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 3635972799355165601, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_SortingOrder
@@ -449,7 +449,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5580139350310075935, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.375
+      value: -0.35
       objectReference: {fileID: 0}
     - target: {fileID: 5645626009961224440, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: rotationAxis
@@ -481,7 +481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6814784865134284174, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.375
+      value: -0.35
       objectReference: {fileID: 0}
     - target: {fileID: 6814784865134284174, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -497,7 +497,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7116941162676163179, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.375
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 7580486688638367968, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalScale.x
@@ -513,15 +513,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7998751678068865717, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.57
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7998751678068865717, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.57
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7998751678068865717, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.57
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7998751678068865717, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -647,7 +647,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.08, y: 0.85}
+  m_Size: {x: 0.07, y: 0.72}
   m_EdgeRadius: 0
 --- !u!4 &1245674770867249722 stripped
 Transform:
@@ -702,7 +702,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.08, y: 0.85}
+  m_Size: {x: 0.07, y: 0.72}
   m_EdgeRadius: 0
 --- !u!1 &2616758785059930720 stripped
 GameObject:
@@ -752,7 +752,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.08, y: 0.85}
+  m_Size: {x: 0.07, y: 0.72}
   m_EdgeRadius: 0
 --- !u!1 &7534212888197949404 stripped
 GameObject:
@@ -802,7 +802,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.86, y: 0.86}
+  m_Size: {x: 0.76, y: 0.76}
   m_EdgeRadius: 0
 --- !u!1 &7619594865552045719 stripped
 GameObject:
@@ -852,5 +852,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.08, y: 0.85}
+  m_Size: {x: 0.07, y: 0.72}
   m_EdgeRadius: 0

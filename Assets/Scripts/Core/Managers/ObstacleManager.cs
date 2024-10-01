@@ -61,8 +61,8 @@ namespace Core.Managers
 
             if (weightToObstacleMap.ContainsKey(2) && weightToObstacleMap.ContainsKey(3))
             {
-                weightToObstacleMap[2] = (2, weightToObstacleMap[3].Item2);
-                weightToObstacleMap[3] = (2, weightToObstacleMap[3].Item2);
+                weightToObstacleMap[2] = (weightToObstacleMap[2].Item2.Count, weightToObstacleMap[2].Item2);
+                weightToObstacleMap[3] = (weightToObstacleMap[3].Item2.Count, weightToObstacleMap[3].Item2);
             }
 
         }

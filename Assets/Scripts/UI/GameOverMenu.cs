@@ -23,6 +23,11 @@ namespace UI
             SceneManager.LoadScene("GameScene");
         }
 
+        public void ToMainMenu()
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+
         private void OnGameReset(Scene arg0, LoadSceneMode arg1)
         {
             SceneManager.sceneLoaded -= OnGameReset;

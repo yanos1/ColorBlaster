@@ -13,8 +13,8 @@ namespace GameLogic.ObstacleGeneration
     public class ObstacleGenerator : MonoBehaviour
     {
         [SerializeField] private ObstacleGeneratorHandler _generatorHandler;
-        [SerializeField] private float generationThreshold = -2f;
-        [SerializeField] private float returnToPoolThreshold = -11f;
+        [SerializeField] private float generationThreshold = -2.5f;
+        private float returnToPoolThreshold = -8f;
 
         private List<Obstacle> activeObstacles;
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> obstacleData;

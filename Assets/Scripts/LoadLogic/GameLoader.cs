@@ -52,13 +52,14 @@ namespace LoaderLogic
         private void LoadCoreManager()
         {
            var coreManager =  new CoreManager();
-           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, TEST_MODE ? testObstacleList :obstaclesList, poolEntries,treasureChestBuffs, baseObjectSpeed, OnCoreManagersLoaded);
+           loaderUI.AddProgress(10);
+           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, TEST_MODE ? testObstacleList :obstaclesList, poolEntries,treasureChestBuffs, baseObjectSpeed, OnCoreManagersLoaded, loaderUI);
             
         }
 
         private void OnCoreManagersLoaded()
         {
-            loaderUI.AddProgress(20);
+            loaderUI.AddProgress(10);
             // LoadLocalData(); // Load local data first
             StartCoroutine(LoadCloudData());
             StartCoroutine(LoadUserDataFromFirebase()); // Load cloud data in parallel

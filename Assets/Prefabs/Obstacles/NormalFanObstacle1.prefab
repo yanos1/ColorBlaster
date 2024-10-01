@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2337052462394243854}
   - component: {fileID: 7874923284203621253}
   m_Layer: 0
-  m_Name: EasyFanObstacle1
+  m_Name: NormalFanObstacle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844a887edee0f5743b6ef54e258d039b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 3
-  difficulty: 1
+  type: 5
+  difficulty: 2
   obstacleComponents:
   - {fileID: 8628816932626694689}
   rightMostPosition: {fileID: 2874338240738700545}
@@ -197,7 +197,6 @@ MonoBehaviour:
   - {fileID: 5234062432937860140}
   - {fileID: 9087923220104626303}
   isSingleColorComponent: 0
-  RotationSpeed: {x: 0, y: 0, z: 20}
 --- !u!114 &5234062432937860140 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2458111983553867250, guid: dc388f4c0c02ba145bc7869e326c8751, type: 3}
