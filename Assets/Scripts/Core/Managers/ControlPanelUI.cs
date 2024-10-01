@@ -20,11 +20,11 @@ namespace Core.Managers
         public TMP_InputField obstacleRotationSpeedIncreasePerLevelInput;
         public TMP_InputField obstaclesPerLevelInput;
         public TMP_InputField sessionMultiplierInput;
-        public TMP_InputField rocketsToShootInput;
         public TMP_InputField obstacleToDifficultyPerLevel;
 
         public Toggle canSpawnRotatingObstaclesToggle;
         public Toggle canSpawnChasingObstaclesToggle;
+        public Toggle SpawnBossObstacleAtTheEndOfLevel;
 
         private ControlPanelManager controlPanelManager;
 
@@ -34,10 +34,16 @@ namespace Core.Managers
 
             // Subscribe to OnDeselect event for each input field
             SubscribeToInputFieldEvents();
+            // SubscribeToToggleEvents();
 
             // Load initial values into input fields and toggles
             LoadUIValues(); 
         }
+
+        // private void SubscribeToToggleEvents()
+        // {
+        //     canSpawnRotatingObstaclesToggle.
+        // }
 
         public void LoadUIValues()
         {
@@ -47,7 +53,6 @@ namespace Core.Managers
             playerMovementSpeedInput.text = controlPanelManager.playerMovementSpeed.ToString();
             obstaclesPerLevelInput.text = controlPanelManager.obstaclesPerLevel.ToString();
             sessionMultiplierInput.text = controlPanelManager.sessionMultiplier.ToString();
-            rocketsToShootInput.text = controlPanelManager.numbersOfRocketsToShootPerLevel.ToString();
             colorWheelRotationSpeedIncrease.text = controlPanelManager.colorWheelRotationSpeedIncrease.ToString();
             colorWheelShootingRotationSpeed.text = controlPanelManager.colorWheelShootingRotationSpeed.ToString();
             obstacleRotationSpeed.text = controlPanelManager.obstacleRotationSpeed.ToString();
@@ -75,6 +80,7 @@ namespace Core.Managers
             // Toggles
             canSpawnRotatingObstaclesToggle.isOn = controlPanelManager.canSpawnRotatingObstacles;
             canSpawnChasingObstaclesToggle.isOn = controlPanelManager.canSpawnChasingObstacles;
+            SpawnBossObstacleAtTheEndOfLevel.isOn = controlPanelManager.spawnBossObstacleAtTheEndOfLevel;
         }
 
         private void SubscribeToInputFieldEvents()
@@ -89,9 +95,11 @@ namespace Core.Managers
             obstacleRotationSpeed.onDeselect.AddListener(delegate { OnTextInputChanged(obstacleRotationSpeed); });
             obstaclesPerLevelInput.onDeselect.AddListener(delegate { OnTextInputChanged(obstaclesPerLevelInput); });
             sessionMultiplierInput.onDeselect.AddListener(delegate { OnTextInputChanged(sessionMultiplierInput); });
-            rocketsToShootInput.onDeselect.AddListener(delegate { OnTextInputChanged(rocketsToShootInput); });
             obstacleToDifficultyPerLevel.onDeselect.AddListener(delegate { OnTextInputChanged(obstacleToDifficultyPerLevel); });
             obstacleRotationSpeedIncreasePerLevelInput.onDeselect.AddListener(delegate { OnTextInputChanged(obstacleRotationSpeedIncreasePerLevelInput); });
+            canSpawnChasingObstaclesToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnChasingObstaclesToggle));});
+            canSpawnRotatingObstaclesToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnRotatingObstaclesToggle));});
+            SpawnBossObstacleAtTheEndOfLevel.onValueChanged.AddListener(delegate {OnToggleChanged((SpawnBossObstacleAtTheEndOfLevel));});
         }
 
         public void OnTextInputChanged(TMP_InputField inputField)
@@ -102,9 +110,11 @@ namespace Core.Managers
             controlPanelManager.UpdateParameterFromInput(parameterName, inputValue);
         }
 
-        public void OnToggleChanged(string parameterName, bool isOn)
+        public void OnToggleChanged(Toggle toggle)
         {
-            controlPanelManager.UpdateParameterFromToggle(parameterName, isOn);
+            string parameterName = toggle.name; // You can name your InputFields accordingly
+            bool isOn = toggle.isOn;
+            controlPanelManager.OnToggleChanged(parameterName, isOn);
         }
 
         public void OnSaveButtonClicked()

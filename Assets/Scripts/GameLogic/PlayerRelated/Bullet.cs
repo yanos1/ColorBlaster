@@ -14,6 +14,7 @@ namespace GameLogic.PlayerRelated
     {
         [SerializeField] private float moveSpeed;
         [SerializeField] private Color baseColor;
+        [SerializeField] private Rigidbody2D rb;
         private float BulletOutOfBoundsYPosition = 4.9f;
 
         private void OnEnable()
@@ -27,9 +28,9 @@ namespace GameLogic.PlayerRelated
             return currentStyle;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            transform.Translate(Vector3.up * (Time.deltaTime * moveSpeed));
+            rb.MovePosition(transform.position + Vector3.up * (Time.deltaTime * moveSpeed));
             if (transform.position.y > BulletOutOfBoundsYPosition)
             {
                 CoreManager.instance.PoolManager.ReturnToPool(PoolType.Bullet, gameObject);

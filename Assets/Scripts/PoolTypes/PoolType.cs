@@ -11,15 +11,15 @@
         NormalRocketObstacle=6,
         HardFlowerObstacle = 7,
         NormalWallObstacle1 = 8,
-        HardWallObstacle1 = 9,
+        EasyWallObstacle3 = 9,
         HardChasingWallObstacle1=10,
         PastelShatterPrefab=11,
         Bullet = 12,
-        EasyChasingWallObstacle1=13,
+        NormalChasingWallObstacle1=13,
         HardVerticallyMovingObstacle1 =14,
         TreasureChestObstacle = 15,
         Gem = 16,
-        HardRocketsObstacle1=17,
+        BossRocketsObstacle1=17,
         ColorRushPowerUp = 18,
         
         

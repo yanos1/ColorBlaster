@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 10
+  obstacleType: 3
   difficulty: 3
   obstacleComponents:
   - {fileID: 1380098965641043731}

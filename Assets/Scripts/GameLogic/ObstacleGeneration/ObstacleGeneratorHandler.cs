@@ -10,7 +10,7 @@ namespace GameLogic.ObstacleGeneration
 {
     public class ObstacleGeneratorHandler : MonoBehaviour
     {
-
+        [SerializeField] private LevelManager levelManager;
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> _difficultyToObstacleMap;
         private Obstacle[] _currentBatch;
         private int numObstaclesPerLevel;
@@ -47,11 +47,23 @@ namespace GameLogic.ObstacleGeneration
         {
             // int numTreasureObstacles = Random.Range(2,4);
             var newBatch = new Obstacle[numObstaclesPerLevel];
-            // Fill with regular obstacles
+
             for (int i = 0; i < numObstaclesPerLevel; ++i)
             {
                 newBatch[i] = GenerateRandomObstacle();
             }
+            UtilityFunctions.ShuffleArray(newBatch);
+
+            if (CoreManager.instance.ControlPanelManager.spawnBossObstacleAtTheEndOfLevel)
+            {
+                // Increase the size of the array by 1
+                print("RESIZED");
+                Array.Resize(ref newBatch, newBatch.Length + 1);
+    
+                // Add the boss obstacle to the last position
+                newBatch[^1] = GetBossObstacle();
+            }
+
 
             // Add treasure obstacles from difficulty 0
             // for (int i = numObstaclesPerLevel; i < numTreasureObstacles+ numObstaclesPerLevel; i++)
@@ -63,7 +75,12 @@ namespace GameLogic.ObstacleGeneration
                 print(obs.name);
             }
 
-            return UtilityFunctions.ShuffleArray(newBatch);
+            return newBatch;
+        }
+
+        private Obstacle GetBossObstacle()
+        {
+            return _difficultyToObstacleMap[4].Item2[Random.Range(0, _difficultyToObstacleMap[4].Item1)];
         }
 
         private Obstacle GenerateRandomObstacle()
@@ -113,10 +130,10 @@ namespace GameLogic.ObstacleGeneration
         public Obstacle GetNextObstacle()
         {
             // Check if the current batch is exhausted, generate a new one if necessary
-            var nextObstacle = _currentBatch[CoreManager.instance.GameManager.ObstacleCrossedThisLevel];
+            var nextObstacle = _currentBatch[levelManager.ObstacleCrossedThisLevel];
 
-            print($"obstacled crossed so far {CoreManager.instance.GameManager.ObstacleCrossedThisLevel} needed to pass level: {numObstaclesPerLevel}");
-            if (++CoreManager.instance.GameManager.ObstacleCrossedThisLevel >= numObstaclesPerLevel)
+            print($"obstacled crossed so far {levelManager.ObstacleCrossedThisLevel} needed to pass level: {numObstaclesPerLevel}");
+            if (++levelManager.ObstacleCrossedThisLevel >= numObstaclesPerLevel + (CoreManager.instance.ControlPanelManager.spawnBossObstacleAtTheEndOfLevel ? 1:0) )
             {
                 _currentBatch = InitNewObstacleBatch();
             }

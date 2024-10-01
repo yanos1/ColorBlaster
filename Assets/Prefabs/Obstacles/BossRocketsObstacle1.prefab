@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3853920311481261557}
   - component: {fileID: 5422812282413597159}
   m_Layer: 0
-  m_Name: HardRocketsObstacle1
+  m_Name: BossRocketsObstacle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,7 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 17
-  difficulty: 3
+  obstacleType: 5
+  difficulty: 4
   obstacleComponents:
   - {fileID: 1136886721562217124}
   - {fileID: 1524495708005235145}

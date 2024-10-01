@@ -34,7 +34,7 @@ namespace GameLogic.ObstacleGeneration
             _generatorHandler.Init(obstacleData);
             currentObstacle = GenerateObstacle();
             StartCoroutine(ActiveObstaclesUpdate());
-            DontDestroyOnLoad(this.gameObject);
+            // DontDestroyOnLoad(this.gameObject);
         }
         
         private void OnEnable()

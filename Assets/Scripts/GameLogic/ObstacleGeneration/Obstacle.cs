@@ -22,7 +22,9 @@ namespace GameLogic.ObstacleGeneration
             private set => difficulty = value;
         }
 
+        public ObstacleType ObstacleType => obstacleType;
 
+        [SerializeField] private ObstacleType obstacleType;
         [SerializeField] private int difficulty;
         [SerializeField] private List<ObstacleComponent> obstacleComponents;
         [SerializeField] private Transform rightMostPosition;

@@ -35,6 +35,7 @@ namespace GameLogic.PlayerRelated
         {
             GameObject bulletPrefab = CoreManager.instance.PoolManager.GetFromPool(bullet);
             bulletPrefab.transform.position = shootingPosition.position;
+            print($"bullet position {bulletPrefab.transform.position}");
             lastTimeShot = Time.time;
             CoreManager.instance.EventManager.InvokeEvent(EventNames.Shoot, null);
         }

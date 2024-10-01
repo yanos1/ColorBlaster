@@ -51,15 +51,13 @@ namespace LoaderLogic
 
         private void LoadCoreManager()
         {
-           var coreManager =  new CoreManager();
-           loaderUI.AddProgress(10);
-           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, TEST_MODE ? testObstacleList :obstaclesList, poolEntries,treasureChestBuffs, baseObjectSpeed, OnCoreManagersLoaded, loaderUI);
+           var coreManager =  new CoreManager(loaderUI);
+           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, TEST_MODE ? testObstacleList :obstaclesList, poolEntries,treasureChestBuffs, baseObjectSpeed, OnCoreManagersLoaded);
             
         }
 
         private void OnCoreManagersLoaded()
         {
-            loaderUI.AddProgress(10);
             // LoadLocalData(); // Load local data first
             StartCoroutine(LoadCloudData());
             StartCoroutine(LoadUserDataFromFirebase()); // Load cloud data in parallel
@@ -80,7 +78,6 @@ namespace LoaderLogic
         int localCoinAmount = PlayerPrefs.GetInt("CoinAmount", 0);
         ApplyCoinAmount(localCoinAmount);
 
-        loaderUI.AddProgress(30);
     }
 
     private IEnumerator LoadCloudData()
@@ -184,7 +181,6 @@ namespace LoaderLogic
     {
         print("called onload data");
         SceneManager.sceneLoaded -= OnLoadData;
-        loaderUI.AddProgress(30);
         OnLoadComplete();
     }
 

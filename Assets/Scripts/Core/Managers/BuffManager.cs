@@ -11,7 +11,6 @@ namespace GameLogic.ConsumablesGeneration
 {
     public class BuffManager
     {
-        
         public float ParticleTransferDuration => UnityEngine.Random.Range(0.3f, 0.85f);
 
         private Dictionary<Color, TreasureChestBuff> colorToBuffMap;
@@ -90,8 +89,11 @@ namespace GameLogic.ConsumablesGeneration
         {
             foreach (var pair in colorToBuffMap)
             {
+
                 if (UtilityFunctions.CompareColors(pair.Key, color))
                 {
+                    // we disable everything but gems power up for test 
+
                     return colorToBuffMap[pair.Key];
                 }
             }
@@ -125,7 +127,7 @@ namespace GameLogic.ConsumablesGeneration
         public void MoveParticlesToPlayer(TreasureChestBuff buff, Vector3 startPosition, Color color, float strength)
         {
             float maxDuration = 0f;
-            int numberOfGemsToEarn =(int)(strength*buff.buffMultiPlier);
+            int numberOfGemsToEarn = (int)(strength * buff.buffMultiPlier);
             int buffDuration = numberOfGemsToEarn;
             Transform targetPosition = CoreManager.instance.Player.transform;
             bool firstParticleReached = false;
@@ -212,4 +214,3 @@ namespace GameLogic.ConsumablesGeneration
         }
     }
 }
-

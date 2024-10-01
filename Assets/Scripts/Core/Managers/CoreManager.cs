@@ -28,7 +28,7 @@ namespace Core.Managers
         public Player Player { get; set; }
         public MonoRunner MonoRunner { get; private set; }
 
-        public CoreManager()
+        public CoreManager(GameLoaderUI loaderUI)
         {
             if (instance != null)
             {
@@ -37,30 +37,30 @@ namespace Core.Managers
             instance = this;
             
             // Initilize CoreManagers
+            loaderUI.AddProgress(10);
             ControlPanelManager = new ControlPanelManager();
+            loaderUI.AddProgress(20);
             EventManager = new EventManager();
+            loaderUI.AddProgress(30);
             SaveManager = new SaveManager();
+            loaderUI.AddProgress(30);
             UserDataManager = new UserDataManager(SystemInfo.deviceUniqueIdentifier);
+            loaderUI.AddProgress(10);
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
         }
 
-        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles, PoolEntry[] poolEntries, TreasureChestBuff[] rewards, float baseObjectSpeed, Action onComplete, GameLoaderUI loaderUI)
+        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles, PoolEntry[] poolEntries, TreasureChestBuff[] rewards, float baseObjectSpeed, Action onComplete)
         {
             // Initialize all the managers here
             
             GameManager = new GameManager();
-            loaderUI.AddProgress(10);
             TimeManager = new TimeManager();
-            loaderUI.AddProgress(10);
 
             StyleManager = new StyleManager(styles);
-            loaderUI.AddProgress(10);
 
             ColorsManager = new ColorsManager(colorThemes);
-            loaderUI.AddProgress(10);
 
             BuffManager = new BuffManager(rewards);
-            loaderUI.AddProgress(10);
 
             ObstacleManager = new ObstacleManager(obstacles);
             PoolManager = new ObjectPoolManager(poolEntries);

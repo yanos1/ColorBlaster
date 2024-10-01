@@ -24,6 +24,8 @@ namespace Core.Managers
         public int numbersOfRocketsToShootPerLevel;
         public bool canSpawnRotatingObstacles;
         public bool canSpawnChasingObstacles;
+        public bool spawnBossObstacleAtTheEndOfLevel;
+
 
         public int Level = 0;
         public int Session = 0;
@@ -35,6 +37,7 @@ namespace Core.Managers
         {
             LoadControlPanelSettings();
         }
+
 
 
         // Load settings from PlayerPrefs or default values
@@ -54,9 +57,12 @@ namespace Core.Managers
             sessionMultiplier = PlayerPrefs.GetFloat("SessionMultiplier", 1.1f);
 
             numbersOfRocketsToShootPerLevel = PlayerPrefs.GetInt("NumbersOfRocketsToShootPerLevel", 2);
+       
             canSpawnRotatingObstacles = PlayerPrefs.GetInt("CanSpawnRotatingObstacles", 1) == 1;
             canSpawnChasingObstacles = PlayerPrefs.GetInt("CanSpawnChasingObstacles", 1) == 1;
             obstacleToDifficultyPerLevel = ParseArray(PlayerPrefs.GetString("ObstacleToDifficultyPerLevel", "80,20,0,70,20,10,60,30,10,50,30,20,40,30,30"));
+            spawnBossObstacleAtTheEndOfLevel = PlayerPrefs.GetInt("SpawnBossObstacleAtTheEndOfLevel", 1) == 1;
+
         }
 
         private int[][] ParseArray(string str)
@@ -101,6 +107,7 @@ namespace Core.Managers
             PlayerPrefs.SetInt("CanSpawnChasingObstacles", canSpawnChasingObstacles ? 1 : 0);
             PlayerPrefs.SetString("ObstacleToDifficultyPerLevel", string.Join(",",obstacleToDifficultyPerLevel.SelectMany(x=>x).ToArray()));
             PlayerPrefs.SetString("LevelSpeeds", String.Join(",", levelSpeeds));
+            PlayerPrefs.SetInt("SpawnBossObstacleAtTheEndOfLevel", spawnBossObstacleAtTheEndOfLevel ? 1:0);
 
             PlayerPrefs.Save();
         }
@@ -178,7 +185,7 @@ namespace Core.Managers
             }
         }
 
-        public void UpdateParameterFromToggle(string parameterName, bool isOn)
+        public void OnToggleChanged(string parameterName, bool isOn)
         {
             switch (parameterName)
             {
@@ -188,11 +195,15 @@ namespace Core.Managers
                 case "CanSpawnChasingObstacles":
                     canSpawnChasingObstacles = isOn;
                     break;
+                case "SpawnBossObstacleAtTheEndOfLevel":
+                    spawnBossObstacleAtTheEndOfLevel = isOn;
+                    break;
                 default:
-                    Debug.LogWarning($"Unknown parameter: {parameterName}");
+                    Debug.LogWarning($"Toggle {parameterName} is not recognized!");
                     break;
             }
         }
+
 
         public float GetGameMoveSpeed()
         {

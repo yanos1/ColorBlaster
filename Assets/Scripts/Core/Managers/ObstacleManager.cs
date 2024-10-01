@@ -18,13 +18,12 @@ namespace Core.Managers
             _obstacleData = obstacleData;
 
             // Manually handle event subscriptions
-
-            InitializeMap();
         }
 
 
         public Dictionary<int, ValueTuple<int, List<Obstacle>>> GetParsedObstacleData()
         {
+            InitializeMap();
             return weightToObstacleMap;
         }
 
@@ -35,6 +34,13 @@ namespace Core.Managers
                 if (!weightToObstacleMap.ContainsKey(obs.Difficulty))
                 {
                     weightToObstacleMap[obs.Difficulty] = (0, new List<Obstacle>());
+                }
+
+                ObstacleType type = obs.ObstacleType;
+                if (SkipObstacleType(type))
+                {
+                    Debug.Log($"SKIPPED {obs.ObstacleType}");
+                    continue;
                 }
 
                 weightToObstacleMap[obs.Difficulty].Item2.Add(obs);
@@ -48,7 +54,7 @@ namespace Core.Managers
                     weightToObstacleMap[i] = (weightToObstacleMap[i].Item2.Count, weightToObstacleMap[i].Item2);
                 }
             }
-            
+
             if (weightToObstacleMap.ContainsKey(0))
             {
                 weightToObstacleMap[0] = (weightToObstacleMap[0].Item2.Count, weightToObstacleMap[0].Item2);
@@ -64,7 +70,19 @@ namespace Core.Managers
                 weightToObstacleMap[2] = (weightToObstacleMap[2].Item2.Count, weightToObstacleMap[2].Item2);
                 weightToObstacleMap[3] = (weightToObstacleMap[3].Item2.Count, weightToObstacleMap[3].Item2);
             }
+        }
 
+        private static bool SkipObstacleType(ObstacleType type)
+        {
+            Debug.Log("TRYING TO SKIP");
+            Debug.Log($"type : {type}  1. {CoreManager.instance.ControlPanelManager.canSpawnChasingObstacles} {CoreManager.instance.ControlPanelManager.canSpawnRotatingObstacles}");
+            bool skip = (type == ObstacleType.Chasing &&
+                    !CoreManager.instance.ControlPanelManager.canSpawnChasingObstacles) ||
+                   type == ObstacleType.Rotating &&
+                   !CoreManager.instance.ControlPanelManager.canSpawnRotatingObstacles;
+            Debug.Log(skip);
+            Debug.Log("---------");
+            return skip;
         }
     }
 }

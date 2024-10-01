@@ -137,6 +137,7 @@ MonoBehaviour:
   _renderer: {fileID: 8096280407654148459}
   moveSpeed: 10
   baseColor: {r: 1, g: 1, b: 1, a: 1}
+  rb: {fileID: -5576568425774821899}
 --- !u!50 &-5576568425774821899
 Rigidbody2D:
   serializedVersion: 4
