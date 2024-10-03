@@ -49,7 +49,7 @@ namespace Core.Managers
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
         }
 
-        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles, PoolEntry[] poolEntries, TreasureChestBuff[] rewards, float baseObjectSpeed, Action onComplete)
+        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles,Obstacle[] bossObstacles, PoolEntry[] poolEntries, TreasureChestBuff[] rewards, Action onComplete)
         {
             // Initialize all the managers here
             
@@ -62,7 +62,7 @@ namespace Core.Managers
 
             BuffManager = new BuffManager(rewards);
 
-            ObstacleManager = new ObstacleManager(obstacles);
+            ObstacleManager = new ObstacleManager(obstacles, bossObstacles);
             PoolManager = new ObjectPoolManager(poolEntries);
             CostManager = new ItemCostManager(itemCosts);
             

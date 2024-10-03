@@ -7,8 +7,9 @@
         Rotating = 2,
         Chasing = 3,
         VerticallyMoving = 4,
-        Boss =5,
-        Treasure = 6,
+        Rocket =5,
+        MultipleHits = 6,
+        Treasure = 7,
         
     }
 }

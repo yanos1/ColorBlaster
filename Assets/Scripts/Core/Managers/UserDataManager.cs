@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase;
+using Firebase.Analytics;
 using Firebase.Database;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -28,56 +29,77 @@ namespace Core.Managers
             stylesOwned = new List<string>();
             colorsOwned = new List<string>();
             itemPurchases = new Dictionary<string, int>();
-
             _id = id;
-            FirebaseApp app = FirebaseApp.DefaultInstance;
-            FirebaseDatabase database = FirebaseDatabase.GetInstance(app,
-                "https://colorblaster-8fe62-default-rtdb.europe-west1.firebasedatabase.app/");
-            _dbReference = database.RootReference;
-
-            userRef = _dbReference.Child("users").Child(_id);
-            Debug.Log($"user ref : {userRef.ToString()}");
-            Debug.Log($"id : {_id}");
-
-            RetrieveDataFromFirebase(_id);
+            InitializeFirebase();
         }
 
         // Retrieve data from Firebase if it exists
+
+        // Firebase initialization
+        public async void InitializeFirebase()
+        {
+            var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+            if (dependencyStatus == DependencyStatus.Available)
+            {
+                FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+
+                // Firebase is initialized, now you can initialize the database and user data manager
+                InitializeDatabase();
+                RetrieveDataFromFirebase(_id); // Now Firebase is initialized, you can call Firebase functions.
+            }
+            else
+            {
+                Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+                // Handle error (e.g., retry, show error to user, etc.)
+            }
+        }
+
+        // Initialize Firebase database and reference
+        private void InitializeDatabase()
+        {
+            FirebaseApp app = FirebaseApp.DefaultInstance;
+            FirebaseDatabase database = FirebaseDatabase.GetInstance(app, "https://colorblaster-8fe62-default-rtdb.europe-west1.firebasedatabase.app/");
+            _dbReference = database.RootReference;
+
+            // Set the user reference, replace _id with the actual user id logic you have
+            userRef = _dbReference.Child("users").Child(_id);
+            Debug.Log($"user ref : {userRef.ToString()}");
+            Debug.Log($"id : {_id}");
+        }
+
+        // Retrieve data from Firebase
         private void RetrieveDataFromFirebase(string userId)
         {
+            Debug.Log("start getting data");
             userRef.GetValueAsync().ContinueWith(task =>
             {
-
                 if (task.IsFaulted)
                 {
-                    // Handle any errors here
-                    Debug.LogError($"Error retrieving data: {task.Exception}");
+                    Debug.Log($"Error retrieving data: {task.Exception}");
                     return;
                 }
 
                 if (task.IsCompleted)
                 {
                     DataSnapshot snapshot = task.Result;
-
                     if (snapshot.Exists)
                     {
-                        // Retrieve coins
                         gemsOwned = int.Parse(snapshot.Child("gemsOwned").Value.ToString());
-                        Debug.Log($"gems in balance: {GemsOwned}");
+                        Debug.Log($"gems in balance: {gemsOwned}");
 
-                        // Retrieve styles owned
+                        stylesOwned = new List<string>();
                         foreach (DataSnapshot styleSnapshot in snapshot.Child("stylesOwned").Children)
                         {
                             stylesOwned.Add(styleSnapshot.Value.ToString());
                         }
 
-                        // Retrieve colors owned
+                        colorsOwned = new List<string>();
                         foreach (DataSnapshot colorThemeSnapShot in snapshot.Child("colorThemesOwned").Children)
                         {
                             colorsOwned.Add(colorThemeSnapShot.Value.ToString());
                         }
 
-                        // Retrieve item purchases
+                        itemPurchases = new Dictionary<string, int>();
                         foreach (DataSnapshot purchaseSnapshot in snapshot.Child("inGamePurchases").Children)
                         {
                             string item = purchaseSnapshot.Key;
@@ -89,14 +111,9 @@ namespace Core.Managers
                     }
                     else
                     {
-                        // No data found for this user, initialize data for them
                         Debug.Log("No data found, initializing new user data.");
                         InitializeUserData(userId);
                     }
-                }
-                else
-                {
-                    Debug.Log("Task not completed successfully.");
                 }
             });
         }

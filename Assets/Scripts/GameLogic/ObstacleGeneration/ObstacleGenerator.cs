@@ -18,6 +18,7 @@ namespace GameLogic.ObstacleGeneration
 
         private List<Obstacle> activeObstacles;
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> obstacleData;
+        private Dictionary<ObstacleType, ValueTuple<int, List<Obstacle>>> bossObstacleData;
         private Coroutine colorRushCoroutine;
         private Obstacle currentObstacle;
         private float maxTimeBetweenObstacles = 6f;
@@ -30,8 +31,8 @@ namespace GameLogic.ObstacleGeneration
         private void Start()
         {
             activeObstacles = new List<Obstacle>();
-            obstacleData = CoreManager.instance.ObstacleManager.GetParsedObstacleData();
-            _generatorHandler.Init(obstacleData);
+            obstacleData = CoreManager.instance.ObstacleManager.GetBaseObstacleMap();
+            _generatorHandler.Init(obstacleData,bossObstacleData);
             currentObstacle = GenerateObstacle();
             StartCoroutine(ActiveObstaclesUpdate());
             // DontDestroyOnLoad(this.gameObject);

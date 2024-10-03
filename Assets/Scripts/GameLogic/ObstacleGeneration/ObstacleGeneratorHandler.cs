@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Core.Managers;
 using Extentions;
 using Unity.VisualScripting;
@@ -12,25 +13,27 @@ namespace GameLogic.ObstacleGeneration
     {
         [SerializeField] private LevelManager levelManager;
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> _difficultyToObstacleMap;
+        private Dictionary<ObstacleType, ValueTuple<int, List<Obstacle>>> _bossObstacleMap;
         private Obstacle[] _currentBatch;
         private int numObstaclesPerLevel;
 
-        public void Init(Dictionary<int, ValueTuple<int, List<Obstacle>>> difficultyToObstacleMap)
+        public void Init(Dictionary<int, ValueTuple<int, List<Obstacle>>> difficultyToObstacleMap,Dictionary<ObstacleType, ValueTuple<int, List<Obstacle>>> bossObstacleMap)
         {
             numObstaclesPerLevel = CoreManager.instance.ControlPanelManager.obstaclesPerLevel;
 
             _difficultyToObstacleMap = difficultyToObstacleMap;
-            foreach (var kvp in difficultyToObstacleMap)
-            {
-                print(kvp.Key);
-                foreach (var obs in kvp.Value.Item2)
-                {
-                    print(obs.name);
-                }
-                print("----");
-            }
+            _bossObstacleMap = bossObstacleMap;
+            
+            // foreach (var kvp in difficultyToObstacleMap)
+            // {
+            //     print(kvp.Key);
+            //     foreach (var obs in kvp.Value.Item2)
+            //     {
+            //         print(obs.name);
+            //     }
+            //     print("----");
+            // }
             _currentBatch = InitNewObstacleBatch();
-            CoreManager.instance.ControlPanelManager.PrintParametersAtEndOfSession();
         }
         
         private void OnEnable()
@@ -143,16 +146,32 @@ namespace GameLogic.ObstacleGeneration
 
         private void AdjustObstacleDifficulty(object obj)
         {
-            if (obj is int amount)
+            if (obj is not int amount) return;
+
+            // Update normal obstacle difficulty
+            for (int difficulty = 1; difficulty <= 3; difficulty++)
             {
-                for (int i = 1; i < 3; ++i)
-                {
-                    var (currentMaxIndex, obstacleList) = _difficultyToObstacleMap[i];
-                    int newMaxIndex = Mathf.Min(currentMaxIndex + amount, obstacleList.Count);
-                    _difficultyToObstacleMap[i] = (newMaxIndex, obstacleList);
-                }
+                var obstacleData = _difficultyToObstacleMap[difficulty];
+                _difficultyToObstacleMap[difficulty] = UpdateObstacleMaxIndex(obstacleData, amount);
+            }
+
+            // Update boss obstacle difficulty
+            foreach (var bossKey in _bossObstacleMap.Keys.ToList())
+            {
+                var obstacleData = _bossObstacleMap[bossKey];
+                _bossObstacleMap[bossKey] = UpdateObstacleMaxIndex(obstacleData, amount);
             }
         }
+
+// Helper function to update max index for obstacles
+        private (int, List<Obstacle>) UpdateObstacleMaxIndex((int currentMaxIndex, List<Obstacle> obstacleList) obstacleData, int amount)
+        {
+            var (currentMaxIndex, obstacleList) = obstacleData;
+            int newMaxIndex = Mathf.Min(currentMaxIndex + amount, obstacleList.Count);
+            return (newMaxIndex, obstacleList);
+        }
+
+
 
         private static Obstacle ResetObstacle(Obstacle obstacle)
         {

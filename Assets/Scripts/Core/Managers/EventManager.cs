@@ -76,7 +76,7 @@ namespace Core.Managers
         DeactivateGemRush=23,
         ActivateDeleteColor=24,
         DeactivateDeleteColor=25,
-        DeactivateColorPrefabArrived=25,
+        DeactivateColorPrefabArrived=26,
         
         // need to check for prefab arrival events
 
