@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
@@ -23,6 +25,17 @@ namespace Extentions
             }
 
             return copy;
+        }
+
+
+        public static void ShuffleArray<T>(List<T> list)
+        {
+            for (int i = 0; i < list.Count; ++i)
+            {
+                int randIndex = Random.Range(0, list.Count);
+                (list[i], list[randIndex]) = (list[randIndex], list[i]);
+            }
+            
         }
 
         public static IEnumerator FadeImage(Renderer renderer, float startValue, float endValue,
@@ -172,6 +185,18 @@ namespace Extentions
             }
 
             image.fillAmount = 0;
+        }
+        
+        public static TKey GetRandomKey<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
+        {
+            // Extract keys as a list
+            List<TKey> keys = new List<TKey>(dictionary.Keys);
+
+            // Generate a random index
+            int randomIndex = Random.Range(0,keys.Count);
+
+            // Return the key at the random index
+            return keys[randomIndex];
         }
     }
 }

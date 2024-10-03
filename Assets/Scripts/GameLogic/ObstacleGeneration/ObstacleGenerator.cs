@@ -32,7 +32,8 @@ namespace GameLogic.ObstacleGeneration
         {
             activeObstacles = new List<Obstacle>();
             obstacleData = CoreManager.instance.ObstacleManager.GetBaseObstacleMap();
-            _generatorHandler.Init(obstacleData,bossObstacleData);
+            bossObstacleData = CoreManager.instance.ObstacleManager.GetBossObstacleMap();
+            _generatorHandler.Init(obstacleData);
             currentObstacle = GenerateObstacle();
             StartCoroutine(ActiveObstaclesUpdate());
             // DontDestroyOnLoad(this.gameObject);

@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public class ScrollMenu : MonoBehaviour
 {
     public RectTransform scrollPanel;   // The RectTransform of the settings menu to be scrolled
-    public float scrollSpeed = 1.0f;    // Speed of scrolling
+    private float scrollSpeed = 20;    // Speed of scrolling
     public float inertia = 0.95f;       // Inertia for smooth stopping
     public float maxScroll = 1000f;      // Maximum scroll distance in positive direction
     public float minScroll = -500f;     // Minimum scroll distance in negative direction

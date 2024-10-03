@@ -50,12 +50,10 @@ namespace GameLogic.PlayerRelated
             ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();
             if (obstacle is not null)
             {
-                print("hit obstacle !");
                 // print($"see difference : {_renderer.color} {obstacle.GetColor()}");
                 // print($"is different:   {_renderer.color == obstacle.GetColor()}");
                 if (UtilityFunctions.CompareColors(_renderer.color,obstacle.GetColor()))
                 {
-                    print("shattered !");
                     obstacle.Shatter();
                 }
                 else
@@ -64,7 +62,6 @@ namespace GameLogic.PlayerRelated
                     // filteredColors.Remove(_renderer.color);  // Remove the current color
                     //
                     // obstacle.SetColor(filteredColors[Random.Range(0, filteredColors.Count)]);
-                    print("didnt shatter!");
                     
                 }
 

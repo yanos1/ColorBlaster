@@ -19,7 +19,7 @@
         HardVerticallyMovingObstacle1 =14,
         TreasureChestObstacle = 15,
         Gem = 16,
-        BossRocketsObstacle1=17,
+        HardRocketsObstacle1=17,
         ColorRushPowerUp = 18,
         
         

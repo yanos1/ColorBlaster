@@ -39,7 +39,6 @@ namespace Core.Managers
         {
             // Reset level and session when the game starts
             ResetLevelAndSession();
-            DisplaySessionAndLevel();
         }
 
         private void CheckLevelProgression()

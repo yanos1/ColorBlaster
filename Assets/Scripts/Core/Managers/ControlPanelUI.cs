@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -21,6 +22,9 @@ namespace Core.Managers
         public TMP_InputField obstaclesPerLevelInput;
         public TMP_InputField sessionMultiplierInput;
         public TMP_InputField obstacleToDifficultyPerLevel;
+        public TMP_InputField minBossLevelDifficultyInput;
+        public TMP_InputField maxBossLevelDifficultyInput;
+        public TMP_InputField bossLevelDifficultyIncreasePerLevelInput;
 
         public Toggle canSpawnRotatingObstaclesToggle;
         public Toggle canSpawnChasingObstaclesToggle;
@@ -58,6 +62,10 @@ namespace Core.Managers
             obstacleRotationSpeed.text = controlPanelManager.obstacleRotationSpeed.ToString();
             obstacleRotationSpeedIncreasePerLevelInput.text = controlPanelManager.obstacleRotationSpeedIncreasePerLevel.ToString();
             levelsSpeedInput.text = string.Join(",", controlPanelManager.levelSpeeds);
+            minBossLevelDifficultyInput.text = controlPanelManager.minBossLevelDifficulty.ToString();
+            maxBossLevelDifficultyInput.text = controlPanelManager.maxBossLevelDifficulty.ToString();
+            bossLevelDifficultyIncreasePerLevelInput.text =
+                controlPanelManager.bossLevelDifficultyIncreasePerLevel.ToString();
             var numbers = controlPanelManager.obstacleToDifficultyPerLevel.SelectMany(x => x).ToArray();
             var result = new List<string>();
 
@@ -100,6 +108,8 @@ namespace Core.Managers
             canSpawnChasingObstaclesToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnChasingObstaclesToggle));});
             canSpawnRotatingObstaclesToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnRotatingObstaclesToggle));});
             SpawnBossObstacleAtTheEndOfLevel.onValueChanged.AddListener(delegate {OnToggleChanged((SpawnBossObstacleAtTheEndOfLevel));});
+            minBossLevelDifficultyInput.onValueChanged.AddListener(delegate {OnTextInputChanged((minBossLevelDifficultyInput));});
+            bossLevelDifficultyIncreasePerLevelInput.onValueChanged.AddListener(delegate {OnTextInputChanged(bossLevelDifficultyIncreasePerLevelInput);});
         }
 
         public void OnTextInputChanged(TMP_InputField inputField)

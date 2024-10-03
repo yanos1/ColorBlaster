@@ -12,30 +12,31 @@ namespace GameLogic.ObstacleGeneration
     public class ObstacleGeneratorHandler : MonoBehaviour
     {
         [SerializeField] private LevelManager levelManager;
+        [SerializeField] private BossWaveManager bossWaveManager;
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> _difficultyToObstacleMap;
-        private Dictionary<ObstacleType, ValueTuple<int, List<Obstacle>>> _bossObstacleMap;
-        private Obstacle[] _currentBatch;
+        // private Dictionary<ObstacleType, ValueTuple<int, List<Obstacle>>> _bossObstacleMap;
+        private List<Obstacle>_currentBatch;
         private int numObstaclesPerLevel;
 
-        public void Init(Dictionary<int, ValueTuple<int, List<Obstacle>>> difficultyToObstacleMap,Dictionary<ObstacleType, ValueTuple<int, List<Obstacle>>> bossObstacleMap)
+        public void Init(Dictionary<int, ValueTuple<int, List<Obstacle>>> difficultyToObstacleMap)
         {
             numObstaclesPerLevel = CoreManager.instance.ControlPanelManager.obstaclesPerLevel;
 
             _difficultyToObstacleMap = difficultyToObstacleMap;
-            _bossObstacleMap = bossObstacleMap;
-            
-            // foreach (var kvp in difficultyToObstacleMap)
-            // {
-            //     print(kvp.Key);
-            //     foreach (var obs in kvp.Value.Item2)
-            //     {
-            //         print(obs.name);
-            //     }
-            //     print("----");
-            // }
+
+            foreach (var kvp in difficultyToObstacleMap)
+            {
+                print(kvp.Key);
+                foreach (var obs in kvp.Value.Item2)
+                {
+                    print(obs.name);
+                }
+
+            }
+
             _currentBatch = InitNewObstacleBatch();
         }
-        
+
         private void OnEnable()
         {
             CoreManager.instance.EventManager.AddListener(EventNames.LevelUp, AdjustObstacleDifficulty);
@@ -46,25 +47,28 @@ namespace GameLogic.ObstacleGeneration
             CoreManager.instance.EventManager.RemoveListener(EventNames.LevelUp, AdjustObstacleDifficulty);
         }
 
-        private Obstacle[] InitNewObstacleBatch()
+        private List<Obstacle> InitNewObstacleBatch()
         {
             // int numTreasureObstacles = Random.Range(2,4);
-            var newBatch = new Obstacle[numObstaclesPerLevel];
+            var newBatch = new List<Obstacle>();
 
             for (int i = 0; i < numObstaclesPerLevel; ++i)
             {
-                newBatch[i] = GenerateRandomObstacle();
+                newBatch.Add(GenerateRandomObstacle());
             }
+
             UtilityFunctions.ShuffleArray(newBatch);
 
             if (CoreManager.instance.ControlPanelManager.spawnBossObstacleAtTheEndOfLevel)
             {
                 // Increase the size of the array by 1
-                print("RESIZED");
-                Array.Resize(ref newBatch, newBatch.Length + 1);
-    
+                bossWaveManager.AddBossWave(newBatch);
+
                 // Add the boss obstacle to the last position
-                newBatch[^1] = GetBossObstacle();
+                // newBatch[^1] = GetBossObstacle();
+
+
+                // inset boss wave here
             }
 
 
@@ -81,18 +85,14 @@ namespace GameLogic.ObstacleGeneration
             return newBatch;
         }
 
-        private Obstacle GetBossObstacle()
-        {
-            return _difficultyToObstacleMap[4].Item2[Random.Range(0, _difficultyToObstacleMap[4].Item1)];
-        }
-
         private Obstacle GenerateRandomObstacle()
         {
             int randomNumber = Random.Range(0, 101);
-            print(randomNumber); ;
+            print(randomNumber);
+            
             int difficulty = GetRandomObstacleDifficulty(randomNumber);
             print(difficulty);
-            
+
 
             var (maxIndex, obstacles) = _difficultyToObstacleMap[difficulty];
             return obstacles[Random.Range(0, maxIndex)];
@@ -112,31 +112,34 @@ namespace GameLogic.ObstacleGeneration
             {
                 print(d);
             }
+
             print("-------");
             float currentNumber = randomNumber;
-            for(int i=0;i<levelDifficulties.Length; ++i)
+            for (int i = 0; i < levelDifficulties.Length; ++i)
             {
                 if (levelDifficulties[i] >= currentNumber)
                 {
                     // print($"chance: {chance} number: {currentNumber}  {difficulty}");
-                    return i+1;
+                    return i + 1;
                 }
+
                 currentNumber -= levelDifficulties[i];
             }
+
             // print($"{currentNumber}  {0}");
             return 1; // Fallback to easiest difficulty if nothing matches
         }
 
-
-  
 
         public Obstacle GetNextObstacle()
         {
             // Check if the current batch is exhausted, generate a new one if necessary
             var nextObstacle = _currentBatch[levelManager.ObstacleCrossedThisLevel];
 
-            print($"obstacled crossed so far {levelManager.ObstacleCrossedThisLevel} needed to pass level: {numObstaclesPerLevel}");
-            if (++levelManager.ObstacleCrossedThisLevel >= numObstaclesPerLevel + (CoreManager.instance.ControlPanelManager.spawnBossObstacleAtTheEndOfLevel ? 1:0) )
+            print(
+                $"obstacled crossed so far {levelManager.ObstacleCrossedThisLevel} needed to pass level: {numObstaclesPerLevel}");
+            if (++levelManager.ObstacleCrossedThisLevel >= numObstaclesPerLevel +
+                (CoreManager.instance.ControlPanelManager.spawnBossObstacleAtTheEndOfLevel ? 1 : 0))
             {
                 _currentBatch = InitNewObstacleBatch();
             }
@@ -156,21 +159,17 @@ namespace GameLogic.ObstacleGeneration
             }
 
             // Update boss obstacle difficulty
-            foreach (var bossKey in _bossObstacleMap.Keys.ToList())
-            {
-                var obstacleData = _bossObstacleMap[bossKey];
-                _bossObstacleMap[bossKey] = UpdateObstacleMaxIndex(obstacleData, amount);
-            }
+          
         }
 
 // Helper function to update max index for obstacles
-        private (int, List<Obstacle>) UpdateObstacleMaxIndex((int currentMaxIndex, List<Obstacle> obstacleList) obstacleData, int amount)
+        private (int, List<Obstacle>) UpdateObstacleMaxIndex(
+            (int currentMaxIndex, List<Obstacle> obstacleList) obstacleData, int amount)
         {
             var (currentMaxIndex, obstacleList) = obstacleData;
             int newMaxIndex = Mathf.Min(currentMaxIndex + amount, obstacleList.Count);
             return (newMaxIndex, obstacleList);
         }
-
 
 
         private static Obstacle ResetObstacle(Obstacle obstacle)

@@ -35,6 +35,13 @@ namespace Core.Managers
         {
             InitializeBaseObstacleMap();
             // SetInitialNumberOfObstaclesPerDifficulty();
+            foreach (var kvp in weightToObstacleMap)
+            {
+                foreach (var obs in kvp.Value.Item2)
+                {
+                    Debug.Log("aaa " + obs.name);
+                }
+            }
             return weightToObstacleMap;
         }
 
@@ -46,20 +53,27 @@ namespace Core.Managers
 
         private void InitializeBossObstacleMap()
         {
+            Debug.Log(bossObstaclesMap.Count + " boss obstacles found");
             foreach (var obs in _bossObstacleData)
             {
-                if (SkipObstacleType(obs.ObstacleType))
-                {
-                    Debug.Log($"SKIPPED {obs.ObstacleType}");
-                    continue;
-                }
+                // if (SkipObstacleType(obs.ObstacleType))
+                // {
+                //     Debug.Log($"SKIPPED {obs.ObstacleType}");
+                //     continue;
+                // }
 
                 if (!bossObstaclesMap.ContainsKey(obs.ObstacleType))
                 {
                     bossObstaclesMap[obs.ObstacleType] = (_minNumOfAvailableObstacles, new List<Obstacle>());
                 }
-
+                Debug.Log($"added {obs.ObstacleType}");
                 bossObstaclesMap[obs.ObstacleType].Item2.Add(obs);
+            }
+
+            // Sort each list by Difficulty (ascending)
+            foreach (var kvp in bossObstaclesMap)
+            {
+                kvp.Value.Item2.Sort((a, b) => a.Difficulty.CompareTo(b.Difficulty)); // Sort by obs.Difficulty
             }
 
             foreach (var kvp in bossObstaclesMap) // error check
@@ -67,16 +81,18 @@ namespace Core.Managers
                 if (kvp.Value.Item1 > kvp.Value.Item2.Count)
                 {
                     Debug.Log(
-                        $"Missmatch between min number of obstacles {_minNumOfAvailableObstacles} and actaul" +
-                        $" obstacle count  {kvp.Value.Item2.Count} in obstacle type : {kvp.Key}");
+                        $"Mismatch between min number of obstacles {_minNumOfAvailableObstacles} and actual" +
+                        $" obstacle count {kvp.Value.Item2.Count} in obstacle type: {kvp.Key}");
                 }
             }
         }
+
 
         private void InitializeBaseObstacleMap()
         {
             foreach (var obs in _obstacleData)
             {
+                Debug.Log("bbb" + obs.name);
                 if (SkipObstacleType(obs.ObstacleType))
                 {
                     Debug.Log($"SKIPPED {obs.ObstacleType}");

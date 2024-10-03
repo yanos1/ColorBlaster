@@ -29,8 +29,9 @@ namespace Core.Managers
 
         public int Level = 0;
         public int Session = 0;
-       
-
+        public int minBossLevelDifficulty;
+        public int maxBossLevelDifficulty;
+        public float bossLevelDifficultyIncreasePerLevel;
 
 
         public ControlPanelManager()
@@ -62,6 +63,9 @@ namespace Core.Managers
             canSpawnChasingObstacles = PlayerPrefs.GetInt("CanSpawnChasingObstacles", 1) == 1;
             obstacleToDifficultyPerLevel = ParseArray(PlayerPrefs.GetString("ObstacleToDifficultyPerLevel", "80,20,0,70,20,10,60,30,10,50,30,20,40,30,30"));
             spawnBossObstacleAtTheEndOfLevel = PlayerPrefs.GetInt("SpawnBossObstacleAtTheEndOfLevel", 1) == 1;
+            minBossLevelDifficulty = PlayerPrefs.GetInt("MinBossLevelDifficulty", 4);
+            minBossLevelDifficulty = PlayerPrefs.GetInt("MinBossLevelDifficulty", 12);
+            bossLevelDifficultyIncreasePerLevel = PlayerPrefs.GetFloat("bossLevelDifficultyIncreasePerLevel", 1.5f);
 
         }
 
@@ -108,6 +112,11 @@ namespace Core.Managers
             PlayerPrefs.SetString("ObstacleToDifficultyPerLevel", string.Join(",",obstacleToDifficultyPerLevel.SelectMany(x=>x).ToArray()));
             PlayerPrefs.SetString("LevelSpeeds", String.Join(",", levelSpeeds));
             PlayerPrefs.SetInt("SpawnBossObstacleAtTheEndOfLevel", spawnBossObstacleAtTheEndOfLevel ? 1:0);
+            PlayerPrefs.SetInt("MinBossLevelDifficulty", minBossLevelDifficulty);
+            PlayerPrefs.SetInt("MaxBossLevelDifficulty", maxBossLevelDifficulty);
+            PlayerPrefs.GetFloat("BossLevelDifficultyIncreasePerLevel", bossLevelDifficultyIncreasePerLevel);
+
+
 
             PlayerPrefs.Save();
         }
@@ -178,6 +187,15 @@ namespace Core.Managers
                     break;
                 case "LevelSpeeds":
                     levelSpeeds = Array.ConvertAll(value.Split(','), float.Parse);
+                    break;
+                case "MinBossLevelDifficulty":
+                    minBossLevelDifficulty = int.Parse(value);
+                    break;
+                case "MaxBossLevelDifficulty":
+                    maxBossLevelDifficulty = int.Parse(value);
+                    break;
+                case "BossLevelDifficultyIncreasePerLevel":
+                    bossLevelDifficultyIncreasePerLevel = int.Parse(value);
                     break;
                 default:
                     Debug.LogWarning($"Unknown parameter: {parameterName}");

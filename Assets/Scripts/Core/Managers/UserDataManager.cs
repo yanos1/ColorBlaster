@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Firebase;
 using Firebase.Analytics;
 using Firebase.Database;
-using Unity.VisualScripting;
+using Firebase.Extensions;
 using UnityEngine;
 
 namespace Core.Managers
@@ -33,25 +33,22 @@ namespace Core.Managers
             InitializeFirebase();
         }
 
-        // Retrieve data from Firebase if it exists
-
         // Firebase initialization
-        public async void InitializeFirebase()
+        public void InitializeFirebase()
         {
-            var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
-            if (dependencyStatus == DependencyStatus.Available)
+            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
             {
-                FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
-
-                // Firebase is initialized, now you can initialize the database and user data manager
-                InitializeDatabase();
-                RetrieveDataFromFirebase(_id); // Now Firebase is initialized, you can call Firebase functions.
-            }
-            else
-            {
-                Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
-                // Handle error (e.g., retry, show error to user, etc.)
-            }
+                if (task.IsCompleted && !task.IsFaulted)
+                {
+                    FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+                    InitializeDatabase();  // Initialize database after Firebase is fully initialized
+                    RetrieveDataFromFirebase(_id); // Now safe to retrieve data from Firebase
+                }
+                else
+                {
+                    Debug.LogError($"Firebase initialization failed: {task.Exception?.Message}");
+                }
+            });
         }
 
         // Initialize Firebase database and reference
@@ -63,15 +60,14 @@ namespace Core.Managers
 
             // Set the user reference, replace _id with the actual user id logic you have
             userRef = _dbReference.Child("users").Child(_id);
-            Debug.Log($"user ref : {userRef.ToString()}");
-            Debug.Log($"id : {_id}");
+            Debug.Log($"User reference: {userRef}");
         }
 
         // Retrieve data from Firebase
         private void RetrieveDataFromFirebase(string userId)
         {
-            Debug.Log("start getting data");
-            userRef.GetValueAsync().ContinueWith(task =>
+            Debug.Log("Start getting data...");
+            userRef.GetValueAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.IsFaulted)
                 {
@@ -84,21 +80,25 @@ namespace Core.Managers
                     DataSnapshot snapshot = task.Result;
                     if (snapshot.Exists)
                     {
+                        // Gems owned
                         gemsOwned = int.Parse(snapshot.Child("gemsOwned").Value.ToString());
-                        Debug.Log($"gems in balance: {gemsOwned}");
+                        Debug.Log($"Gems in balance: {gemsOwned}");
 
+                        // Styles owned
                         stylesOwned = new List<string>();
                         foreach (DataSnapshot styleSnapshot in snapshot.Child("stylesOwned").Children)
                         {
                             stylesOwned.Add(styleSnapshot.Value.ToString());
                         }
 
+                        // Colors owned
                         colorsOwned = new List<string>();
                         foreach (DataSnapshot colorThemeSnapShot in snapshot.Child("colorThemesOwned").Children)
                         {
                             colorsOwned.Add(colorThemeSnapShot.Value.ToString());
                         }
 
+                        // Item purchases
                         itemPurchases = new Dictionary<string, int>();
                         foreach (DataSnapshot purchaseSnapshot in snapshot.Child("inGamePurchases").Children)
                         {
@@ -118,15 +118,13 @@ namespace Core.Managers
             });
         }
 
-
         // Initialize default data for a new user
         private void InitializeUserData(string userId)
         {
             userRef.Child("highScore").SetValueAsync(0);
             userRef.Child("coinAmount").SetValueAsync(500); // Default coin amount
-            userRef.Child("stylesOwned")
-                .SetValueAsync(new List<string> { StyleName.Pastel.ToString() }); // Default styles
-            userRef.Child("colorThemesOwned").SetValueAsync(new List<string>(){"Default"}); // Empty color themes
+            userRef.Child("stylesOwned").SetValueAsync(new List<string> { StyleName.Pastel.ToString() }); // Default styles
+            userRef.Child("colorThemesOwned").SetValueAsync(new List<string> { "Default" }); // Default color themes
             userRef.Child("inGamePurchases").SetValueAsync(new Dictionary<string, int>()); // Empty purchases
 
             Debug.Log("New user data initialized.");
@@ -134,7 +132,7 @@ namespace Core.Managers
 
         public void SetNewHighScore(int newHighScore)
         {
-            Debug.Log("new high score set!");
+            Debug.Log("New high score set!");
             userRef.Child("highScore").SetValueAsync(newHighScore);
         }
 
@@ -149,15 +147,13 @@ namespace Core.Managers
             return 0;
         }
 
-        // Update coins and sync to Firebase
         public void AddGems(int amount)
         {
             gemsOwned = Mathf.Max(0, gemsOwned + amount);
             userRef.Child("gemsOwned").SetValueAsync(gemsOwned);
-            Debug.Log($"Added {amount} coins. New total: {gemsOwned}");
+            Debug.Log($"Added {amount} gems. New total: {gemsOwned}");
         }
 
-        // Add a new style and sync to Firebase
         public void AddStyle(string style)
         {
             if (!stylesOwned.Contains(style))
@@ -168,7 +164,6 @@ namespace Core.Managers
             }
         }
 
-        // Add a new color theme and sync to Firebase
         public void AddColorTheme(string colorTheme)
         {
             if (!colorsOwned.Contains(colorTheme))
@@ -179,7 +174,6 @@ namespace Core.Managers
             }
         }
 
-        // Add item purchase and sync to Firebase
         public void AddItemPurchase(string itemName, int quantity)
         {
             if (itemPurchases.ContainsKey(itemName))
@@ -201,13 +195,12 @@ namespace Core.Managers
             if (snapshot.Exists)
             {
                 int currentGems = Convert.ToInt32(snapshot.Value) + gemsCollected;
-                await userRef.Child("gemsOwned").SetValueAsync(currentGems);  // Sets gemsOwned to its current value
+                await userRef.Child("gemsOwned").SetValueAsync(currentGems);
             }
             else
             {
                 Debug.Log("gemsOwned does not exist.");
             }
         }
-
     }
 }

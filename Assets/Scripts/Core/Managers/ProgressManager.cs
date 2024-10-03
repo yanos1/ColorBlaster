@@ -59,7 +59,9 @@ namespace Core.Managers
         private void UpdateStatsIfNeeded(object obj)
         {
             if (_bestDistanceTraveled < _currentDistanceTraveled)
-            {
+            {   
+                print("zzzz" + CoreManager.instance.UserDataManager);
+                print(_currentDistanceTraveled);
                 CoreManager.instance.UserDataManager.SetNewHighScore(_currentDistanceTraveled);
                 highScoreUI.text = "best: " + _currentDistanceTraveled;
                 _currentDistanceTraveled = 0;

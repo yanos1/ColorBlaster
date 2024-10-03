@@ -439,18 +439,20 @@ MonoBehaviour:
     color2: {r: 0.90188676, g: 0.5224136, b: 0.8323069, a: 1}
     color3: {r: 0.79607844, g: 0.3764706, b: 0.40992755, a: 1}
     color4: {r: 0.93962264, g: 0.8474391, b: 0.019501582, a: 1}
-  obstaclesList:
+  baseObstaclesList:
   - {fileID: 4593088555778702884, guid: e9cc0ce5ffa0e9949b2cb860b20f9196, type: 3}
-  - {fileID: 7874923284203621253, guid: 2b5024d3d589dfb4382cb459fbd0f5c9, type: 3}
   - {fileID: 1886096160865127755, guid: 5c960a1a1a66a4b4499a4f4874048c5c, type: 3}
-  - {fileID: 3252981143576609274, guid: a95c3d16dbd8ee348b942faefbf1b668, type: 3}
-  - {fileID: 4564010476227397230, guid: 93007b65b889ced4393c3ab5b5732db1, type: 3}
   - {fileID: 1845636849903950649, guid: f7b6f37cf6181c84fb27111b3f2223c9, type: 3}
   - {fileID: 7546963337934849875, guid: 01bce2e4344c3f5409a52cb585690c91, type: 3}
-  - {fileID: 3944323053696984722, guid: f1d90154d252dfa4e9e0744661ad889c, type: 3}
+  - {fileID: 4564010476227397230, guid: 93007b65b889ced4393c3ab5b5732db1, type: 3}
   - {fileID: 6527131636297681434, guid: b532d801a4ec1c9419d41e619147449a, type: 3}
   - {fileID: 9013239082066213185, guid: 9bedf15afda018b4f940330e2381c079, type: 3}
+  - {fileID: 7874923284203621253, guid: 2b5024d3d589dfb4382cb459fbd0f5c9, type: 3}
+  - {fileID: 3252981143576609274, guid: a95c3d16dbd8ee348b942faefbf1b668, type: 3}
+  - {fileID: 3944323053696984722, guid: f1d90154d252dfa4e9e0744661ad889c, type: 3}
+  bossObstaclesList:
   - {fileID: 5422812282413597159, guid: 335a29bf0c3cfe24ab87cff3d539575c, type: 3}
+  - {fileID: 2031825499238378032, guid: 5d789d75d48a6a84ab11a6617d92ce8a, type: 3}
   poolEntries:
   - type: 1
     prefab: {fileID: 6722398912885778981, guid: e9cc0ce5ffa0e9949b2cb860b20f9196, type: 3}
@@ -506,7 +508,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c4cadf29f5eee3f49b5a306d1f062661, type: 2}
   - {fileID: 11400000, guid: e0c378a455b84c8458ef620584d8c0f7, type: 2}
   - {fileID: 11400000, guid: 21f6e984a76620b4ab19ac85ec23f225, type: 2}
-  baseObjectSpeed: 2
   TEST_MODE: 0
   testObstacleList:
   - {fileID: 3944323053696984722, guid: f1d90154d252dfa4e9e0744661ad889c, type: 3}
