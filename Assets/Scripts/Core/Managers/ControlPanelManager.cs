@@ -298,7 +298,7 @@ namespace Core.Managers
                    obstacleRotationSpeedIncreasePerLevel * (levelSpeeds.Length * (Session) + Level);
         }
 
-        public float GetObstacleMovespeed(float baseSpeed)
+        public float GetObstacleSpeedMuliplier(float baseSpeed)
         {
             float curSpeed = baseSpeed;
             for (int i = 0; i < Session; i++)

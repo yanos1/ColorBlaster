@@ -81,6 +81,6 @@ namespace Core.Managers
         // need to check for prefab arrival events
 
 
-        DeleteColorPrefabArrived=26,
+        DeleteColorPrefabArrived=27,
     }
 }

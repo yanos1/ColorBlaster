@@ -8,12 +8,13 @@ namespace GameLogic.PlayerRelated
         public float maxYPosition = 5f; // Maximum Y position the player can move to
         public float minYPosition = -5f; // Minimum Y position the player can move to
 
-        
+
         void Update()
         {
-            if(CoreManager.instance.Player.IsDead) return;
+            if (CoreManager.instance.Player.IsDead) return;
             
-            float horizontalInput = Input.GetAxis("Horizontal");
+
+        float horizontalInput = Input.GetAxis("Horizontal");
         
             // Calculate the movement direction
             Vector3 moveDirection = new Vector3(horizontalInput,0, 0);

@@ -14,7 +14,7 @@ namespace GameLogic.ObstacleGeneration
             {
 
                 transform.position += Vector3.left *
-                                      (CoreManager.instance.ControlPanelManager.GetObstacleMovespeed(CoreManager
+                                      (CoreManager.instance.ControlPanelManager.GetObstacleSpeedMuliplier(CoreManager
                                            .instance.ControlPanelManager.chasingObstaclesMovespeed) * Time.deltaTime);
             }
         }

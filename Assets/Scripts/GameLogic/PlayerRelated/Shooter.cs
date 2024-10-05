@@ -26,7 +26,7 @@ namespace GameLogic.PlayerRelated
         {
             if (Input.GetKey(KeyCode.Space) && Time.time > shootingCoolDown + lastTimeShot)
             {
-                
+
                 Shoot();
             }
         }

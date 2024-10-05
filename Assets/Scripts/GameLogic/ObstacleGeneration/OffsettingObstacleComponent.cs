@@ -24,7 +24,7 @@ namespace GameLogic.ObstacleGeneration
             if (transform.position.y < OutOfScreenYValue)
             {
                 transform.position += Vector3.left * (direction * Time.deltaTime *
-                                                      CoreManager.instance.ControlPanelManager.GetObstacleMovespeed(
+                                                      CoreManager.instance.ControlPanelManager.GetObstacleSpeedMuliplier(
                                                           CoreManager.instance.ControlPanelManager
                                                               .offsettingobstaclesMovespeed));
             }

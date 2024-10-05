@@ -111,6 +111,16 @@ public class CameraManager : MonoBehaviour
         mainCamera.fieldOfView = targetFieldOfView;
     }
 
+    public Vector2 ReturnLeftMostPosition()
+    {
+        return mainCamera.ViewportToWorldPoint(new Vector3(0, 0.5f, mainCamera.nearClipPlane));
+
+    } 
+
+    public Vector2 ReturnRightMostPosition()
+    {
+        return mainCamera.ViewportToWorldPoint(new Vector3(1, 0.5f, mainCamera.nearClipPlane));
+    } 
 }
 
 }
