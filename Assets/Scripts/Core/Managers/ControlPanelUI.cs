@@ -17,6 +17,9 @@ namespace Core.Managers
         public TMP_InputField colorWheelRotationSpeedIncrease;
         public TMP_InputField shootingCooldownInput;
         public TMP_InputField playerMovementSpeedInput;
+        public TMP_InputField chasingObstaclesMovespeedInput;
+        public TMP_InputField offsettingObstaclesMovespeedInput;
+        public TMP_InputField movingObstaclesMovespeedInput;
         public TMP_InputField obstacleRotationSpeed;
         public TMP_InputField obstacleRotationSpeedIncreasePerLevelInput;
         public TMP_InputField obstaclesPerLevelInput;
@@ -25,9 +28,14 @@ namespace Core.Managers
         public TMP_InputField minBossLevelDifficultyInput;
         public TMP_InputField maxBossLevelDifficultyInput;
         public TMP_InputField bossLevelDifficultyIncreasePerLevelInput;
+        public TMP_InputField distanceBetweenObstaclesInput;
 
         public Toggle canSpawnRotatingObstaclesToggle;
         public Toggle canSpawnChasingObstaclesToggle;
+        public Toggle canSpawnOffsettingObstaclesToggle;
+        public Toggle canSpawnMovingObstaclesToggle;
+        public Toggle canSpawnRocketsToggle;
+        public Toggle canSpawnMultipleHitsToggle;
         public Toggle SpawnBossObstacleAtTheEndOfLevel;
 
         private ControlPanelManager controlPanelManager;
@@ -55,6 +63,9 @@ namespace Core.Managers
             colorWheelRotationSpeedInput.text = controlPanelManager.colorWheelRotationSpeed.ToString();
             shootingCooldownInput.text = controlPanelManager.shootingCooldown.ToString();
             playerMovementSpeedInput.text = controlPanelManager.playerMovementSpeed.ToString();
+            chasingObstaclesMovespeedInput.text = controlPanelManager.chasingObstaclesMovespeed.ToString();
+            offsettingObstaclesMovespeedInput.text = controlPanelManager.offsettingobstaclesMovespeed.ToString();
+            movingObstaclesMovespeedInput.text = controlPanelManager.movingObstaclesMovespeed.ToString();
             obstaclesPerLevelInput.text = controlPanelManager.obstaclesPerLevel.ToString();
             sessionMultiplierInput.text = controlPanelManager.sessionMultiplier.ToString();
             colorWheelRotationSpeedIncrease.text = controlPanelManager.colorWheelRotationSpeedIncrease.ToString();
@@ -66,6 +77,7 @@ namespace Core.Managers
             maxBossLevelDifficultyInput.text = controlPanelManager.maxBossLevelDifficulty.ToString();
             bossLevelDifficultyIncreasePerLevelInput.text =
                 controlPanelManager.bossLevelDifficultyIncreasePerLevel.ToString();
+            distanceBetweenObstaclesInput.text = controlPanelManager.distanceBetweenObstacles.ToString();
             var numbers = controlPanelManager.obstacleToDifficultyPerLevel.SelectMany(x => x).ToArray();
             var result = new List<string>();
 
@@ -89,6 +101,10 @@ namespace Core.Managers
             canSpawnRotatingObstaclesToggle.isOn = controlPanelManager.canSpawnRotatingObstacles;
             canSpawnChasingObstaclesToggle.isOn = controlPanelManager.canSpawnChasingObstacles;
             SpawnBossObstacleAtTheEndOfLevel.isOn = controlPanelManager.spawnBossObstacleAtTheEndOfLevel;
+            canSpawnOffsettingObstaclesToggle.isOn = controlPanelManager.canSpawnOffsettingObstacles;
+            canSpawnMovingObstaclesToggle.isOn = controlPanelManager.canSpawnMovingObstacles;
+            canSpawnRocketsToggle.isOn = controlPanelManager.canSpawnRockets;
+            canSpawnMultipleHitsToggle.isOn = controlPanelManager.canSpawnMultipleHits;
         }
 
         private void SubscribeToInputFieldEvents()
@@ -100,6 +116,9 @@ namespace Core.Managers
             colorWheelRotationSpeedIncrease.onDeselect.AddListener(delegate { OnTextInputChanged(colorWheelRotationSpeedIncrease); });
             shootingCooldownInput.onDeselect.AddListener(delegate { OnTextInputChanged(shootingCooldownInput); });
             playerMovementSpeedInput.onDeselect.AddListener(delegate { OnTextInputChanged(playerMovementSpeedInput); });
+            chasingObstaclesMovespeedInput.onDeselect.AddListener(delegate { OnTextInputChanged(chasingObstaclesMovespeedInput); });
+            offsettingObstaclesMovespeedInput.onDeselect.AddListener(delegate { OnTextInputChanged(offsettingObstaclesMovespeedInput); });
+            movingObstaclesMovespeedInput.onDeselect.AddListener(delegate { OnTextInputChanged(movingObstaclesMovespeedInput); });
             obstacleRotationSpeed.onDeselect.AddListener(delegate { OnTextInputChanged(obstacleRotationSpeed); });
             obstaclesPerLevelInput.onDeselect.AddListener(delegate { OnTextInputChanged(obstaclesPerLevelInput); });
             sessionMultiplierInput.onDeselect.AddListener(delegate { OnTextInputChanged(sessionMultiplierInput); });
@@ -108,8 +127,14 @@ namespace Core.Managers
             canSpawnChasingObstaclesToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnChasingObstaclesToggle));});
             canSpawnRotatingObstaclesToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnRotatingObstaclesToggle));});
             SpawnBossObstacleAtTheEndOfLevel.onValueChanged.AddListener(delegate {OnToggleChanged((SpawnBossObstacleAtTheEndOfLevel));});
-            minBossLevelDifficultyInput.onValueChanged.AddListener(delegate {OnTextInputChanged((minBossLevelDifficultyInput));});
-            bossLevelDifficultyIncreasePerLevelInput.onValueChanged.AddListener(delegate {OnTextInputChanged(bossLevelDifficultyIncreasePerLevelInput);});
+            canSpawnRocketsToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnRocketsToggle));});
+            canSpawnMultipleHitsToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnMultipleHitsToggle));});
+            canSpawnMovingObstaclesToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnMovingObstaclesToggle));});
+            canSpawnOffsettingObstaclesToggle.onValueChanged.AddListener(delegate {OnToggleChanged((canSpawnOffsettingObstaclesToggle));});
+            minBossLevelDifficultyInput.onDeselect.AddListener(delegate {OnTextInputChanged((minBossLevelDifficultyInput));});
+            maxBossLevelDifficultyInput.onDeselect.AddListener(delegate {OnTextInputChanged((maxBossLevelDifficultyInput));});
+            bossLevelDifficultyIncreasePerLevelInput.onDeselect.AddListener(delegate {OnTextInputChanged(bossLevelDifficultyIncreasePerLevelInput);});
+            distanceBetweenObstaclesInput.onDeselect.AddListener(delegate {OnTextInputChanged(distanceBetweenObstaclesInput);});
         }
 
         public void OnTextInputChanged(TMP_InputField inputField)

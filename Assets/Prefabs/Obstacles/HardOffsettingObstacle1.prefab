@@ -1202,7 +1202,7 @@ GameObject:
   - component: {fileID: 5014010496118513289}
   - component: {fileID: 6527131636297681434}
   m_Layer: 0
-  m_Name: HardVerticallyMovingObstacle1
+  m_Name: HardOffsettingObstacle1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1241,7 +1241,7 @@ MonoBehaviour:
   obstacleType: 4
   difficulty: 3
   obstacleComponents:
-  - {fileID: 1947520935980414705}
+  - {fileID: 8063894318001042417}
   rightMostPosition: {fileID: 3865167013576715686}
 --- !u!1 &8472215215745619880
 GameObject:
@@ -1397,7 +1397,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6430335314377625281}
-  - component: {fileID: 1947520935980414705}
+  - component: {fileID: 8063894318001042417}
   m_Layer: 0
   m_Name: VetricallyMovingComponent
   m_TagString: Untagged
@@ -1429,7 +1429,7 @@ Transform:
   - {fileID: 5099882433624611122}
   m_Father: {fileID: 5014010496118513289}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!114 &1947520935980414705
+--- !u!114 &8063894318001042417
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Managers;
 using Extentions;
-using Unity.VisualScripting;
-using UnityEditor.Playables;
 using UnityEngine;
 
 namespace GameLogic.ObstacleGeneration
@@ -12,6 +10,7 @@ namespace GameLogic.ObstacleGeneration
     public class BossWaveManager : MonoBehaviour
     {
         private float _currentBossLevelDifficulty;
+        private int obstacleAddtitionAmount = 1;
         private Dictionary<ObstacleType, (int, List<Obstacle>)> _bossObstacleMap;
 
         private void Start()
@@ -22,26 +21,29 @@ namespace GameLogic.ObstacleGeneration
 
         private void OnEnable()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.LevelUp, AdjustObstacleDifficultyAndIncreaseBossLevel);
+            CoreManager.instance.EventManager.AddListener(EventNames.LevelUp,
+                AdjustObstacleDifficultyAndIncreaseBossLevel);
         }
 
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.LevelUp, AdjustObstacleDifficultyAndIncreaseBossLevel);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.LevelUp,
+                AdjustObstacleDifficultyAndIncreaseBossLevel);
         }
 
         private void AdjustObstacleDifficultyAndIncreaseBossLevel(object obj)
         {
-            if (obj is int amount)
+            foreach (var bossKey in _bossObstacleMap.Keys.ToList())
             {
-                foreach (var bossKey in _bossObstacleMap.Keys.ToList())
-                {
-                    var obstacleData = _bossObstacleMap[bossKey];
-                    _bossObstacleMap[bossKey] = UpdateObstacleMaxIndex(obstacleData, amount);
-                }
+                var obstacleData = _bossObstacleMap[bossKey];
+                _bossObstacleMap[bossKey] = UpdateObstacleMaxIndex(obstacleData, obstacleAddtitionAmount);
             }
 
-            _currentBossLevelDifficulty += CoreManager.instance.ControlPanelManager.bossLevelDifficultyIncreasePerLevel;
+
+            _currentBossLevelDifficulty = Mathf.Min(_currentBossLevelDifficulty + CoreManager.instance
+                    .ControlPanelManager
+                    .bossLevelDifficultyIncreasePerLevel,
+                CoreManager.instance.ControlPanelManager.maxBossLevelDifficulty);
         }
 
         private (int, List<Obstacle>) UpdateObstacleMaxIndex(
@@ -56,25 +58,36 @@ namespace GameLogic.ObstacleGeneration
         public void AddBossWave(List<Obstacle> newBatch)
         {
             ObstacleType chosenBoss = UtilityFunctions.GetRandomKey(_bossObstacleMap);
+            if (chosenBoss == default) return;
+
             List<Obstacle> obstacles = _bossObstacleMap[chosenBoss].Item2;
             List<Obstacle> obstaclesToAdd = new();
             int maxIndex = _bossObstacleMap[chosenBoss].Item1;
+
+            // print($"max index: {maxIndex}  obstacles length: {obstacles.Count}");
             float currentPoints = _currentBossLevelDifficulty;
-            
+            print($"current boss diff : {_currentBossLevelDifficulty}");
+
             while (currentPoints > 0)
             {
+                print(currentPoints);
                 Obstacle currentObstacle = obstacles[maxIndex - 1];
                 while (currentObstacle.Difficulty <= currentPoints)
                 {
+                    print(currentPoints);
                     obstaclesToAdd.Add(currentObstacle);
                     currentPoints -= currentObstacle.Difficulty;
                 }
 
-                maxIndex -= 1;
+                if (--maxIndex <= 0)
+                {
+                    break;
+                }
             }
-            obstaclesToAdd.Reverse();
-            newBatch.AddRange(obstaclesToAdd);
 
+            obstaclesToAdd.Reverse();
+            print($"boss level count : {obstaclesToAdd.Count}");
+            newBatch.AddRange(obstaclesToAdd);
         }
     }
 }

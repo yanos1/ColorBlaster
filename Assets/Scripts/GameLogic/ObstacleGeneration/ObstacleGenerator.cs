@@ -13,7 +13,7 @@ namespace GameLogic.ObstacleGeneration
     public class ObstacleGenerator : MonoBehaviour
     {
         [SerializeField] private ObstacleGeneratorHandler _generatorHandler;
-        [SerializeField] private float generationThreshold = -2.5f;
+        private float generationThreshold;
         private float returnToPoolThreshold = -8f;
 
         private List<Obstacle> activeObstacles;
@@ -21,6 +21,7 @@ namespace GameLogic.ObstacleGeneration
         private Dictionary<ObstacleType, ValueTuple<int, List<Obstacle>>> bossObstacleData;
         private Coroutine colorRushCoroutine;
         private Obstacle currentObstacle;
+        private float maxTimeBetweenRockets = 4.9f;
         private float maxTimeBetweenObstacles = 6f;
         private float lastTimeGenerated;
         private bool isColorRushActive = false;
@@ -30,15 +31,15 @@ namespace GameLogic.ObstacleGeneration
         // Update is called once per frame
         private void Start()
         {
+            generationThreshold = MapDistance(CoreManager.instance.ControlPanelManager.distanceBetweenObstacles);
             activeObstacles = new List<Obstacle>();
             obstacleData = CoreManager.instance.ObstacleManager.GetBaseObstacleMap();
-            bossObstacleData = CoreManager.instance.ObstacleManager.GetBossObstacleMap();
             _generatorHandler.Init(obstacleData);
             currentObstacle = GenerateObstacle();
             StartCoroutine(ActiveObstaclesUpdate());
             // DontDestroyOnLoad(this.gameObject);
         }
-        
+
         private void OnEnable()
         {
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun, PauseObstacles);
@@ -46,11 +47,8 @@ namespace GameLogic.ObstacleGeneration
             CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, PaintActiveObstacles);
             CoreManager.instance.EventManager.AddListener(EventNames.DeactivateColorRush, RestoreActiveObstacles);
             CoreManager.instance.EventManager.AddListener(EventNames.ActivateDeleteColor, DisableDeletedColor);
-
-        
         }
 
-   
 
         private void OnDisable()
         {
@@ -59,7 +57,6 @@ namespace GameLogic.ObstacleGeneration
             CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, PaintActiveObstacles);
             CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, RestoreActiveObstacles);
             CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateDeleteColor, DisableDeletedColor);
-
         }
 
         private void DisableDeletedColor(object obj)
@@ -88,7 +85,7 @@ namespace GameLogic.ObstacleGeneration
 
         private void PaintActiveObstacles(object obj)
         {
-            if (obj is (Color color,float duration, TreasureChestBuff buff))
+            if (obj is (Color color, float duration, TreasureChestBuff buff))
             {
                 isColorRushActive = true;
                 foreach (var obstacle in activeObstacles)
@@ -104,13 +101,12 @@ namespace GameLogic.ObstacleGeneration
 
         private void PauseObstacles(object obj)
         {
-            StopAllCoroutines();   // this looks like bad practice !! better to save the coroutine, watch out !
+            StopAllCoroutines(); // this looks like bad practice !! better to save the coroutine, watch out !
         }
 
         private void ResumeObstacles(object obj)
         {
             StartCoroutine(ActiveObstaclesUpdate());
-
         }
 
 
@@ -118,18 +114,27 @@ namespace GameLogic.ObstacleGeneration
         {
             while (true)
             {
-                if (Time.time > lastTimeGenerated + maxTimeBetweenObstacles)
+               
+                if (currentObstacle.ObstacleType == ObstacleType.Rocket && Time.time > lastTimeGenerated + maxTimeBetweenRockets)
                 {
-                    // CoreManager.instance.PoolManager.ReturnToPool(currentObstacle.PoolType, currentObstacle.gameObject);
+                    CoreManager.instance.PoolManager.ReturnToPool(currentObstacle.PoolType, currentObstacle.gameObject);
                     currentObstacle = GenerateObstacle();
+                    yield return new WaitForSeconds(0.2f); // we check for updates every 0.2 seconds
                 }
-                
+                else if (Time.time > lastTimeGenerated + maxTimeBetweenObstacles)
+                {
+                    currentObstacle = GenerateObstacle();
+                    yield return new WaitForSeconds(0.2f); // we check for updates every 0.2 seconds
+
+
+                }
+
                 for (int i = activeObstacles.Count - 1; i >= 0; i--)
                 {
                     Obstacle obstacle = activeObstacles[i];
 
                     // Check if the obstacle crossed the generation threshold
-                   
+
                     if (obstacle == currentObstacle && obstacle.RightMostPosition.y < generationThreshold)
                     {
                         currentObstacle = GenerateObstacle();
@@ -162,6 +167,11 @@ namespace GameLogic.ObstacleGeneration
             currentObstacle.transform.position = transform.position;
             activeObstacles.Add(currentObstacle);
             return currentObstacle;
+        }
+
+        private static float MapDistance(float x)
+        {
+            return 3f - 0.06f * x;
         }
     }
 }

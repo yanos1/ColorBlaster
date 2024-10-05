@@ -17,10 +17,14 @@ namespace GameLogic.ObstacleGeneration
         // private Dictionary<ObstacleType, ValueTuple<int, List<Obstacle>>> _bossObstacleMap;
         private List<Obstacle>_currentBatch;
         private int numObstaclesPerLevel;
+        private int obstacleAdditionAmount;
+        private int generateTreasureAtLevel;
 
         public void Init(Dictionary<int, ValueTuple<int, List<Obstacle>>> difficultyToObstacleMap)
         {
             numObstaclesPerLevel = CoreManager.instance.ControlPanelManager.obstaclesPerLevel;
+            obstacleAdditionAmount = 2;
+            generateTreasureAtLevel = Random.Range(2, CoreManager.instance.ControlPanelManager.levelSpeeds.Length);
 
             _difficultyToObstacleMap = difficultyToObstacleMap;
 
@@ -57,6 +61,11 @@ namespace GameLogic.ObstacleGeneration
                 newBatch.Add(GenerateRandomObstacle());
             }
 
+            if (CoreManager.instance.ControlPanelManager.Level == generateTreasureAtLevel)
+            {
+                Obstacle treasure = GenerateTreasureObstacle();
+                newBatch.Add(treasure);
+            }
             UtilityFunctions.ShuffleArray(newBatch);
 
             if (CoreManager.instance.ControlPanelManager.spawnBossObstacleAtTheEndOfLevel)
@@ -101,7 +110,7 @@ namespace GameLogic.ObstacleGeneration
         private Obstacle GenerateTreasureObstacle()
         {
             var (maxIndex, treasureObstacles) = _difficultyToObstacleMap[0];
-            return treasureObstacles[Random.Range(0, maxIndex)];
+            return treasureObstacles[0];  // for test, this needs fixing
         }
 
         private int GetRandomObstacleDifficulty(int randomNumber)
@@ -137,10 +146,11 @@ namespace GameLogic.ObstacleGeneration
             var nextObstacle = _currentBatch[levelManager.ObstacleCrossedThisLevel];
 
             print(
-                $"obstacled crossed so far {levelManager.ObstacleCrossedThisLevel} needed to pass level: {numObstaclesPerLevel}");
-            if (++levelManager.ObstacleCrossedThisLevel >= numObstaclesPerLevel +
-                (CoreManager.instance.ControlPanelManager.spawnBossObstacleAtTheEndOfLevel ? 1 : 0))
+                $"obstacled crossed so far {levelManager.ObstacleCrossedThisLevel} needed to pass level: {_currentBatch.Count}");
+            if (++levelManager.ObstacleCrossedThisLevel >= _currentBatch.Count)
             {
+                CoreManager.instance.EventManager.InvokeEvent(
+                    EventNames.LevelUp, null);
                 _currentBatch = InitNewObstacleBatch();
             }
 
@@ -149,20 +159,20 @@ namespace GameLogic.ObstacleGeneration
 
         private void AdjustObstacleDifficulty(object obj)
         {
-            if (obj is not int amount) return;
 
             // Update normal obstacle difficulty
             for (int difficulty = 1; difficulty <= 3; difficulty++)
             {
                 var obstacleData = _difficultyToObstacleMap[difficulty];
-                _difficultyToObstacleMap[difficulty] = UpdateObstacleMaxIndex(obstacleData, amount);
+                _difficultyToObstacleMap[difficulty] = UpdateObstacleMaxIndex(obstacleData, obstacleAdditionAmount);
             }
 
             // Update boss obstacle difficulty
           
         }
 
-// Helper function to update max index for obstacles
+
+        // Helper function to update max index for obstacles
         private (int, List<Obstacle>) UpdateObstacleMaxIndex(
             (int currentMaxIndex, List<Obstacle> obstacleList) obstacleData, int amount)
         {

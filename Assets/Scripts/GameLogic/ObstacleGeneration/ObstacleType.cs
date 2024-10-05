@@ -6,10 +6,11 @@
         Stationary = 1,
         Rotating = 2,
         Chasing = 3,
-        VerticallyMoving = 4,
+        Offsetting = 4,
         Rocket =5,
         MultipleHits = 6,
         Treasure = 7,
-        
+
+        Moving = 9,
     }
 }

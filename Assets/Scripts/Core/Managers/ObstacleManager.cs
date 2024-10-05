@@ -22,7 +22,8 @@ namespace Core.Managers
             _obstacleData = obstacleData;
             _bossObstacleData = bossObstacleData;
             _minNumOfAvailableObstacles = 2;
-            // Manually handle event subscriptions
+            Debug.Log($"boss obstacles amount : {_bossObstacleData.Length}");
+        // Manually handle event subscriptions
         }
 
         public ObstacleManager(int minNumOfAvailableObstacles)
@@ -53,14 +54,14 @@ namespace Core.Managers
 
         private void InitializeBossObstacleMap()
         {
-            Debug.Log(bossObstaclesMap.Count + " boss obstacles found");
+            Debug.Log($"boss obstacles amount : {_bossObstacleData.Length}");
             foreach (var obs in _bossObstacleData)
             {
-                // if (SkipObstacleType(obs.ObstacleType))
-                // {
-                //     Debug.Log($"SKIPPED {obs.ObstacleType}");
-                //     continue;
-                // }
+                if (SkipObstacleType(obs.ObstacleType))
+                {
+                    Debug.Log($"SKIPPED {obs.ObstacleType}");
+                    continue;
+                }
 
                 if (!bossObstaclesMap.ContainsKey(obs.ObstacleType))
                 {
@@ -143,10 +144,16 @@ namespace Core.Managers
             Debug.Log("TRYING TO SKIP");
             Debug.Log(
                 $"type : {type}  1. {CoreManager.instance.ControlPanelManager.canSpawnChasingObstacles} {CoreManager.instance.ControlPanelManager.canSpawnRotatingObstacles}");
-            bool skip = (type == ObstacleType.Chasing &&
-                         !CoreManager.instance.ControlPanelManager.canSpawnChasingObstacles) ||
-                        type == ObstacleType.Rotating &&
-                        !CoreManager.instance.ControlPanelManager.canSpawnRotatingObstacles;
+            bool skip = ((type == ObstacleType.Chasing &&
+                          !CoreManager.instance.ControlPanelManager.canSpawnChasingObstacles) ||
+                         (type == ObstacleType.Rotating &&
+                          !CoreManager.instance.ControlPanelManager.canSpawnRotatingObstacles) ||
+                         (type == ObstacleType.Offsetting &&
+                          !CoreManager.instance.ControlPanelManager.canSpawnOffsettingObstacles) ||
+                         (type == ObstacleType.Moving &&
+                          !CoreManager.instance.ControlPanelManager.canSpawnMovingObstacles) ||
+                         type == ObstacleType.Rocket &&
+                         !CoreManager.instance.ControlPanelManager.canSpawnRockets);
             Debug.Log(skip);
             Debug.Log("---------");
             return skip;

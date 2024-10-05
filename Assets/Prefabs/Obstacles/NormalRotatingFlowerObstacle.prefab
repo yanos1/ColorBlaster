@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 7329379215585767173}
   - component: {fileID: 4564010476227397230}
   m_Layer: 0
-  m_Name: HardFlowerObstacle
+  m_Name: NormalRotatingFlowerObstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,7 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 7
   obstacleType: 2
-  difficulty: 3
+  difficulty: 2
   obstacleComponents:
   - {fileID: 8358775430175006341}
   - {fileID: 2772974374178478723}

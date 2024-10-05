@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -187,9 +188,13 @@ namespace Extentions
             image.fillAmount = 0;
         }
         
-        public static TKey GetRandomKey<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
+        public static TKey? GetRandomKey<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
         {
             // Extract keys as a list
+            if (dictionary.Count == 0)
+            {
+                return default;
+            }
             List<TKey> keys = new List<TKey>(dictionary.Keys);
 
             // Generate a random index

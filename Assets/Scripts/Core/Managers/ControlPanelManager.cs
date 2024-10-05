@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using GameLogic.ObstacleGeneration;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
@@ -15,6 +17,9 @@ namespace Core.Managers
         public float colorWheelRotationSpeedIncrease;
         public float obstacleRotationSpeed;
         public float obstacleRotationSpeedIncreasePerLevel;
+        public float chasingObstaclesMovespeed;
+        public float offsettingobstaclesMovespeed;
+        public float movingObstaclesMovespeed;
         public float shootingCooldown;
         public float playerMovementSpeed;
 
@@ -24,6 +29,12 @@ namespace Core.Managers
         public int numbersOfRocketsToShootPerLevel;
         public bool canSpawnRotatingObstacles;
         public bool canSpawnChasingObstacles;
+        public bool canSpawnOffsettingObstacles;
+        public bool canSpawnMovingObstacles;
+        public bool canSpawnRockets;
+        public bool canSpawnMultipleHits;
+
+
         public bool spawnBossObstacleAtTheEndOfLevel;
 
 
@@ -32,6 +43,7 @@ namespace Core.Managers
         public int minBossLevelDifficulty;
         public int maxBossLevelDifficulty;
         public float bossLevelDifficultyIncreasePerLevel;
+        public float distanceBetweenObstacles;
 
 
         public ControlPanelManager()
@@ -40,33 +52,40 @@ namespace Core.Managers
         }
 
 
-
         // Load settings from PlayerPrefs or default values
         public void LoadControlPanelSettings()
         {
-
             colorWheelRotationSpeed = PlayerPrefs.GetFloat("ColorWheelRotationSpeed", 150f);
-            levelSpeeds = Array.ConvertAll(PlayerPrefs.GetString("LevelSpeeds", "2.1,2.3,2.5,2.7,2.9").Split(","),float.Parse);
+            levelSpeeds = Array.ConvertAll(PlayerPrefs.GetString("LevelSpeeds", "2.1,2.3,2.5,2.7,2.9").Split(","),
+                float.Parse);
             colorWheelShootingRotationSpeed = PlayerPrefs.GetFloat("ColorWheelShootingRotationSpeed", 20f);
             obstacleRotationSpeed = PlayerPrefs.GetFloat("ObstacleRotationSpeed", 25f);
             colorWheelRotationSpeedIncrease = PlayerPrefs.GetInt("colorWheelRotationSpeedIncrease", 15);
             obstacleRotationSpeedIncreasePerLevel = PlayerPrefs.GetFloat("ObstacleRotationSpeedIncreasePerLevel", 2f);
             shootingCooldown = PlayerPrefs.GetFloat("ShootingCooldown", 0.1f);
             playerMovementSpeed = PlayerPrefs.GetFloat("PlayerMovementSpeed", 5f);
+            chasingObstaclesMovespeed = PlayerPrefs.GetFloat("ChasingObstaclesMovespeed", 1.5f);
+            movingObstaclesMovespeed = PlayerPrefs.GetFloat("MovingObstaclesMovespeed", 2.2f);
+            offsettingobstaclesMovespeed = PlayerPrefs.GetFloat("OffsettingObstaclesMovespeed", 1.9f);
 
             obstaclesPerLevel = PlayerPrefs.GetInt("ObstaclesPerLevel", 10);
             sessionMultiplier = PlayerPrefs.GetFloat("SessionMultiplier", 1.1f);
 
             numbersOfRocketsToShootPerLevel = PlayerPrefs.GetInt("NumbersOfRocketsToShootPerLevel", 2);
-       
+
             canSpawnRotatingObstacles = PlayerPrefs.GetInt("CanSpawnRotatingObstacles", 1) == 1;
             canSpawnChasingObstacles = PlayerPrefs.GetInt("CanSpawnChasingObstacles", 1) == 1;
-            obstacleToDifficultyPerLevel = ParseArray(PlayerPrefs.GetString("ObstacleToDifficultyPerLevel", "80,20,0,70,20,10,60,30,10,50,30,20,40,30,30"));
+            canSpawnOffsettingObstacles = PlayerPrefs.GetInt("CanSpawnOffsettingObstacles", 1) == 1;
+            canSpawnMovingObstacles = PlayerPrefs.GetInt("CanSpawnMovingObstacles", 1) == 1;
+            canSpawnRockets = PlayerPrefs.GetInt("CanSpawnRockets", 1) == 1;
+            canSpawnMultipleHits = PlayerPrefs.GetInt("CanSpawnMultipleHits", 1) == 1;
+            obstacleToDifficultyPerLevel = ParseArray(PlayerPrefs.GetString("ObstacleToDifficultyPerLevel",
+                "80,20,0,70,20,10,60,30,10,50,30,20,40,30,30"));
             spawnBossObstacleAtTheEndOfLevel = PlayerPrefs.GetInt("SpawnBossObstacleAtTheEndOfLevel", 1) == 1;
             minBossLevelDifficulty = PlayerPrefs.GetInt("MinBossLevelDifficulty", 4);
-            minBossLevelDifficulty = PlayerPrefs.GetInt("MinBossLevelDifficulty", 12);
+            maxBossLevelDifficulty = PlayerPrefs.GetInt("MaxBossLevelDifficulty", 12);
             bossLevelDifficultyIncreasePerLevel = PlayerPrefs.GetFloat("bossLevelDifficultyIncreasePerLevel", 1.5f);
-
+            distanceBetweenObstacles = PlayerPrefs.GetFloat("DistanceBetweenObstacles", -2.5f);
         }
 
         private int[][] ParseArray(string str)
@@ -82,7 +101,7 @@ namespace Core.Managers
                 subArrays[i] = new int[3];
                 Array.Copy(arr, i * 3, subArrays[i], 0, 3);
             }
-            
+
             return subArrays;
         }
 
@@ -102,46 +121,55 @@ namespace Core.Managers
             PlayerPrefs.SetFloat("ObstacleRotationSpeedIncreasePerLevel", obstacleRotationSpeedIncreasePerLevel);
             PlayerPrefs.SetFloat("ShootingCooldown", shootingCooldown);
             PlayerPrefs.SetFloat("PlayerMovementSpeed", playerMovementSpeed);
-
+            PlayerPrefs.SetFloat("ChasingObstaclesMovespeed", chasingObstaclesMovespeed);
+            PlayerPrefs.SetFloat("MovingObstaclesMovespeed", movingObstaclesMovespeed);
+            PlayerPrefs.SetFloat("OffsettingObstaclesMovespeed", offsettingobstaclesMovespeed);
             PlayerPrefs.SetInt("ObstaclesPerLevel", obstaclesPerLevel);
             PlayerPrefs.SetFloat("SessionMultiplier", sessionMultiplier);
 
             PlayerPrefs.SetInt("NumbersOfRocketsToShootPerLevel", numbersOfRocketsToShootPerLevel);
             PlayerPrefs.SetInt("CanSpawnRotatingObstacles", canSpawnRotatingObstacles ? 1 : 0);
             PlayerPrefs.SetInt("CanSpawnChasingObstacles", canSpawnChasingObstacles ? 1 : 0);
-            PlayerPrefs.SetString("ObstacleToDifficultyPerLevel", string.Join(",",obstacleToDifficultyPerLevel.SelectMany(x=>x).ToArray()));
+            PlayerPrefs.SetInt("CanSpawnOffsettingObstacles", canSpawnOffsettingObstacles ? 1 : 0);
+            PlayerPrefs.SetInt("CanSpawnMovingObstacles", canSpawnMovingObstacles ? 1 : 0);
+            PlayerPrefs.SetInt("CanSpawnRockets", canSpawnRockets ? 1 : 0);
+            PlayerPrefs.SetInt("CanSpawnMultipleHits", canSpawnMultipleHits ? 1 : 0);
+            canSpawnMultipleHits = PlayerPrefs.GetInt("CanSpawnMultipleHits", 1) == 1;
+            PlayerPrefs.SetString("ObstacleToDifficultyPerLevel",
+                string.Join(",", obstacleToDifficultyPerLevel.SelectMany(x => x).ToArray()));
             PlayerPrefs.SetString("LevelSpeeds", String.Join(",", levelSpeeds));
-            PlayerPrefs.SetInt("SpawnBossObstacleAtTheEndOfLevel", spawnBossObstacleAtTheEndOfLevel ? 1:0);
+            PlayerPrefs.SetInt("SpawnBossObstacleAtTheEndOfLevel", spawnBossObstacleAtTheEndOfLevel ? 1 : 0);
             PlayerPrefs.SetInt("MinBossLevelDifficulty", minBossLevelDifficulty);
             PlayerPrefs.SetInt("MaxBossLevelDifficulty", maxBossLevelDifficulty);
-            PlayerPrefs.GetFloat("BossLevelDifficultyIncreasePerLevel", bossLevelDifficultyIncreasePerLevel);
-
+            PlayerPrefs.SetFloat("BossLevelDifficultyIncreasePerLevel", bossLevelDifficultyIncreasePerLevel);
+            PlayerPrefs.SetFloat("DistanceBetweenObstacles", distanceBetweenObstacles);
 
 
             PlayerPrefs.Save();
         }
 
+
         // Print current parameters
-        public void PrintParametersAtEndOfSession()
-        {
-            string output = "Game Parameters:\n";
-
-            output += $"Level Speeds: {string.Join(",", levelSpeeds)}\n";
-            output += $"Color Wheel Rotation Speed: {colorWheelRotationSpeed}\n";
-            output += $"Color Wheel Shooting Rotation Speed: {colorWheelShootingRotationSpeed}\n";
-            output += $"Color Wheel Shooting Rotation Speed Increase Per Level: {colorWheelRotationSpeedIncrease}\n";
-            output += $"Obstacle Rotation Speed Increase Per Level: {obstacleRotationSpeedIncreasePerLevel}\n";
-            output += $"Obstacle Rotation Speed: {obstacleRotationSpeed}\n";
-            output += $"Shooting Speed: {shootingCooldown}\n";
-            output += $"Player Movement Speed: {playerMovementSpeed}\n";
-            output += $"Obstacles Per Level: {obstaclesPerLevel}\n";
-            output += $"Session Multiplier: {sessionMultiplier}\n";
-            output += $"Rockets to Shoot: {numbersOfRocketsToShootPerLevel}\n";
-            output += $"Can Spawn Rotating Obstacles: {canSpawnRotatingObstacles}\n";
-            output += $"Can Spawn Chasing Obstacles: {canSpawnChasingObstacles}\n";
-
-            Debug.Log(output);
-        }
+        // public void PrintParametersAtEndOfSession()
+        // {
+        //     string output = "Game Parameters:\n";
+        //
+        //     output += $"Level Speeds: {string.Join(",", levelSpeeds)}\n";
+        //     output += $"Color Wheel Rotation Speed: {colorWheelRotationSpeed}\n";
+        //     output += $"Color Wheel Shooting Rotation Speed: {colorWheelShootingRotationSpeed}\n";
+        //     output += $"Color Wheel Shooting Rotation Speed Increase Per Level: {colorWheelRotationSpeedIncrease}\n";
+        //     output += $"Obstacle Rotation Speed Increase Per Level: {obstacleRotationSpeedIncreasePerLevel}\n";
+        //     output += $"Obstacle Rotation Speed: {obstacleRotationSpeed}\n";
+        //     output += $"Shooting Speed: {shootingCooldown}\n";
+        //     output += $"Player Movement Speed: {playerMovementSpeed}\n";
+        //     output += $"Obstacles Per Level: {obstaclesPerLevel}\n";
+        //     output += $"Session Multiplier: {sessionMultiplier}\n";
+        //     output += $"Rockets to Shoot: {numbersOfRocketsToShootPerLevel}\n";
+        //     output += $"Can Spawn Rotating Obstacles: {canSpawnRotatingObstacles}\n";
+        //     output += $"Can Spawn Chasing Obstacles: {canSpawnChasingObstacles}\n";
+        //
+        //     Debug.Log(output);
+        // }
 
         // Update parameter values from UI text input or toggle
         public void UpdateParameterFromInput(string parameterName, string value)
@@ -169,7 +197,7 @@ namespace Core.Managers
                 case "ObstacleRotationSpeed":
                     obstacleRotationSpeed = float.Parse(value);
                     break;
-             
+
                 case "SessionMultiplier":
                     sessionMultiplier = float.Parse(value);
                     break;
@@ -192,10 +220,23 @@ namespace Core.Managers
                     minBossLevelDifficulty = int.Parse(value);
                     break;
                 case "MaxBossLevelDifficulty":
+                    Debug.Log($"UPDATING MAXBOSSLEVELDIFFICULTY TO : {value}");
                     maxBossLevelDifficulty = int.Parse(value);
                     break;
                 case "BossLevelDifficultyIncreasePerLevel":
-                    bossLevelDifficultyIncreasePerLevel = int.Parse(value);
+                    bossLevelDifficultyIncreasePerLevel = float.Parse(value);
+                    break;
+                case "DistanceBetweenObstacles":
+                    distanceBetweenObstacles = float.Parse(value);
+                    break;
+                case "OffsettingObstaclesMovespeed":
+                    offsettingobstaclesMovespeed = float.Parse(value);
+                    break;
+                case "ChasingObstaclesMovespeed":
+                    chasingObstaclesMovespeed = float.Parse(value);
+                    break;
+                case "MovingObstaclesMovespeed":
+                    movingObstaclesMovespeed = float.Parse(value);
                     break;
                 default:
                     Debug.LogWarning($"Unknown parameter: {parameterName}");
@@ -213,8 +254,20 @@ namespace Core.Managers
                 case "CanSpawnChasingObstacles":
                     canSpawnChasingObstacles = isOn;
                     break;
+                case "CanSpawnOffsettingObstacles":
+                    canSpawnOffsettingObstacles = isOn;
+                    break;
                 case "SpawnBossObstacleAtTheEndOfLevel":
                     spawnBossObstacleAtTheEndOfLevel = isOn;
+                    break;
+                case "CanSpawnMovingObstacles":
+                    canSpawnMovingObstacles = isOn;
+                    break;
+                case "CanSpawnMultipleHits":
+                    canSpawnMultipleHits = isOn;
+                    break;
+                case "CanSpawnRockets":
+                    canSpawnRockets = isOn;
                     break;
                 default:
                     Debug.LogWarning($"Toggle {parameterName} is not recognized!");
@@ -229,7 +282,7 @@ namespace Core.Managers
             {
                 return 0f;
             }
-            
+
             float currentSpeed = levelSpeeds[Level];
             for (int i = 0; i < Session; ++i)
             {
@@ -241,22 +294,32 @@ namespace Core.Managers
 
         public float GetObstacleRotationSpeed()
         {
-            return obstacleRotationSpeed + obstacleRotationSpeedIncreasePerLevel *(levelSpeeds.Length * (Session) + Level);
+            return obstacleRotationSpeed +
+                   obstacleRotationSpeedIncreasePerLevel * (levelSpeeds.Length * (Session) + Level);
+        }
+
+        public float GetObstacleMovespeed(float baseSpeed)
+        {
+            float curSpeed = baseSpeed;
+            for (int i = 0; i < Session; i++)
+            {
+                curSpeed *= sessionMultiplier;
+            }
+
+            return curSpeed;
         }
 
         public float GetWheelRotationSpeedWhileShooting()
         {
             return colorWheelShootingRotationSpeed;
-
-
         }
 
         public float GetWheeRotationSpeed()
         {
-            float speed = colorWheelRotationSpeed + colorWheelRotationSpeedIncrease *((levelSpeeds.Length * Session) + Level);
+            float speed = colorWheelRotationSpeed +
+                          colorWheelRotationSpeedIncrease * ((levelSpeeds.Length * Session) + Level);
             // Debug.Log(speed);
             return speed;
-
         }
     }
 }
