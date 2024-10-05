@@ -416,6 +416,7 @@ MonoBehaviour:
   bossObstaclesList:
   - {fileID: 5422812282413597159, guid: 335a29bf0c3cfe24ab87cff3d539575c, type: 3}
   - {fileID: 2031825499238378032, guid: 5d789d75d48a6a84ab11a6617d92ce8a, type: 3}
+  - {fileID: 438429272075136512, guid: 139b045da6135764a98ecce5fff316ba, type: 3}
   poolEntries:
   - type: 1
     prefab: {fileID: 6722398912885778981, guid: e9cc0ce5ffa0e9949b2cb860b20f9196, type: 3}
@@ -486,6 +487,9 @@ MonoBehaviour:
   - type: 25
     prefab: {fileID: 2078614405491748491, guid: e67203c94d2893842b7fa2b347214792, type: 3}
     count: 4
+  - type: 27
+    prefab: {fileID: 6536520909376827037, guid: 139b045da6135764a98ecce5fff316ba, type: 3}
+    count: 2
   itemCosts: {fileID: 4900000, guid: 4537f4657d3f4262a4c3442c5e3acc61, type: 3}
   treasureChestBuffs:
   - {fileID: 11400000, guid: 06d5de28f82987e44a72c4fc92582adf, type: 2}

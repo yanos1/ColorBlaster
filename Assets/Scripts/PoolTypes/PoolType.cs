@@ -29,6 +29,8 @@
         HardMovingObstacle1=24,
         HardRotatingTriangleObstacle=25,
         EasyWallObstacle6=26,
+        VeryHardRocketObstacle=27,
+        
         
         
         
