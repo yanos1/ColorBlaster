@@ -114,7 +114,7 @@ namespace GameLogic.ObstacleGeneration
         {
             while (true)
             {
-               
+               print($"Time  : {Time.time} time for new obstacle : {lastTimeGenerated + maxTimeBetweenRockets}");
                 if (currentObstacle.ObstacleType == ObstacleType.Rocket && Time.time > lastTimeGenerated + maxTimeBetweenRockets)
                 {
                     CoreManager.instance.PoolManager.ReturnToPool(currentObstacle.PoolType, currentObstacle.gameObject);

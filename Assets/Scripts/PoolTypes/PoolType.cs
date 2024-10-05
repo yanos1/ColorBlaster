@@ -11,7 +11,7 @@
         NormalRocketObstacle=6,
         NormalRotatingFlowerObstacle = 7,
         NormalWallObstacle1 = 8,
-        EasyWallObstacle3 = 9,
+        NormalWallObstacle3 = 9,
         HardChasingWallObstacle1=10,
         PastelShatterPrefab=11,
         Bullet = 12,
