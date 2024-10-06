@@ -202,5 +202,40 @@ namespace Core.Managers
                 Debug.Log("gemsOwned does not exist.");
             }
         }
+
+
+        public enum Boosters
+        {
+            None = 0,
+            Shield = 101,
+            ColorBlaster = 102,
+            
+        }
+
+        public enum ColorThemes
+        {
+            None = 0,
+            Default = 101,
+            Cyber = 102,
+            
+        }
+
+        public enum Styles {
+            None = 0,
+            Default = 101,
+            Pastel = 102,
+            Electric = 103,
+            
+            
+        }
+
+        public enum Avatars
+        {
+            None = 0,
+            Default = 101,
+            Turkey = 102,
+            
+        }
+        
     }
 }
