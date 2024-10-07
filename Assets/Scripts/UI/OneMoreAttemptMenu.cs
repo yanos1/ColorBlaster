@@ -1,4 +1,5 @@
 using System;
+using Core.GameData;
 using Core.Managers;
 using TMPro;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace UI
         void Start()
         {
             Int32.TryParse(coinsToRevive.text, out costToReviveInt);
-            coinsToRevive.text = CoreManager.instance.CostManager.GetItemCost(ItemType.Revive).ToString();
+            coinsToRevive.text = CoreManager.instance.CostManager.GetItemCost(Item.Revive).ToString();
         }
 
         private void OnEnable()

@@ -1,4 +1,5 @@
-﻿using Core.Managers;
+﻿using Core.GameData;
+using Core.Managers;
 using GameLogic.ObstacleGeneration;
 using PoolTypes;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "NewStyle", menuName = "Styles/Style", order = 1)]
     public class Style : ScriptableObject
     {
-        [SerializeField] private StyleName styleName;
+        [SerializeField] private Item styleName;
         [SerializeField] private Material material;
         [SerializeField] private Texture texture;
         [SerializeField] private Shader shader;
@@ -16,7 +17,7 @@ namespace ScriptableObjects
         [SerializeField] private AudioClip shatterSound;
 
         // Public read-only properties to access private fields
-        public StyleName StyleName => styleName;
+        public Item StyleName => styleName;
         public Material Material => material;
         public Texture Texture => texture;
         public Shader Shader => shader;
@@ -25,7 +26,7 @@ namespace ScriptableObjects
 
         // Probably add stats for the volume (to change glow and stuff)
 
-        public StyleName GetStyle()
+        public Item GetStyle()
         {
             return styleName;
         }

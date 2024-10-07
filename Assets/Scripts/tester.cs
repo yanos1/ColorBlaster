@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core.GameData;
 using Core.Managers;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ public class tester : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.E))
         {
-            CoreManager.instance.StyleManager.ApplyStyle(StyleName.Pastel);
+            CoreManager.instance.StyleManager.ApplyStyle(Item.PastelStyle);
         }
 
         if (Input.GetKeyDown(KeyCode.R))
