@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.GameData;
 using Firebase;
 using Firebase.Analytics;
 using Firebase.Database;
 using Firebase.Extensions;
+using UnityEditor;
 using UnityEngine;
 
 namespace Core.Managers
@@ -12,23 +14,21 @@ namespace Core.Managers
     public class UserDataManager
     {
         public int GemsOwned => gemsOwned;
-        public List<string> StylesOwned => stylesOwned;
-        public List<string> ColorsOwned => colorsOwned;
+        public Dictionary<FirebasePath, Dictionary<Item, bool>> ItemsOwned => itemsOwned;
+        public Dictionary<Item, int> BoostersOwned => boostersOwned;
 
         private DatabaseReference _dbReference;
         private DatabaseReference userRef;
         private string _id;
 
         private int gemsOwned;
-        private List<string> stylesOwned;
-        private List<string> colorsOwned;
-        private Dictionary<string, int> itemPurchases; // item name -> quantity purchased
+        private Dictionary<Item, int> boostersOwned;
+        private Dictionary<FirebasePath, Dictionary<Item, bool>> itemsOwned;
 
         public UserDataManager(string id)
         {
-            stylesOwned = new List<string>();
-            colorsOwned = new List<string>();
-            itemPurchases = new Dictionary<string, int>();
+            boostersOwned = new Dictionary<Item, int>();
+            itemsOwned = new Dictionary<FirebasePath, Dictionary<Item, bool>>();
             _id = id;
             InitializeFirebase();
         }
@@ -41,8 +41,8 @@ namespace Core.Managers
                 if (task.IsCompleted && !task.IsFaulted)
                 {
                     FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
-                    InitializeDatabase();  // Initialize database after Firebase is fully initialized
-                    RetrieveDataFromFirebase(_id); // Now safe to retrieve data from Firebase
+                    InitializeDatabase();
+                    RetrieveDataFromFirebase(_id);
                 }
                 else
                 {
@@ -55,23 +55,22 @@ namespace Core.Managers
         private void InitializeDatabase()
         {
             FirebaseApp app = FirebaseApp.DefaultInstance;
-            FirebaseDatabase database = FirebaseDatabase.GetInstance(app, "https://colorblaster-8fe62-default-rtdb.europe-west1.firebasedatabase.app/");
+            FirebaseDatabase database = FirebaseDatabase.GetInstance(app,
+                "https://colorblaster-8fe62-default-rtdb.europe-west1.firebasedatabase.app/");
             _dbReference = database.RootReference;
 
-            // Set the user reference, replace _id with the actual user id logic you have
+            // Set the user reference
             userRef = _dbReference.Child("users").Child(_id);
-            Debug.Log($"User reference: {userRef}");
         }
 
         // Retrieve data from Firebase
         private void RetrieveDataFromFirebase(string userId)
         {
-            Debug.Log("Start getting data...");
             userRef.GetValueAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.IsFaulted)
                 {
-                    Debug.Log($"Error retrieving data: {task.Exception}");
+                    Debug.LogError($"Error retrieving data: {task.Exception}");
                     return;
                 }
 
@@ -80,127 +79,212 @@ namespace Core.Managers
                     DataSnapshot snapshot = task.Result;
                     if (snapshot.Exists)
                     {
-                        // Gems owned
-                        gemsOwned = int.Parse(snapshot.Child("gemsOwned").Value.ToString());
-                        Debug.Log($"Gems in balance: {gemsOwned}");
+                        // Retrieve owned data
+                        gemsOwned = int.Parse(snapshot.Child(FirebasePath.gemsOwned.ToString()).Value.ToString());
 
-                        // Styles owned
-                        stylesOwned = new List<string>();
-                        foreach (DataSnapshot styleSnapshot in snapshot.Child("stylesOwned").Children)
+                        // Retrieve all dictionaries of items in a loop
+                        foreach (FirebasePath path in Enum.GetValues(typeof(FirebasePath)))
                         {
-                            stylesOwned.Add(styleSnapshot.Value.ToString());
+                            if (path != FirebasePath.gemsOwned && path != FirebasePath.boostersOwned &&
+                                path != FirebasePath.highScore)
+                            {
+                                var dict = new Dictionary<Item, bool>();
+                                GetDataOfType(snapshot, path, dict);
+                                itemsOwned[path] = dict;
+                            }
                         }
 
-                        // Colors owned
-                        colorsOwned = new List<string>();
-                        foreach (DataSnapshot colorThemeSnapShot in snapshot.Child("colorThemesOwned").Children)
-                        {
-                            colorsOwned.Add(colorThemeSnapShot.Value.ToString());
-                        }
-
-                        // Item purchases
-                        itemPurchases = new Dictionary<string, int>();
-                        foreach (DataSnapshot purchaseSnapshot in snapshot.Child("inGamePurchases").Children)
-                        {
-                            string item = purchaseSnapshot.Key;
-                            int quantity = int.Parse(purchaseSnapshot.Value.ToString());
-                            itemPurchases[item] = quantity;
-                        }
-
-                        Debug.Log("User data retrieved successfully.");
+                        // Retrieve boosters
+                        GetBoosterData(snapshot);
                     }
                     else
                     {
-                        Debug.Log("No data found, initializing new user data.");
                         InitializeUserData(userId);
                     }
                 }
             });
         }
 
+        // Retrieve dictionary data for styles, color themes, avatars
+        private void GetDataOfType(DataSnapshot snapshot, FirebasePath path, Dictionary<Item, bool> dict)
+        {
+            foreach (DataSnapshot data in snapshot.Child(path.ToString()).Children)
+            {
+                if (Enum.TryParse(data.Key, out Item item) && bool.TryParse(data.Value.ToString(), out bool isEquipped))
+                {
+                    dict[item] = isEquipped;
+                }
+            }
+        }
+
+        // Retrieve boosters
+        private void GetBoosterData(DataSnapshot snapshot)
+        {
+            foreach (DataSnapshot boosterSnapshot in snapshot.Child(FirebasePath.boostersOwned.ToString()).Children)
+            {
+                if (Enum.TryParse(boosterSnapshot.Key, out Item booster))
+                {
+                    boostersOwned[booster] = int.Parse(boosterSnapshot.Value.ToString());
+                }
+            }
+        }
+
         // Initialize default data for a new user
         private void InitializeUserData(string userId)
         {
-            userRef.Child("highScore").SetValueAsync(0);
-            userRef.Child("coinAmount").SetValueAsync(500); // Default coin amount
-            userRef.Child("stylesOwned").SetValueAsync(new List<string> { StyleName.Pastel.ToString() }); // Default styles
-            userRef.Child("colorThemesOwned").SetValueAsync(new List<string> { "Default" }); // Default color themes
-            userRef.Child("inGamePurchases").SetValueAsync(new Dictionary<string, int>()); // Empty purchases
-
-            Debug.Log("New user data initialized.");
+            userRef.Child(FirebasePath.gemsOwned.ToString()).SetValueAsync(0);
+            userRef.Child(FirebasePath.stylesOwned.ToString()).SetValueAsync(new Dictionary<int, bool>
+                { { (int)Item.DefaultStyle, true } });
+            userRef.Child(FirebasePath.colorThemesOwned.ToString()).SetValueAsync(new Dictionary<int, bool>
+                { { (int)Item.DefaultColorTheme, true } });
+            userRef.Child(FirebasePath.avatarsOwned.ToString()).SetValueAsync(new Dictionary<int, bool>
+                { { (int)Item.DefaultAvatar, true } });
+            userRef.Child(FirebasePath.boostersOwned.ToString()).SetValueAsync(new Dictionary<int, int>
+                { { (int)Item.ShieldBooster, 0 } });
         }
 
-        public void SetNewHighScore(int newHighScore)
+        public bool IsItemEquipped(Item item, FirebasePath firebasePath)
         {
-            Debug.Log("New high score set!");
-            userRef.Child("highScore").SetValueAsync(newHighScore);
-        }
-
-        public async Task<int> GetHighScore()
-        {
-            var highScoreSnapshot = await userRef.Child("highScore").GetValueAsync();
-            if (highScoreSnapshot.Exists)
+            foreach (var (path, dictionary) in itemsOwned)
             {
-                return int.Parse(highScoreSnapshot.Value.ToString());
+                if (path == firebasePath)
+                {
+                    if (!dictionary.ContainsKey(item))
+                    {
+                        return false;
+                    }
+
+                    return dictionary[item];
+                }
             }
 
-            return 0;
+            return false;
         }
 
+        // Equip items  can be optimised !
+        public void EquipItem(Item item, FirebasePath path)
+        {
+            if (!itemsOwned.ContainsKey(path))
+            {
+                Debug.LogError($"Path {path} not found in itemsOwned dictionary.");
+                return;
+            }
+
+            var dict = itemsOwned[path];
+
+            foreach (var key in dict.Keys)
+            {
+                dict[key] = false; // Unequip all items
+            }
+
+            dict[item] = true; // Equip the new item
+
+            // Prepare data for Firebase
+            var firebaseData = new Dictionary<int, bool>();
+            foreach (var entry in dict)
+            {
+                firebaseData[(int)entry.Key] = entry.Value;
+            }
+
+            userRef.Child(path.ToString()).SetValueAsync(firebaseData);
+        }
+
+        public void EquipStyle(Item style) => EquipItem(style, FirebasePath.stylesOwned);
+
+        public void EquipColorTheme(Item colorTheme) => EquipItem(colorTheme, FirebasePath.colorThemesOwned);
+
+        public void EquipAvatar(Item avatar) => EquipItem(avatar, FirebasePath.avatarsOwned);
+
+        // Add items
+        public void AddItem(Item item, FirebasePath firebasePath)
+        {
+            if (!itemsOwned.ContainsKey(firebasePath))
+            {
+                Debug.LogError($"Path {firebasePath} not found in itemsOwned dictionary.");
+                return;
+            }
+
+            var dict = itemsOwned[firebasePath];
+            AddItemToDataBase(item, firebasePath, dict);
+        }
+
+        private void AddItemToDataBase(Item item, FirebasePath path, Dictionary<Item, bool> dict)
+        {
+            if (dict.TryAdd(item, false)) // Add item to the local dictionary if it doesn't already exist
+            {
+                var newItem = new Dictionary<string, object>
+                {
+                    { ((int)item).ToString(), false }
+                };
+
+                userRef.Child(path.ToString()).UpdateChildrenAsync(newItem).ContinueWith(task =>
+                {
+                    if (task.IsCompleted)
+                    {
+                        Debug.Log($"Successfully added {item} to Firebase under {path}.");
+                    }
+                    else
+                    {
+                        Debug.LogError($"Failed to add {item} to Firebase: {task.Exception}");
+                    }
+                });
+            }
+        }
+
+        public void AddStyle(Item style) => AddItem(style, FirebasePath.stylesOwned);
+
+        public void AddColorTheme(Item colorTheme) => AddItem(colorTheme, FirebasePath.colorThemesOwned);
+
+        public void AddAvatar(Item avatar) => AddItem(avatar, FirebasePath.avatarsOwned);
+
+        // Add boosters
+        public void AddBooster(Item booster, int quantity)
+        {
+            if (boostersOwned.ContainsKey(booster))
+            {
+                boostersOwned[booster] += quantity;
+            }
+            else
+            {
+                boostersOwned[booster] = quantity;
+            }
+
+            userRef.Child(FirebasePath.boostersOwned.ToString()).Child(((int)booster).ToString())
+                .SetValueAsync(boostersOwned[booster]);
+        }
+
+        // Add gems
         public void AddGems(int amount)
         {
             gemsOwned = Mathf.Max(0, gemsOwned + amount);
-            userRef.Child("gemsOwned").SetValueAsync(gemsOwned);
-            Debug.Log($"Added {amount} gems. New total: {gemsOwned}");
+            userRef.Child(FirebasePath.gemsOwned.ToString()).SetValueAsync(gemsOwned);
         }
 
-        public void AddStyle(string style)
+        // High score
+        public async Task<int> GetHighScore()
         {
-            if (!stylesOwned.Contains(style))
-            {
-                stylesOwned.Add(style);
-                userRef.Child("stylesOwned").SetValueAsync(stylesOwned);
-                Debug.Log($"Added new style: {style}");
-            }
+            var snapshot = await userRef.Child(FirebasePath.highScore.ToString()).GetValueAsync();
+            return snapshot.Exists ? int.Parse(snapshot.Value.ToString()) : 0;
         }
 
-        public void AddColorTheme(string colorTheme)
+        public void SetNewHighScore(int newScore)
         {
-            if (!colorsOwned.Contains(colorTheme))
-            {
-                colorsOwned.Add(colorTheme);
-                userRef.Child("colorThemesOwned").SetValueAsync(colorsOwned);
-                Debug.Log($"Added new color theme: {colorTheme}");
-            }
+             userRef.Child(FirebasePath.highScore.ToString()).SetValueAsync(newScore);
         }
 
-        public void AddItemPurchase(string itemName, int quantity)
+        public bool HasItem(Item itemType, FirebasePath avatarFirebasePath)
         {
-            if (itemPurchases.ContainsKey(itemName))
-            {
-                itemPurchases[itemName] += quantity;
-            }
-            else
-            {
-                itemPurchases[itemName] = quantity;
-            }
-
-            userRef.Child("inGamePurchases").SetValueAsync(itemPurchases);
-            Debug.Log($"Added {quantity} of {itemName}. New total: {itemPurchases[itemName]}");
+            return itemsOwned[avatarFirebasePath].ContainsKey(itemType);
         }
+    }
 
-        public async void UpdateGemsOwned(int gemsCollected)
-        {
-            var snapshot = await userRef.Child("gemsOwned").GetValueAsync();
-            if (snapshot.Exists)
-            {
-                int currentGems = Convert.ToInt32(snapshot.Value) + gemsCollected;
-                await userRef.Child("gemsOwned").SetValueAsync(currentGems);
-            }
-            else
-            {
-                Debug.Log("gemsOwned does not exist.");
-            }
-        }
+    public enum FirebasePath
+    {
+        stylesOwned,
+        gemsOwned,
+        colorThemesOwned,
+        avatarsOwned,
+        boostersOwned,
+        highScore
     }
 }

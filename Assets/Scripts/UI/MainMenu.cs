@@ -10,6 +10,8 @@ namespace UI
     {
         // Start is called before the first frame update
         [SerializeField] private GameObject controlPanel;
+        [SerializeField] private GameObject itemShopPanel;
+        [SerializeField] private GameObject gemShopPanel;
         void Start()
         {
         
@@ -19,6 +21,15 @@ namespace UI
         void Update()
         {
         
+        }
+
+        public void OpenGemShop()
+        {
+            gemShopPanel.SetActive(true);
+        }
+        public void OpenItemShop()
+        {
+            itemShopPanel.SetActive(true);
         }
 
         public void OpenControlPanel()

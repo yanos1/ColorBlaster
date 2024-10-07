@@ -1,46 +1,27 @@
 ﻿using System.Collections.Generic;
-using System.Net.Mime;
+using Core.GameData;
 using UnityEngine;
 
 namespace Core.Managers
 {
-    public enum ItemType
-    {
-        Revive,
-        Style1,
-        Style2,
-        Style3,
-        Colors1,
-        Colors2,
-        Colors3,
-        Character1,
-        Character2,
-        Character3,
-        Boost1,
-        Boost2,
-        
-        
-        // Add other items here
-    }
-
     [System.Serializable]
     public class ItemCost
     {
-        public ItemType item; // Enum instead of string
+        public Item item; // Enum instead of string
         public int cost;
     }
 
     [System.Serializable]
     public class ItemCostList
     {
-        public List<ItemCost> items;
+        public List<ItemCost> itemCosts; // Wrapper for deserialization
     }
 
     public class ItemCostManager
     {
         public TextAsset ItemCostJson;
 
-        private Dictionary<ItemType, int> itemCosts = new Dictionary<ItemType, int>();
+        private Dictionary<Item, int> itemCosts = new Dictionary<Item, int>();
 
         public ItemCostManager(TextAsset itemCostJson)
         {
@@ -51,13 +32,13 @@ namespace Core.Managers
         private void LoadItemCosts()
         {
             ItemCostList itemList = JsonUtility.FromJson<ItemCostList>(ItemCostJson.text);
-            foreach (var item in itemList.items)
+            foreach (var item in itemList.itemCosts)
             {
                 itemCosts[item.item] = item.cost;
             }
         }
 
-        public int GetItemCost(ItemType itemName) // Changed parameter to ItemType
+        public int GetItemCost(Item itemName) // Changed parameter to ItemType
         {
             if (itemCosts.TryGetValue(itemName, out int cost))
             {
@@ -66,7 +47,7 @@ namespace Core.Managers
             else
             {
                 Debug.LogError("Item cost not found!");
-                return -1;
+                return -1; // Or throw exception / use Nullable<int>
             }
         }
     }

@@ -67,7 +67,7 @@ namespace Core.Managers
                 _currentDistanceTraveled = 0;
             }
 
-            CoreManager.instance.UserDataManager.UpdateGemsOwned(_currentGemsPicked);
+            CoreManager.instance.UserDataManager.AddGems(_currentGemsPicked);
         }
 
         public int GetCoins()

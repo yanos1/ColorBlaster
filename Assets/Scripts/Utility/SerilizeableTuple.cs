@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
-namespace Extentions
+namespace Extensions
 {
     [Serializable]
-    public class SerializableTuple<TKey, TValue> : ISerializationCallbackReceiver
+    public class SerializableTuple<TKey, TValue> : ISerializationCallbackReceiver, IEnumerable
     {
         [SerializeField] private TKey _First;
         [SerializeField] private TValue _Second;
@@ -18,7 +19,7 @@ namespace Extentions
         }
 
         private Tuple<TKey, TValue> _Tuple;
-        
+
         public SerializableTuple(TKey key, TValue value)
         {
             _First = key;
@@ -42,6 +43,13 @@ namespace Extentions
         {
             key = _First;
             value = _Second;
+        }
+
+        // IEnumerator implementation to iterate over the two elements of the tuple
+        public IEnumerator GetEnumerator()
+        {
+            yield return _First;  // First item (key)
+            yield return _Second; // Second item (value)
         }
     }
 }

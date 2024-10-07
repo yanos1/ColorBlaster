@@ -5,20 +5,20 @@
       "cost": 1
     },
     {
-      "item": "Style1",
-      "cost": 200
+      "item": "PastelStyle",
+      "cost": 10
     },
     {
-      "item": "Style2",
-      "cost": 400
+      "item": "ElectricStyle",
+      "cost": 10
     },
     {
       "item": "Style3",
       "cost": 600
     },
     {
-      "item": "Colors1",
-      "cost": 100
+      "item": "CyberColorTheme",
+      "cost": 10
     },
     {
       "item": "Colors2",
@@ -29,8 +29,8 @@
       "cost": 100
     },
     {
-      "item": "Character1",
-      "cost": 300
+      "item": "TurkeyAvatar",
+      "cost": 10
     },
     {
       "item": "Character2",
@@ -41,12 +41,12 @@
       "cost": 300
     },
     {
-      "item": "Boost1",
-      "cost": 70
+      "item": "ShieldBooster",
+      "cost": 10
     },
     {
-      "item": "Boost2",
-      "cost": 0
+      "item": "ColorBlasterBooster",
+      "cost": 10
     }
   ]
 }

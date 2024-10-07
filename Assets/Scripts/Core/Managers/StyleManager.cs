@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Core.GameData;
 using GameLogic.StyleRelated;
 using ScriptableObjects;
 using UnityEngine;
+using static Core.Managers.UserDataManager;
 
 namespace Core.Managers
 {
@@ -34,7 +36,7 @@ namespace Core.Managers
             // Try to load the saved style, defaulting to Neon if no saved style is found
             CoreManager.instance.SaveManager.Load<StyleSaver>(savedData =>
             {
-                if (savedData != null && Enum.TryParse(savedData.StyleName, out StyleName savedStyle))
+                if (savedData != null && Enum.TryParse(savedData.StyleName, out Item savedStyle))
                 {
                     currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == savedStyle);
                 }
@@ -42,7 +44,7 @@ namespace Core.Managers
                 // Fallback to default Pastel style if no saved style was found or invalid style saved
                 if (savedData == null)
                 {
-                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == StyleName.Pastel);
+                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == Item.DefaultStyle);
 
                     CoreManager.instance.SaveManager.Save(new StyleSaver(currentStyle.StyleName.ToString()));
 
@@ -74,7 +76,7 @@ namespace Core.Managers
             _styleableObjects.Add(obj);
         }
 
-        public void ApplyStyle(StyleName newStyle)
+        public void ApplyStyle(Item newStyle)
         {
             currentStyle = _styles.FirstOrDefault(style => style.StyleName == newStyle);
             foreach (var obj in _styleableObjects)
@@ -88,13 +90,5 @@ namespace Core.Managers
             _styleableObjects.Remove(obj);
         }
     }
-
-    public enum StyleName
-    {
-        None = 0,
-        Neon = 1,
-        Glass = 2,
-        Pastel = 3,
-        Metal = 4
-    }
+    
 }
