@@ -31,7 +31,6 @@ namespace GameLogic.PlayerRelated
         private void Awake()
         {
             Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
-            Debug.Log(currentColors.First());
 
             if (blocks.Length != currentColors.Length)
             {
@@ -72,8 +71,8 @@ namespace GameLogic.PlayerRelated
                 foreach (var block in blocks)
                 {
                     block.Renderer.color = color;
-                    block.Renderer.material = colorRushStyle.Material;
-                    block.Renderer.material.shader = colorRushStyle.Shader;
+                    block.Renderer.sharedMaterials[1] = colorRushStyle.Material;
+                    block.Renderer.sharedMaterials[1].shader = colorRushStyle.Shader;
                 }
             }
         }
@@ -86,9 +85,9 @@ namespace GameLogic.PlayerRelated
             {
                 Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
                 Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
-                block.Renderer.color = currentColors[i++];
-                block.Renderer.material = currentStyle.Material;
-                block.Renderer.material.shader = currentStyle.Shader;
+                block.SetColor(currentColors[i++]);
+                block.Renderer.sharedMaterials[1] = currentStyle.Material;
+                block.Renderer.sharedMaterials[1].shader = currentStyle.Shader;
             }
         }
 

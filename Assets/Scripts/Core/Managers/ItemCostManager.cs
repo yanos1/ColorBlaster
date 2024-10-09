@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core.GameData;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace Core.Managers
     [System.Serializable]
     public class ItemCost
     {
-        public Item item; // Enum instead of string
+        public string item; // Store the item as a string during deserialization
         public int cost;
     }
 
@@ -32,9 +33,21 @@ namespace Core.Managers
         private void LoadItemCosts()
         {
             ItemCostList itemList = JsonUtility.FromJson<ItemCostList>(ItemCostJson.text);
-            foreach (var item in itemList.itemCosts)
+            
+            Debug.Log($"LOADING ITEM COSTS {itemList.itemCosts.Count}");
+            
+            foreach (var itemCost in itemList.itemCosts)
             {
-                itemCosts[item.item] = item.cost;
+                // Try to parse the string to the enum
+                if (Enum.TryParse(itemCost.item, out Item parsedItem))
+                {
+                    Debug.Log($"item {parsedItem} cost {itemCost.cost}");
+                    itemCosts[parsedItem] = itemCost.cost;
+                }
+                else
+                {
+                    Debug.Log($"Item '{itemCost.item}' could not be parsed to enum.");
+                }
             }
         }
 

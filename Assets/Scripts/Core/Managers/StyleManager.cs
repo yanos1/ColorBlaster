@@ -33,25 +33,39 @@ namespace Core.Managers
         {
             _styleableObjects = new List<StyleableObject>();
             _styles = styles;
-            // Try to load the saved style, defaulting to Neon if no saved style is found
-            CoreManager.instance.SaveManager.Load<StyleSaver>(savedData =>
+            foreach (var VARIABLE in _styles)
             {
-                if (savedData != null && Enum.TryParse(savedData.StyleName, out Item savedStyle))
-                {
-                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == savedStyle);
+                Debug.Log($" style : {VARIABLE.StyleName}");
+            }
+
+            foreach (var style in _styles)
+            {
+                Debug.Log($"current style {style.StyleName}");
+                if (CoreManager.instance.UserDataManager.IsItemEquipped(style.StyleName, Style.path))
+                { 
+                    Debug.Log("FOUND STYLE!");
+                    currentStyle = style;
                 }
-
-                // Fallback to default Pastel style if no saved style was found or invalid style saved
-                if (savedData == null)
-                {
-                    currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == Item.DefaultStyle);
-
-                    CoreManager.instance.SaveManager.Save(new StyleSaver(currentStyle.StyleName.ToString()));
-
-                }
+            }
+            // // Try to load the saved style, defaulting to Neon if no saved style is found
+            // CoreManager.instance.SaveManager.Load<StyleSaver>(savedData =>
+            // {
+            //     if (savedData != null && Enum.TryParse(savedData.StyleName, out Item savedStyle))
+            //     {
+            //         currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == savedStyle);
+            //     }
+            //
+            //     // Fallback to default Pastel style if no saved style was found or invalid style saved
+            //     if (savedData == null)
+            //     {
+            //         currentStyle = _styles.FirstOrDefault(style => style.GetStyle() == Item.DefaultStyle);
+            //
+            //         CoreManager.instance.SaveManager.Save(new StyleSaver(currentStyle.StyleName.ToString()));
+            //
+            //     }
 
                 // SetStyle(currentStyle.StyleName);
-            });
+            
 
 
         }
@@ -59,6 +73,15 @@ namespace Core.Managers
         public Style GetStyle()
         {
             return currentStyle;
+        }
+
+        public GameObject GetShatterPrefab()
+        {
+            Debug.Log($"current style {currentStyle}");
+            Debug.Log($"current style shatter prefab type {currentStyle.ShatterType}");
+            GameObject obj =  CoreManager.instance.PoolManager.GetFromPool(currentStyle.ShatterType);
+            Debug.Log($"prefab : {obj}");
+            return obj;
         }
 
 

@@ -33,7 +33,7 @@ namespace GameLogic.ObstacleGeneration
             TakeHit();
             if (currentHits == amountOfShotsToBreak)
             {
-                CoreManager.instance.BuffManager.ActivateBuff(transform.position, Renderer.color, currentHits);
+                CoreManager.instance.BuffManager.ActivateBuff(transform.position,GetColor(), currentHits);
                 // TreasureChestBuff buff = CoreManager.instance.BuffManager.GetReward(Renderer.color);
                 // float buffMultiplier = buff.buffType == BuffType.GemBuff ? currentHits * GetGemMultyplier() : 1.5f;
                 // CoreManager.instance.BuffManager.MoveParticlesToPlayer(transform.position, buff.poolType,

@@ -76,18 +76,23 @@ namespace Core.Managers
             {
                 if (queue.Count > 0)
                 {
+                    Debug.Log($"count is {queue.Count}");
                     GameObject obj = queue.Dequeue();
                     obj.SetActive(true);
                     activeObjects[type].Add(obj);
+                    Debug.Log($"got prefab {obj}");
                     return obj;
                 }
                 else
                 {
+                    Debug.Log("??????????");
                     Debug.LogWarning($"No available objects of type {type} in pool. Consider increasing initial count.");
                 }
             }
             else
             {
+                Debug.Log(11111111);
+
                 Debug.LogError($"Object type {type} not found in pool.");
             }
 

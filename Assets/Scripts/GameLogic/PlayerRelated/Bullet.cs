@@ -43,16 +43,15 @@ namespace GameLogic.PlayerRelated
             if (colorBlock is not null)
             {
                 Color color = colorBlock.GetColor();
-                Renderer.color = color;
+                SetColor(color);
                 CoreManager.instance.EventManager.InvokeEvent(EventNames.Shoot, color);
             }
 
             ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();
             if (obstacle is not null)
             {
-                // print($"see difference : {_renderer.color} {obstacle.GetColor()}");
                 // print($"is different:   {_renderer.color == obstacle.GetColor()}");
-                if (UtilityFunctions.CompareColors(_renderer.color,obstacle.GetColor()))
+                if (UtilityFunctions.CompareColors(GetColor(),obstacle.GetColor()))
                 {
                     obstacle.Shatter();
                 }
@@ -64,7 +63,7 @@ namespace GameLogic.PlayerRelated
                     // obstacle.SetColor(filteredColors[Random.Range(0, filteredColors.Count)]);
                     
                 }
-
+                print("RETURN T +O POOOOLL");
                 CoreManager.instance.PoolManager.ReturnToPool(PoolType.Bullet, gameObject);
             }
         }

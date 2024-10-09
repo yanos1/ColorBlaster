@@ -12,12 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32f2cbed24c941ab9487683dc23a98aa, type: 3}
   m_Name: TestStyle 1
   m_EditorClassIdentifier: 
-  styleName: 1
-  colorPalette:
-  - {r: 1, g: 0.45098042, b: 0.96742564, a: 1}
-  - {r: 0.5169811, g: 0.13558558, b: 0.4878262, a: 1}
-  - {r: 1, g: 0.2840327, b: 0.081131995, a: 1}
-  - {r: 0.512975, g: 0.29585615, b: 0.9169811, a: 1}
+  styleName: 108
   material: {fileID: 2100000, guid: 500f5062be7dec347888ac40ac5a317c, type: 2}
   texture: {fileID: 0}
   shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}

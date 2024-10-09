@@ -22,7 +22,7 @@ namespace Particles
         private IEnumerator PlayParticles(StyleableObject obj)
         {
             var mainModule = particles.main;
-            mainModule.startColor = obj.Renderer.color;
+            mainModule.startColor = obj.GetColor();
             
             var shape = particles.shape;
             shape.enabled = true;

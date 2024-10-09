@@ -17,6 +17,8 @@ namespace Core.Managers
         public Dictionary<FirebasePath, Dictionary<Item, bool>> ItemsOwned => itemsOwned;
         public Dictionary<Item, int> BoostersOwned => boostersOwned;
 
+        public Action onComplete;
+
         private DatabaseReference _dbReference;
         private DatabaseReference userRef;
         private string _id;
@@ -24,12 +26,14 @@ namespace Core.Managers
         private int gemsOwned;
         private Dictionary<Item, int> boostersOwned;
         private Dictionary<FirebasePath, Dictionary<Item, bool>> itemsOwned;
+        private bool finishedLoading;
 
         public UserDataManager(string id)
         {
             boostersOwned = new Dictionary<Item, int>();
             itemsOwned = new Dictionary<FirebasePath, Dictionary<Item, bool>>();
             _id = id;
+            finishedLoading = false;
             InitializeFirebase();
         }
 
@@ -83,27 +87,29 @@ namespace Core.Managers
                         gemsOwned = int.Parse(snapshot.Child(FirebasePath.gemsOwned.ToString()).Value.ToString());
 
                         // Retrieve all dictionaries of items in a loop
-                        foreach (FirebasePath path in Enum.GetValues(typeof(FirebasePath)))
+                        foreach (FirebasePath path in new[]
+                                 {
+                                     FirebasePath.avatarsOwned, FirebasePath.stylesOwned, FirebasePath.colorThemesOwned
+                                 })
                         {
-                            if (path != FirebasePath.gemsOwned && path != FirebasePath.boostersOwned &&
-                                path != FirebasePath.highScore)
-                            {
-                                var dict = new Dictionary<Item, bool>();
-                                GetDataOfType(snapshot, path, dict);
-                                itemsOwned[path] = dict;
-                            }
+                            var dict = new Dictionary<Item, bool>();
+                            GetDataOfType(snapshot, path, dict);
+                            itemsOwned[path] = dict;
                         }
+                    }
 
-                        // Retrieve boosters
-                        GetBoosterData(snapshot);
-                    }
-                    else
-                    {
-                        InitializeUserData(userId);
-                    }
+                    // Retrieve boosters
+                    GetBoosterData(snapshot);
                 }
+                else
+                {
+                    InitializeUserData(userId);
+                }
+
+                finishedLoading = true;
             });
         }
+
 
         // Retrieve dictionary data for styles, color themes, avatars
         private void GetDataOfType(DataSnapshot snapshot, FirebasePath path, Dictionary<Item, bool> dict)
@@ -145,16 +151,19 @@ namespace Core.Managers
 
         public bool IsItemEquipped(Item item, FirebasePath firebasePath)
         {
+            Debug.Log("ISITEM CALLED");
             foreach (var (path, dictionary) in itemsOwned)
             {
                 if (path == firebasePath)
                 {
-                    if (!dictionary.ContainsKey(item))
+                    foreach (var v in dictionary)
                     {
-                        return false;
+                        Debug.Log($"item : {v.Key}  eqipped: {v.Value}");
                     }
 
-                    return dictionary[item];
+                    bool owned = dictionary.GetValueOrDefault(item, false);
+                    Debug.Log(owned);
+                    return owned;
                 }
             }
 
@@ -269,12 +278,17 @@ namespace Core.Managers
 
         public void SetNewHighScore(int newScore)
         {
-             userRef.Child(FirebasePath.highScore.ToString()).SetValueAsync(newScore);
+            userRef.Child(FirebasePath.highScore.ToString()).SetValueAsync(newScore);
         }
 
         public bool HasItem(Item itemType, FirebasePath avatarFirebasePath)
         {
             return itemsOwned[avatarFirebasePath].ContainsKey(itemType);
+        }
+
+        public bool FinishedLoading()
+        {
+            return finishedLoading;
         }
     }
 

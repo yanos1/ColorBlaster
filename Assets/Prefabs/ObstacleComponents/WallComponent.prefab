@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3495355062483403668}
   - component: {fileID: 2084105168619154934}
+  - component: {fileID: 8745554891865519092}
   m_Layer: 0
   m_Name: WallComponent
   m_TagString: Untagged
@@ -48,6 +49,21 @@ MonoBehaviour:
   parts:
   - {fileID: 2557454894274207486}
   isSingleColorComponent: 0
+--- !u!114 &8745554891865519092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 831250115945865344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3c4189ef5ce4df9b084dd303291dab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parts:
+  - {fileID: 2240510147647776691}
+  isSingleColorComponent: 0
 --- !u!1 &8186761375300714043
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,6 +76,7 @@ GameObject:
   - component: {fileID: 2823863115819416238}
   - component: {fileID: 5148119021333205458}
   - component: {fileID: 2557454894274207486}
+  - component: {fileID: 2240510147647776691}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -77,7 +94,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.15, y: 5, z: 1}
+  m_LocalScale: {x: 0.15, y: 1.6666666, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3495355062483403668}
@@ -191,5 +208,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ca239bd9cff9a047963f1f4ef8599a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _renderer: {fileID: 2823863115819416238}
-  gemUIimage: {fileID: 0}
+--- !u!114 &2240510147647776691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8186761375300714043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca239bd9cff9a047963f1f4ef8599a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

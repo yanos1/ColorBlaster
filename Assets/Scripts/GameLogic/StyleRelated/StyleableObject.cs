@@ -9,33 +9,40 @@ namespace GameLogic.StyleRelated
     {
         public SpriteRenderer Renderer => _renderer;
 
-        [SerializeField] protected SpriteRenderer _renderer;
+        protected SpriteRenderer _renderer;
 
         protected AudioSource _audioSource;
 
-        private void Awake()
+        public virtual void Awake()
         {
             _audioSource = GetComponent<AudioSource>();
+            _renderer = GetComponent<SpriteRenderer>();
+            if (name.ToString().Contains("Block"))
+            {
+                print($"CALLED AWAKE ON {name}");
+                print($"renderer is {_renderer}");
+            }
         }
 
         public abstract void ChangeStyle();
 
         public virtual Style ApplyStyle()
         {
+            
             Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
             // Apply the material from the style
-            _renderer.sharedMaterial = currentStyle.Material;
+            _renderer.sharedMaterials[1] = currentStyle.Material;
             // Apply texture and shader from the style (if needed)
             if (currentStyle.Texture != null)
             {
-                _renderer.sharedMaterial.mainTexture = currentStyle.Texture;
+                _renderer.sharedMaterials[1].mainTexture = currentStyle.Texture;
             }
 
             if (currentStyle.Shader != null)
             {
-                _renderer.sharedMaterial.shader = currentStyle.Shader;
+                _renderer.sharedMaterials[1].shader = currentStyle.Shader;
             }
-
+            Debug.Log("styles applied !");
             return currentStyle;
         }
         
@@ -45,8 +52,14 @@ namespace GameLogic.StyleRelated
             // Play the shatter sound *ADD LATER*
             // _audioSource.Play();
             // Instantiate the shatter effect at the part's position
-            CoreManager.instance.PoolManager.GetFromPool(CoreManager.instance.StyleManager.GetStyle()
-                .ShatterType).GetComponent<ShapeShiftingParticleSystem>().Init(this);
+            print(name); 
+            
+            print(CoreManager.instance.PoolManager);
+            GameObject shaterPrefab = CoreManager.instance.StyleManager.GetShatterPrefab();
+            print($"shatter prefab {shaterPrefab}");
+            ShapeShiftingParticleSystem particles = shaterPrefab.GetComponent<ShapeShiftingParticleSystem>();
+            print($"particeles : {particles}");
+            particles.Init(this);
 
             // Disable the part or handle other shatter logic
             gameObject.SetActive(false);
@@ -54,13 +67,15 @@ namespace GameLogic.StyleRelated
 
         public Color GetColor()
         {
-            return _renderer.color;
+            return _renderer.materials[0].color;
         }
 
 
         public virtual void SetColor(Color newColor)
         {
-            _renderer.color = newColor;
+            print(name);
+            print($"renderer : {_renderer}");
+            _renderer.materials[0].color = newColor;
         }
         
       

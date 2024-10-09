@@ -98,11 +98,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: spawnYPositionRange.x
-      value: 1.7
+      value: -0.8
       objectReference: {fileID: 0}
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: spawnYPositionRange.y
-      value: 2.7
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2213087177440139989, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: m_LocalPosition.x
@@ -179,11 +179,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: spawnYPositionRange.x
-      value: 2.8
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: spawnYPositionRange.y
-      value: 3.8
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 2213087177440139989, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: m_LocalPosition.x
@@ -260,11 +260,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: spawnYPositionRange.x
-      value: 0.6
+      value: -1.9
       objectReference: {fileID: 0}
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: spawnYPositionRange.y
-      value: 1.6
+      value: -0.9
       objectReference: {fileID: 0}
     - target: {fileID: 2213087177440139989, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: m_LocalPosition.x
@@ -341,11 +341,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: spawnYPositionRange.x
-      value: 3.9
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 2030237594264377420, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: spawnYPositionRange.y
-      value: 4.6
+      value: 2.2
       objectReference: {fileID: 0}
     - target: {fileID: 2213087177440139989, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
       propertyPath: m_LocalPosition.x

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Extentions;
 using GameLogic.ConsumablesGeneration;
@@ -30,6 +31,11 @@ namespace Core.Managers
 
         public CoreManager(GameLoaderUI loaderUI)
         {
+         
+        }
+
+        public CoreManager(GameLoaderUI loaderUI, TextAsset itemCosts, Style[] stylesList, List<ColorTheme> colorThemes, Obstacle[] baseObstaclesList, Obstacle[] bossObstaclesList, PoolEntry[] poolEntries, TreasureChestBuff[] treasureChestBuffs, Action onCoreManagersLoaded)
+        {
             if (instance != null)
             {
                 throw new InvalidOperationException("CoreManager instance already exists.");
@@ -47,6 +53,18 @@ namespace Core.Managers
             UserDataManager = new UserDataManager(SystemInfo.deviceUniqueIdentifier);
             loaderUI.AddProgress(10);
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
+            MonoRunner.StartCoroutine(WaitForUserDataLoading(itemCosts,stylesList,colorThemes,baseObstaclesList,bossObstaclesList,poolEntries,treasureChestBuffs,onCoreManagersLoaded));
+        }
+
+        private IEnumerator WaitForUserDataLoading(TextAsset itemCosts, Style[] stylesList,
+            List<ColorTheme> colorThemes, Obstacle[] baseObstaclesList, Obstacle[] bossObstaclesList,
+            PoolEntry[] poolEntries, TreasureChestBuff[] treasureChestBuffs, Action onCoreManagersLoaded)
+        {
+            // Wait until UserDataManager.FinishedLoading returns true
+            yield return new WaitUntil(() => UserDataManager.FinishedLoading());
+            Debug.Log($"finished loading : {UserDataManager.FinishedLoading()}");
+            InitializeManagers(itemCosts, stylesList, colorThemes, baseObstaclesList, bossObstaclesList, poolEntries,
+                treasureChestBuffs, onCoreManagersLoaded);
         }
 
         public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles,Obstacle[] bossObstacles, PoolEntry[] poolEntries, TreasureChestBuff[] rewards, Action onComplete)

@@ -7728,6 +7728,37 @@ RectTransform:
   m_AnchoredPosition: {x: 150, y: -157.5}
   m_SizeDelta: {x: 300, y: 315}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &664978483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 664978484}
+  m_Layer: 0
+  m_Name: Center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &664978484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 664978483}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 772710175}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &686435064
 GameObject:
   m_ObjectHideFlags: 0
@@ -8863,7 +8894,7 @@ PrefabInstance:
     - target: {fileID: 5645626009961224440, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: rotationAxis
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 664978483}
     - target: {fileID: 5645626009961224440, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
       propertyPath: rotationSpeed
       value: 40
@@ -8934,9 +8965,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7998751678068865717, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 664978484}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
+--- !u!4 &772710175 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7998751678068865717, guid: 065945b17e7f2cd469a9827059f32f8c, type: 3}
+  m_PrefabInstance: {fileID: 772710174}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &815584821
 GameObject:
   m_ObjectHideFlags: 0

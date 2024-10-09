@@ -9,6 +9,8 @@ namespace ScriptableObjects
     [CreateAssetMenu(fileName = "NewStyle", menuName = "Styles/Style", order = 1)]
     public class Style : ScriptableObject
     {
+        public static FirebasePath path = FirebasePath.stylesOwned;
+
         [SerializeField] private Item styleName;
         [SerializeField] private Material material;
         [SerializeField] private Texture texture;

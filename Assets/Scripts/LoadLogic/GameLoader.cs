@@ -49,17 +49,13 @@ namespace LoaderLogic
 
         private void LoadCoreManager()
         {
-           var coreManager =  new CoreManager(loaderUI);
-           LoadLocalData();
-           coreManager.InitializeManagers(itemCosts, stylesList, colorThemes, baseObstaclesList,bossObstaclesList, poolEntries,treasureChestBuffs, OnCoreManagersLoaded);
-            
+            var coreManager = new CoreManager(loaderUI,itemCosts, stylesList, colorThemes, baseObstaclesList,bossObstaclesList, poolEntries,treasureChestBuffs, OnCoreManagersLoaded);
         }
 
         private void OnCoreManagersLoaded()
         {
             SceneManager.sceneLoaded += OnLoadData;
             SceneManager.LoadScene("MainMenu");
-            return;
         }
     
 

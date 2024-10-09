@@ -11,7 +11,7 @@ namespace GameLogic.ConsumablesGeneration
 {
     public class BuffManager
     {
-        public float ParticleTransferDuration => UnityEngine.Random.Range(0.3f, 0.85f);
+        public float ParticleTransferDuration => 0.5f;
 
         private Dictionary<Color, TreasureChestBuff> colorToBuffMap;
         private Dictionary<Color, ValueTuple<ValueTuple<EventNames, EventNames>, float>> activeBuffsDurationsLeft;

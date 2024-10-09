@@ -68,7 +68,7 @@ namespace GameLogic.ObstacleGeneration
                     List<StyleableObject> obstacleParts = obstacle.ExtractStyleableObjects();
                     foreach (var part in obstacleParts)
                     {
-                        if (UtilityFunctions.CompareColors(part.Renderer.color, color))
+                        if (UtilityFunctions.CompareColors(part.GetColor(), color))
                         {
                             part.gameObject.SetActive(false);
                         }
@@ -92,7 +92,7 @@ namespace GameLogic.ObstacleGeneration
                 {
                     foreach (var part in obstacle.ExtractStyleableObjects())
                     {
-                        part.Renderer.color = color;
+                        part.SetColor(color);
                         colorRushColor = color;
                     }
                 }
@@ -114,7 +114,7 @@ namespace GameLogic.ObstacleGeneration
         {
             while (true)
             {
-               print($"Time  : {Time.time} time for new obstacle : {lastTimeGenerated + maxTimeBetweenRockets}");
+               // print($"Time  : {Time.time} time for new obstacle : {lastTimeGenerated + maxTimeBetweenRockets}");
                 if (currentObstacle.ObstacleType == ObstacleType.Rocket && Time.time > lastTimeGenerated + maxTimeBetweenRockets)
                 {
                     CoreManager.instance.PoolManager.ReturnToPool(currentObstacle.PoolType, currentObstacle.gameObject);
@@ -160,7 +160,7 @@ namespace GameLogic.ObstacleGeneration
             {
                 foreach (var part in currentObstacle.ExtractStyleableObjects())
                 {
-                    part.Renderer.color = colorRushColor;
+                    part.SetColor(colorRushColor);
                 }
             }
 
@@ -169,7 +169,7 @@ namespace GameLogic.ObstacleGeneration
             return currentObstacle;
         }
 
-        private static float MapDistance(float x)
+        private static float MapDistance(float x) 
         {
             return 3f - 0.06f * x;
         }

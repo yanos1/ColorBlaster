@@ -7,6 +7,7 @@ using Interfaces;
 using PoolTypes;
 using ScriptableObjects;
 using UI;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,13 @@ namespace GameLogic.ObstacleGeneration
     public class ObstaclePart : StyleableObject, IResettable
     {
         // [SerializeField] private Image gemUIimage;
+        private float gemTravelingDistance = 1.2f;
 
+
+        public override void Awake()
+        {
+            base.Awake();
+        }
 
         public override void ChangeStyle()
         {
@@ -32,7 +39,7 @@ namespace GameLogic.ObstacleGeneration
         public virtual void ResetGameObject()
         {
             Color? deleteColorBuffColor = CoreManager.instance.BuffManager.IsBuffActive(BuffType.DeleteColorBuff);
-            if (deleteColorBuffColor is Color color && UtilityFunctions.CompareColors(color, Renderer.color))
+            if (deleteColorBuffColor is Color color && UtilityFunctions.CompareColors(color, GetColor()))
             {
                 return; // we detcted a color that is meant to be inactive, so we return before activating.
             }
@@ -45,11 +52,11 @@ namespace GameLogic.ObstacleGeneration
             print("gem earned from obstacle");
             float speed = CoreManager.instance.BuffManager.ParticleTransferDuration;
             GameObject gem = CoreManager.instance.PoolManager.GetFromPool(PoolType.Gem);
-            gem.GetComponent<SpriteRenderer>().color = Renderer.color;
-            gem.GetComponent<TrailRenderer>().startColor = Renderer.color;
+            gem.GetComponent<SpriteRenderer>().color = GetColor();
+            gem.GetComponent<TrailRenderer>().startColor = GetColor();
             CoreManager.instance.MonoRunner.StartCoroutine(UtilityFunctions.MoveObjectOverTime(gem, transform.position,
                 transform.rotation,
-                GameUIManager.instance.GetGemsCollectedUIPosition(), transform.rotation, speed,
+                transform.position +Vector3.up*gemTravelingDistance, transform.rotation, speed,
                 () =>
                 {
                     CoreManager.instance.EventManager.InvokeEvent(EventNames.GemPrefabArrived, null);

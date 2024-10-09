@@ -16,7 +16,7 @@ namespace GameLogic.PlayerRelated
             if (obstaclePart is not null)
             {
                 //TODO enter sound
-                CoreManager.instance.BuffManager.StopBuff(Renderer.color);
+                CoreManager.instance.BuffManager.StopBuff(GetColor());
                 obstaclePart.Shatter();
                 Shatter();
             }
@@ -30,7 +30,7 @@ namespace GameLogic.PlayerRelated
         public override void SetColor(Color color)
         {
             float newAlpha = opacity;
-            Renderer.color = new Color(color.r, color.g, color.b, newAlpha);
+            base.SetColor(new Color(color.r, color.g, color.b, newAlpha));
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿{
-  "items": [
+  "itemCosts": [
     {
-      "item": "Revive",
+      "item": "XXX",
       "cost": 1
     },
     {
@@ -47,6 +47,10 @@
     {
       "item": "ColorBlasterBooster",
       "cost": 10
+    },
+    {
+      "item": "Revive",
+      "cost": 1
     }
   ]
 }

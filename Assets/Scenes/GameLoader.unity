@@ -383,7 +383,6 @@ MonoBehaviour:
   stylesList:
   - {fileID: 11400000, guid: 68a3958377c88094fb60914059da531d, type: 2}
   - {fileID: 11400000, guid: b159f557ac1d9424a97aec324c2c9ebd, type: 2}
-  - {fileID: 11400000, guid: e92e6250a2a7ce4449411a29f39b0ee1, type: 2}
   colorThemes:
   - type: 1
     color1: {r: 0, g: 0.3422258, b: 1, a: 1}

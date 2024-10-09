@@ -9,6 +9,7 @@ namespace GameLogic.ObstacleGeneration
     public class Rocket : ObstaclePart
     {
         [SerializeField] private Vector2 spawnYPositionRange;
+        [SerializeField] private TrailRenderer trail;
         [SerializeField] private SpriteRenderer _alertRenderer;
         [SerializeField] private float frequency; // Frequency of the sine wave motion
         [SerializeField] private float amplitude; // Amplitude of the sine wave motion
@@ -19,8 +20,10 @@ namespace GameLogic.ObstacleGeneration
         private float speedMultiplier; // Multiplier of the baseobstacleSpeed.
 
 
-        private void Awake()
+        public override void Awake()
         {
+            base.Awake();
+            trail = GetComponent<TrailRenderer>();
             imageFadeDuration = 0.5f;
             numOfAlerts = 3;
             startDirection = Random.value > 0.5 ? 1: -1;
@@ -59,8 +62,8 @@ namespace GameLogic.ObstacleGeneration
             base.ResetGameObject();
             StopAllCoroutines();
             transform.position = new Vector3(Random.Range(spawnYPositionRange.x, spawnYPositionRange.y),
-                transform.parent.parent.position.y, 0);   // I DONT LIKE THIS AT ALL !!
-            print($"color: {Renderer.color}");
+                transform.parent.parent.position.y, 0);   // I DONT LIKE THIS AT ALL
+            trail.startColor = GetColor();
             startDirection = Random.value > 0.5 ? 1 : -1;
             StartCoroutine(AlertThenLaunch());
         }
