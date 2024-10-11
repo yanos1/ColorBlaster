@@ -185,10 +185,10 @@ namespace GameLogic.ConsumablesGeneration
             activeBuffsDurationsLeft.Clear();
         }
 
-        public void ActivateBuff(Vector3 startPosition, Color color, float buffStrength)
+        public void AddBuff(Vector3 startPosition, Color color, float buffStrength)
         {
             TreasureChestBuff buff = GetBuff(color);
-            MoveParticlesToPlayer(buff, startPosition, color, buffStrength);
+            MoveParticlesToBuffUI(buff, startPosition, color, buffStrength);
         }
 
         public Color? IsBuffActive(BuffType buffType) // can be optimised

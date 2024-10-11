@@ -15,7 +15,6 @@ namespace GameLogic.ObstacleGeneration
     {
         [SerializeField] private TextMeshProUGUI numberOfShotsUI;
         [SerializeField] private PoolType explodeType;
-        [SerializeField] private Transform GemsCollectedUIPosition;
 
         private int amountOfShotsToBreak;
         private int minAmountOfShots = 2;
@@ -27,13 +26,10 @@ namespace GameLogic.ObstacleGeneration
 
         public override void Shatter()
         {
-            
-            
-            
             TakeHit();
             if (currentHits == amountOfShotsToBreak)
             {
-                CoreManager.instance.BuffManager.ActivateBuff(transform.position,GetColor(), currentHits);
+                CoreManager.instance.BuffManager.AddBuff(transform.position, GetColor(), currentHits);
                 // TreasureChestBuff buff = CoreManager.instance.BuffManager.GetReward(Renderer.color);
                 // float buffMultiplier = buff.buffType == BuffType.GemBuff ? currentHits * GetGemMultyplier() : 1.5f;
                 // CoreManager.instance.BuffManager.MoveParticlesToPlayer(transform.position, buff.poolType,
@@ -72,7 +68,6 @@ namespace GameLogic.ObstacleGeneration
             Debug.Log("HIT CHEST");
             if (other.gameObject.GetComponent<Shield>() is not null)
             {
-                
                 base.Shatter();
             }
         }
