@@ -61,6 +61,7 @@ namespace Core.Managers
             PoolEntry[] poolEntries, TreasureChestBuff[] treasureChestBuffs, Action onCoreManagersLoaded)
         {
             // Wait until UserDataManager.FinishedLoading returns true
+            Debug.Log("WAITING DATA...");
             yield return new WaitUntil(() => UserDataManager.FinishedLoading());
             Debug.Log($"finished loading : {UserDataManager.FinishedLoading()}");
             InitializeManagers(itemCosts, stylesList, colorThemes, baseObstaclesList, bossObstaclesList, poolEntries,

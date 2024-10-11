@@ -64,6 +64,7 @@ namespace Core.Managers
             {
                 CoreManager.instance.ControlPanelManager.Level = 0;
                 CoreManager.instance.ControlPanelManager.Session++;
+                CoreManager.instance.EventManager.InvokeEvent(EventNames.SessionUp, null);
                 Debug.Log("New Session Is Called!");
             }
 

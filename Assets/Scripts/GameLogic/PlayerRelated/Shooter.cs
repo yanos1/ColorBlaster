@@ -14,17 +14,26 @@ namespace GameLogic.PlayerRelated
         private Color lastShotColor;
         private float shootingCoolDown;
         private float lastTimeShot;
+
+        private TouchInputManager _inputManager;
     
+        
+        public void Init(TouchInputManager inputManager)
+        {
+            _inputManager = inputManager;
+        }
         void Start()
         {
             lastTimeShot = Time.time;
             shootingCoolDown = CoreManager.instance.ControlPanelManager.shootingCooldown;
+            
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKey(KeyCode.Space) && Time.time > shootingCoolDown + lastTimeShot)
+            if (CoreManager.instance.Player.IsDead) return;
+            if (Time.time > shootingCoolDown + lastTimeShot && (Input.GetKey(KeyCode.Space) || _inputManager.GetTouchPosition() ==null))
             {
 
                 Shoot();
@@ -39,14 +48,6 @@ namespace GameLogic.PlayerRelated
             lastTimeShot = Time.time;
             CoreManager.instance.EventManager.InvokeEvent(EventNames.Shoot, null);
         }
-
-        public void TryToShoot()
-        {
-            if (Time.time > shootingCoolDown + lastTimeShot)
-            {
-                Shoot();
-                print("SHOOOTT");
-            }
-        }
+        
     }
 }

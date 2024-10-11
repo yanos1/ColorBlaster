@@ -385,10 +385,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b159f557ac1d9424a97aec324c2c9ebd, type: 2}
   colorThemes:
   - type: 1
-    color1: {r: 0, g: 0.3422258, b: 1, a: 1}
-    color2: {r: 1, g: 0, b: 0, a: 1}
-    color3: {r: 0.96812177, g: 1, b: 0, a: 1}
-    color4: {r: 0, g: 1, b: 0.06365299, a: 1}
+    color1: {r: 0.3075471, g: 0.54379576, b: 1, a: 1}
+    color2: {r: 1, g: 0.8875291, b: 0.3075471, a: 1}
+    color3: {r: 1, g: 0.3446009, b: 0.2471698, a: 1}
+    color4: {r: 0.536625, g: 0.97735846, b: 0.56383085, a: 1}
   - type: 2
     color1: {r: 0.46195084, g: 0.514708, b: 0.9169811, a: 1}
     color2: {r: 0.90188676, g: 0.5224136, b: 0.8323069, a: 1}
@@ -458,7 +458,7 @@ MonoBehaviour:
     count: 2
   - type: 16
     prefab: {fileID: 3694219356360321770, guid: 74dba86f013f48642887310866f026a6, type: 3}
-    count: 20
+    count: 40
   - type: 17
     prefab: {fileID: 423088138292595383, guid: 335a29bf0c3cfe24ab87cff3d539575c, type: 3}
     count: 3

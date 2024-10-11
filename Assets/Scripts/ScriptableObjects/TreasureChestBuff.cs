@@ -19,8 +19,9 @@ namespace GameLogic.ConsumablesGeneration
         public EventNames deactivationEvent;
         public EventNames prefabReachTargetEvent; //will be used for power ups that trigger ui change (like gem pickup)
         public Image UIImage;// icon used for the UIbar representing the buff duration left
-        
-        
+        public GameObject UIButton;   // icon of the buff itself on the buff UI
+
+
     }
     
     public enum BuffType

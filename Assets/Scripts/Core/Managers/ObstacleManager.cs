@@ -36,13 +36,13 @@ namespace Core.Managers
         {
             InitializeBaseObstacleMap();
             // SetInitialNumberOfObstaclesPerDifficulty();
-            foreach (var kvp in weightToObstacleMap)
-            {
-                foreach (var obs in kvp.Value.Item2)
-                {
-                    Debug.Log("aaa " + obs.name);
-                }
-            }
+            // foreach (var kvp in weightToObstacleMap)
+            // {
+            //     foreach (var obs in kvp.Value.Item2)
+            //     {
+            //         Debug.Log("aaa " + obs.name);
+            //     }
+            // }
             return weightToObstacleMap;
         }
 
@@ -54,12 +54,10 @@ namespace Core.Managers
 
         private void InitializeBossObstacleMap()
         {
-            Debug.Log($"boss obstacles amount : {_bossObstacleData.Length}");
             foreach (var obs in _bossObstacleData)
             {
                 if (SkipObstacleType(obs.ObstacleType))
                 {
-                    Debug.Log($"SKIPPED {obs.ObstacleType}");
                     continue;
                 }
 
@@ -67,7 +65,6 @@ namespace Core.Managers
                 {
                     bossObstaclesMap[obs.ObstacleType] = (_minNumOfAvailableObstacles, new List<Obstacle>());
                 }
-                Debug.Log($"added {obs.ObstacleType}");
                 bossObstaclesMap[obs.ObstacleType].Item2.Add(obs);
             }
 
@@ -93,10 +90,10 @@ namespace Core.Managers
         {
             foreach (var obs in _obstacleData)
             {
-                Debug.Log("bbb" + obs.name);
+                // Debug.Log("bbb" + obs.name);
                 if (SkipObstacleType(obs.ObstacleType))
                 {
-                    Debug.Log($"SKIPPED {obs.ObstacleType}");
+                    // Debug.Log($"SKIPPED {obs.ObstacleType}");
                     continue;
                 }
 
@@ -141,9 +138,7 @@ namespace Core.Managers
 
         private static bool SkipObstacleType(ObstacleType type)
         {
-            Debug.Log("TRYING TO SKIP");
-            Debug.Log(
-                $"type : {type}  1. {CoreManager.instance.ControlPanelManager.canSpawnChasingObstacles} {CoreManager.instance.ControlPanelManager.canSpawnRotatingObstacles}");
+      
             bool skip = ((type == ObstacleType.Chasing &&
                           !CoreManager.instance.ControlPanelManager.canSpawnChasingObstacles) ||
                          (type == ObstacleType.Rotating &&
@@ -154,8 +149,7 @@ namespace Core.Managers
                           !CoreManager.instance.ControlPanelManager.canSpawnMovingObstacles) ||
                          type == ObstacleType.Rocket &&
                          !CoreManager.instance.ControlPanelManager.canSpawnRockets);
-            Debug.Log(skip);
-            Debug.Log("---------");
+          
             return skip;
         }
     }

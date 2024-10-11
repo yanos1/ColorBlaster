@@ -1,6 +1,7 @@
 ﻿using Core.Managers;
 using Particles;
 using ScriptableObjects;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameLogic.StyleRelated
@@ -9,7 +10,7 @@ namespace GameLogic.StyleRelated
     {
         public SpriteRenderer Renderer => _renderer;
 
-        protected SpriteRenderer _renderer;
+        private SpriteRenderer _renderer;
 
         protected AudioSource _audioSource;
 
@@ -73,8 +74,7 @@ namespace GameLogic.StyleRelated
 
         public virtual void SetColor(Color newColor)
         {
-            print(name);
-            print($"renderer : {_renderer}");
+            print($"renderer {_renderer}");
             _renderer.materials[0].color = newColor;
         }
         

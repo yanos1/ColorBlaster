@@ -83,5 +83,7 @@ namespace Core.Managers
 
         DeleteColorPrefabArrived=27,
         DatabaseLoaded = 28,
+        SessionUp = 29,
+        BoughtItem=30,
     }
 }

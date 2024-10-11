@@ -80,34 +80,41 @@ namespace Core.Managers
 
                 if (task.IsCompleted)
                 {
+                    Debug.Log("Starting To Load DB DATA !");
                     DataSnapshot snapshot = task.Result;
-                    if (snapshot.Exists)
+                    Debug.Log($"111 {task.Result.Exists}");
+                    if (!snapshot.Exists)
                     {
-                        // Retrieve owned data
-                        gemsOwned = int.Parse(snapshot.Child(FirebasePath.gemsOwned.ToString()).Value.ToString());
-
-                        // Retrieve all dictionaries of items in a loop
-                        foreach (FirebasePath path in new[]
-                                 {
-                                     FirebasePath.avatarsOwned, FirebasePath.stylesOwned, FirebasePath.colorThemesOwned
-                                 })
-                        {
-                            var dict = new Dictionary<Item, bool>();
-                            GetDataOfType(snapshot, path, dict);
-                            itemsOwned[path] = dict;
-                        }
+                        Debug.Log("call new user");
+                        InitializeUserData();
+                        return;
                     }
 
-                    // Retrieve boosters
-                    GetBoosterData(snapshot);
+                    Debug.Log("load data into data structures");
+                    AssignDataLocally(snapshot);
+                    Debug.Log("FINISHED LOADING DB DATA !");
                 }
-                else
-                {
-                    InitializeUserData(userId);
-                }
-
-                finishedLoading = true;
             });
+        }
+
+        private void AssignDataLocally(DataSnapshot snapshot)
+        {
+            gemsOwned = int.Parse(snapshot.Child(FirebasePath.gemsOwned.ToString()).Value.ToString());
+
+            // Retrieve all dictionaries of items in a loop
+            foreach (FirebasePath path in new[]
+                         { FirebasePath.avatarsOwned, FirebasePath.stylesOwned, FirebasePath.colorThemesOwned })
+            {
+                Debug.Log($"LOADING {path.ToString()}");
+                var dict = new Dictionary<Item, bool>();
+                GetDataOfType(snapshot, path, dict);
+                itemsOwned[path] = dict;
+            }
+
+            // Retrieve boosters
+            GetBoosterData(snapshot);
+            Debug.Log("DONE !");
+            finishedLoading = true;
         }
 
 
@@ -116,8 +123,10 @@ namespace Core.Managers
         {
             foreach (DataSnapshot data in snapshot.Child(path.ToString()).Children)
             {
+                Debug.Log($"trying to load {data} 111 ");
                 if (Enum.TryParse(data.Key, out Item item) && bool.TryParse(data.Value.ToString(), out bool isEquipped))
                 {
+                    Debug.Log($"{item.ToString()} found 111");
                     dict[item] = isEquipped;
                 }
             }
@@ -130,24 +139,53 @@ namespace Core.Managers
             {
                 if (Enum.TryParse(boosterSnapshot.Key, out Item booster))
                 {
+                    Debug.Log($"owned booster : {booster} amount: {boosterSnapshot.Value}");
                     boostersOwned[booster] = int.Parse(boosterSnapshot.Value.ToString());
                 }
             }
         }
 
         // Initialize default data for a new user
-        private void InitializeUserData(string userId)
+        // Initialize default data for a new user safely
+        private async void InitializeUserData()
         {
-            userRef.Child(FirebasePath.gemsOwned.ToString()).SetValueAsync(0);
-            userRef.Child(FirebasePath.stylesOwned.ToString()).SetValueAsync(new Dictionary<int, bool>
-                { { (int)Item.DefaultStyle, true } });
-            userRef.Child(FirebasePath.colorThemesOwned.ToString()).SetValueAsync(new Dictionary<int, bool>
-                { { (int)Item.DefaultColorTheme, true } });
-            userRef.Child(FirebasePath.avatarsOwned.ToString()).SetValueAsync(new Dictionary<int, bool>
-                { { (int)Item.DefaultAvatar, true } });
-            userRef.Child(FirebasePath.boostersOwned.ToString()).SetValueAsync(new Dictionary<int, int>
-                { { (int)Item.ShieldBooster, 0 } });
+            Debug.Log("Initializing new user data...");
+
+            // Create tasks for each set operation
+            // Use Task.WhenAll to wait for all tasks to complete
+            await Task.WhenAll(
+                userRef.Child(FirebasePath.stylesOwned.ToString()).SetValueAsync(new Dictionary<string, object>
+                {
+                    { ((int)Item.DefaultStyle).ToString(), true }
+                }),
+                userRef.Child(FirebasePath.gemsOwned.ToString()).SetValueAsync(0),
+                userRef.Child(FirebasePath.colorThemesOwned.ToString()).SetValueAsync(new Dictionary<string, object>
+                {
+                    { ((int)Item.DefaultColorTheme).ToString(), true }
+                }),
+                userRef.Child(FirebasePath.avatarsOwned.ToString()).SetValueAsync(new Dictionary<string, object>
+                {
+                    { ((int)Item.DefaultAvatar).ToString(), true }
+                }),
+                userRef.Child(FirebasePath.boostersOwned.ToString()).SetValueAsync(new Dictionary<string, object>
+                {
+                    { ((int)Item.ShieldBooster).ToString(), 0 }, {((int)Item.ColorBlasterBooster).ToString(), 0}
+                })
+            );
+
+            // Get the updated user data after all set operations are complete
+            DataSnapshot snapshot = await userRef.GetValueAsync();
+
+            if (snapshot.Exists)
+            {
+                AssignDataLocally(snapshot);
+            }
+            else
+            {
+                Debug.Log("Error: User data not found.");
+            }
         }
+
 
         public bool IsItemEquipped(Item item, FirebasePath firebasePath)
         {

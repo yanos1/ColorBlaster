@@ -74,7 +74,7 @@ namespace GameLogic.ConsumablesGeneration
 
         private void InitColorToRewardMap(TreasureChestBuff[] allBuffs)
         {
-            Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
+            Color[] currentColors = CoreManager.instance.ColorsManager.AllColors;
             int i = 0;
             foreach (var buff in allBuffs)
             {
@@ -124,12 +124,12 @@ namespace GameLogic.ConsumablesGeneration
         }
 
 
-        public void MoveParticlesToPlayer(TreasureChestBuff buff, Vector3 startPosition, Color color, float strength)
+        public void MoveParticlesToBuffUI(TreasureChestBuff buff, Vector3 startPosition, Color color, float strength)
         {
             float maxDuration = 0f;
             int numberOfGemsToEarn = (int)(strength * buff.buffMultiPlier);
             int buffDuration = numberOfGemsToEarn;
-            Transform targetPosition = CoreManager.instance.Player.transform;
+            Transform targetPosition = buff.UIButton.transform;
             bool firstParticleReached = false;
             for (int i = 0; i < numberOfGemsToEarn; ++i)
             {
@@ -139,7 +139,7 @@ namespace GameLogic.ConsumablesGeneration
                 GameObject gem = CoreManager.instance.PoolManager.GetFromPool(buff.poolType);
                 gem.transform.position = startPosition;
                 UtilityFunctions.MoveObjectInRandomDirection(gem.transform, 2f);
-                gem.GetComponent<SpriteRenderer>().color = color;
+                gem.GetComponent<SpriteRenderer>().materials[0].color = color;   // ew thats ugly, better build a pool that manages allows downcast
                 gem.GetComponent<TrailRenderer>().startColor = color;
 
                 CoreManager.instance.MonoRunner.StartCoroutine(UtilityFunctions.MoveObjectOverTime(gem,

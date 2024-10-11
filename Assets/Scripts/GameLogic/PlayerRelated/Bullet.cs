@@ -40,11 +40,10 @@ namespace GameLogic.PlayerRelated
         private void OnTriggerEnter2D(Collider2D other)
         {
             ColorBlock colorBlock = other.gameObject.GetComponent<ColorBlock>();
-            if (colorBlock is not null)
+            if (colorBlock is not null && GetColor() == Color.white)
             {
                 Color color = colorBlock.GetColor();
                 SetColor(color);
-                CoreManager.instance.EventManager.InvokeEvent(EventNames.Shoot, color);
             }
 
             ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();
@@ -70,7 +69,7 @@ namespace GameLogic.PlayerRelated
 
         public void ResetGameObject()
         {
-            _renderer.color = baseColor;
+            SetColor(baseColor);
         }
 
         public override void ChangeStyle()

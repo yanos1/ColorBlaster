@@ -1,6 +1,7 @@
 ﻿using Core.Managers;
 using Extentions;
 using GameLogic.ConsumablesGeneration;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace GameLogic.PlayerRelated
@@ -9,6 +10,7 @@ namespace GameLogic.PlayerRelated
     {
         public Shooter Shooter => shooter;
         public PlayerMovement PlayerMovement => playerMovement;
+        
 
         public bool IsDead
         {
@@ -16,6 +18,7 @@ namespace GameLogic.PlayerRelated
             set => isDead = value;
         }
 
+        [SerializeField] public TouchInputManager inputManager;
         [SerializeField] private Shooter shooter;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private Shield shieldBuff;
@@ -36,6 +39,8 @@ namespace GameLogic.PlayerRelated
             rb = GetComponent<Rigidbody2D>();
             startPos = transform.position;
             isDead = false;
+            shooter.Init(inputManager);
+            playerMovement.Init(inputManager);
         }
 
         private void OnEnable()

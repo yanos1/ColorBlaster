@@ -45,18 +45,24 @@ namespace Core.Managers
 
     public class ColorsManager
     {
-        public Color[] CurrentColors => _currentColorTheme;
+        public Color[] CurrentColors => _currentColorTheme[..maxColors];
+        public Color[] AllColors => _currentColorTheme;
         
         private  Color[] _currentColorTheme;
 
         // Serialized list where each element holds 4 colors
         private readonly List<ColorTheme> _colorSets;
+        private int maxColors;
+        private int minAmountOfColors;
+
 
         // Dictionary where each enum key maps to an array of 4 colors
 
         public ColorsManager(List<ColorTheme> colorSets)
         {
+            minAmountOfColors = 2;
             _colorSets = colorSets;
+            maxColors = minAmountOfColors;
 
             // Load saved color theme
             CoreManager.instance.SaveManager.Load<ColorSaver>(savedData =>
@@ -78,7 +84,18 @@ namespace Core.Managers
                     // Save the default theme if no saved theme was found
                     CoreManager.instance.SaveManager.Save(new ColorSaver(ColorThemeType.Default.ToString()));
                 }
+            CoreManager.instance.EventManager.AddListener(EventNames.SessionUp, (object obj)=> maxColors=Mathf.Min(maxColors+1,_currentColorTheme.Length));
+            CoreManager.instance.EventManager.AddListener(EventNames.GameOver, (object obj)=> maxColors=minAmountOfColors);
             });
+        }
+
+
+        public void OnDestroy()
+        {
+            CoreManager.instance.EventManager.RemoveListener(EventNames.SessionUp, (object obj)=> maxColors=Mathf.Min(maxColors+1,_currentColorTheme.Length));
+            CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, (object obj)=> maxColors=minAmountOfColors);
+
+
         }
 
         // You can add methods to get or manipulate colors as needed
@@ -89,7 +106,7 @@ namespace Core.Managers
 
         public void ChangeColorTheme(ColorThemeType type)
         {
-            _currentColorTheme = _colorSets.FirstOrDefault(theme => type == theme.type).GetColors();
+            _currentColorTheme = _colorSets.FirstOrDefault(theme => type == theme.type)?.GetColors();
         }
     }
 }

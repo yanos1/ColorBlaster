@@ -30,23 +30,15 @@ namespace GameLogic.PlayerRelated
 
         private void Awake()
         {
-            Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
-
-            if (blocks.Length != currentColors.Length)
-            {
-                Debug.Log("Mismatch between style colors and color blocks");
-            }
-
-            for (int i = 0; i < currentColors.Length; ++i)
-            {
-                blocks[i].SetColor(currentColors[i]);
-                print(currentColors[i]);
-            }
+            SetColorWheelColors(null);
 
             invincible = true;
             playerDead = false;
             isShooting = false;
         }
+
+        
+  
 
         private void OnEnable()
         {
@@ -54,6 +46,7 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.AddListener(EventNames.Shoot, SetIsShooting);
             CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, OnColorRushPickUp);
             CoreManager.instance.EventManager.AddListener(EventNames.DeactivateColorRush, OnColorRushEnd);
+            CoreManager.instance.EventManager.AddListener(EventNames.SessionUp, SetColorWheelColors);
         }
 
         private void OnDisable()
@@ -62,8 +55,19 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.RemoveListener(EventNames.Shoot, SetIsShooting);
             CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, OnColorRushPickUp);
             CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, OnColorRushEnd);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.SessionUp, SetColorWheelColors);
+
         }
 
+        private void SetColorWheelColors(object obj)
+        {
+            Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
+
+            for (int i = 0; i < blocks.Length; ++i)
+            {
+                blocks[i].SetColor(currentColors[i%currentColors.Length]);
+            }
+        }
         private void OnColorRushPickUp(object obj)
         {
             if (obj is (Color color, float duration, TreasureChestBuff buff))
@@ -85,7 +89,7 @@ namespace GameLogic.PlayerRelated
             {
                 Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
                 Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
-                block.SetColor(currentColors[i++]);
+                block.SetColor(currentColors[i++%currentColors.Length]);
                 block.Renderer.sharedMaterials[1] = currentStyle.Material;
                 block.Renderer.sharedMaterials[1].shader = currentStyle.Shader;
             }
@@ -151,13 +155,13 @@ namespace GameLogic.PlayerRelated
                     curReviveDuration,
                     i == blocks.Length - 1
                         ? null
-                        : () => StartCoroutine(SetPlayerDeadAfterDelay(maxReviveDuration)) // Call the method
+                        : () => StartCoroutine(SetPlayeAliveAfterDelay(maxReviveDuration)) // Call the method
                 ));
             }
         }
 
 
-        private IEnumerator SetPlayerDeadAfterDelay(float delay)
+        private IEnumerator SetPlayeAliveAfterDelay(float delay)
         {
             yield return new WaitForSeconds(delay);
             CoreManager.instance.EventManager.InvokeEvent(EventNames.FinishedReviving, null);

@@ -59,14 +59,14 @@ namespace Core.Managers
             levelSpeeds = Array.ConvertAll(PlayerPrefs.GetString("LevelSpeeds", "2.1,2.3,2.5,2.7,2.9").Split(","),
                 float.Parse);
             colorWheelShootingRotationSpeed = PlayerPrefs.GetFloat("ColorWheelShootingRotationSpeed", 20f);
-            obstacleRotationSpeed = PlayerPrefs.GetFloat("ObstacleRotationSpeed", 25f);
-            colorWheelRotationSpeedIncrease = PlayerPrefs.GetInt("colorWheelRotationSpeedIncrease", 15);
+            obstacleRotationSpeed = PlayerPrefs.GetFloat("ObstacleRotationSpeed", 12f);
+            colorWheelRotationSpeedIncrease = PlayerPrefs.GetInt("colorWheelRotationSpeedIncrease", 13);
             obstacleRotationSpeedIncreasePerLevel = PlayerPrefs.GetFloat("ObstacleRotationSpeedIncreasePerLevel", 2f);
-            shootingCooldown = PlayerPrefs.GetFloat("ShootingCooldown", 0.1f);
-            playerMovementSpeed = PlayerPrefs.GetFloat("PlayerMovementSpeed", 5f);
-            chasingObstaclesMovespeed = PlayerPrefs.GetFloat("ChasingObstaclesMovespeed", 1.5f);
-            movingObstaclesMovespeed = PlayerPrefs.GetFloat("MovingObstaclesMovespeed", 2.2f);
-            offsettingobstaclesMovespeed = PlayerPrefs.GetFloat("OffsettingObstaclesMovespeed", 1.9f);
+            shootingCooldown = PlayerPrefs.GetFloat("ShootingCooldown", 0.15f);
+            playerMovementSpeed = PlayerPrefs.GetFloat("PlayerMovementSpeed", 6.5f);
+            chasingObstaclesMovespeed = PlayerPrefs.GetFloat("ChasingObstaclesMovespeed", 1.3f);
+            movingObstaclesMovespeed = PlayerPrefs.GetFloat("MovingObstaclesMovespeed", 1.9f);
+            offsettingobstaclesMovespeed = PlayerPrefs.GetFloat("OffsettingObstaclesMovespeed", 1.5f);
 
             obstaclesPerLevel = PlayerPrefs.GetInt("ObstaclesPerLevel", 10);
             sessionMultiplier = PlayerPrefs.GetFloat("SessionMultiplier", 1.1f);
@@ -85,7 +85,7 @@ namespace Core.Managers
             minBossLevelDifficulty = PlayerPrefs.GetInt("MinBossLevelDifficulty", 4);
             maxBossLevelDifficulty = PlayerPrefs.GetInt("MaxBossLevelDifficulty", 12);
             bossLevelDifficultyIncreasePerLevel = PlayerPrefs.GetFloat("bossLevelDifficultyIncreasePerLevel", 1.5f);
-            distanceBetweenObstacles = PlayerPrefs.GetFloat("DistanceBetweenObstacles", -2.5f);
+            distanceBetweenObstacles = PlayerPrefs.GetFloat("DistanceBetweenObstacles", 70f);
         }
 
         private int[][] ParseArray(string str)

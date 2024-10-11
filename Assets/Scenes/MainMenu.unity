@@ -4360,7 +4360,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 313486697238078320, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
       propertyPath: m_Name
-      value: GemsCollectedUI
+      value: GemsOwned
+      objectReference: {fileID: 0}
+    - target: {fileID: 2050661477867756056, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
+      propertyPath: m_Name
+      value: GemsOwned
       objectReference: {fileID: 0}
     - target: {fileID: 2181166465822120714, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
       propertyPath: m_Pivot.x
@@ -4424,11 +4428,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2181166465822120714, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -398.6
+      value: -488
       objectReference: {fileID: 0}
     - target: {fileID: 2181166465822120714, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -50
+      value: -202
       objectReference: {fileID: 0}
     - target: {fileID: 2181166465822120714, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4443,12 +4447,40 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3895327401835351826, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3895327401835351826, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
       propertyPath: m_fontSize
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3895327401835351826, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
+      propertyPath: m_margin.x
+      value: -81.510315
+      objectReference: {fileID: 0}
+    - target: {fileID: 3895327401835351826, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
+      propertyPath: m_margin.y
+      value: -45.831787
+      objectReference: {fileID: 0}
+    - target: {fileID: 3895327401835351826, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
+      propertyPath: m_margin.z
+      value: -148.4076
+      objectReference: {fileID: 0}
+    - target: {fileID: 3895327401835351826, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
       propertyPath: m_fontSizeBase
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3895327401835351826, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5034820571703841248, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 347
+      objectReference: {fileID: 0}
+    - target: {fileID: 5034820571703841248, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -83
       objectReference: {fileID: 0}
     - target: {fileID: 7123454398828937232, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
       propertyPath: m_LocalScale.x
@@ -4470,7 +4502,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -116.9
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7967298540754312526, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -4480,6 +4513,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2181166465822120714, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
   m_PrefabInstance: {fileID: 364451713}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &364451715 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3895327401835351826, guid: 35818750a759cd6459d0c2f5bbd29b8b, type: 3}
+  m_PrefabInstance: {fileID: 364451713}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &395755341
 GameObject:
   m_ObjectHideFlags: 0
@@ -14468,8 +14512,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlPanel: {fileID: 395755341}
-  itemShopPanel: {fileID: 0}
-  gemShopPanel: {fileID: 0}
+  itemShopPanel: {fileID: 1106988349}
+  gemShopPanel: {fileID: 7688921342435122303}
+  gemsOwned: {fileID: 364451715}
 --- !u!114 &1482788911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21854,6 +21899,11 @@ PrefabInstance:
 --- !u!224 &7688921342435122302 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6620238900839894790, guid: fc39b3fc53045044b9ff8663789b542e, type: 3}
+  m_PrefabInstance: {fileID: 7688921342435122301}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7688921342435122303 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 392808402057457377, guid: fc39b3fc53045044b9ff8663789b542e, type: 3}
   m_PrefabInstance: {fileID: 7688921342435122301}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &7835628458302169440

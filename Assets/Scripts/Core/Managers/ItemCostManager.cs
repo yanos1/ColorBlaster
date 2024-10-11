@@ -34,14 +34,12 @@ namespace Core.Managers
         {
             ItemCostList itemList = JsonUtility.FromJson<ItemCostList>(ItemCostJson.text);
             
-            Debug.Log($"LOADING ITEM COSTS {itemList.itemCosts.Count}");
             
             foreach (var itemCost in itemList.itemCosts)
             {
                 // Try to parse the string to the enum
                 if (Enum.TryParse(itemCost.item, out Item parsedItem))
                 {
-                    Debug.Log($"item {parsedItem} cost {itemCost.cost}");
                     itemCosts[parsedItem] = itemCost.cost;
                 }
                 else

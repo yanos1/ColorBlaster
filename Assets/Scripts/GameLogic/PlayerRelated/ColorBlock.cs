@@ -1,4 +1,5 @@
-﻿using Core.Managers;
+﻿using System;
+using Core.Managers;
 using GameLogic.ObstacleGeneration;
 using GameLogic.StyleRelated;
 using ScriptableObjects;
@@ -29,7 +30,7 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.StyleManager.RemoveStyleableObject(this);
         }
         
-        
+
 
         public override Style ApplyStyle()
         {

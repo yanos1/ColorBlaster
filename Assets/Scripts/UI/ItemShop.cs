@@ -27,10 +27,11 @@ namespace UI
 
         void Start()
         {
+            _dataManager = CoreManager.instance.UserDataManager;
+
             InitializeButtonToPanelMap();
             InitializeNonConsumablesItems();
             InitializeConsumablesItems();
-            _dataManager = CoreManager.instance.UserDataManager;
         }
 
         private void InitializeButtonToPanelMap()
@@ -59,7 +60,9 @@ namespace UI
         {
             foreach (var booster in boosters)
             {
+                print(booster.itemType);
                 _dataManager.BoostersOwned.TryGetValue(booster.itemType, out int amount);
+                
                 booster.numberOwned.text = "Owned " +  amount;
             }
         }
@@ -108,7 +111,10 @@ public abstract class ShopItem : MonoBehaviour, IPurchasable
     {
         if (CoreManager.instance.UserDataManager.GemsOwned >= price)
         {
+            
             CoreManager.instance.UserDataManager.AddGems(-price);
+            
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.BoughtItem, price);
             return true;
         }
         else
