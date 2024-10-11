@@ -70,7 +70,7 @@ namespace GameLogic.PlayerRelated
 
         private void ActivateShield(object obj)
         {
-            if (obj is (Color color, float duration, TreasureChestBuff buff))
+            if (obj is (Color color, float duration, Booster buff))
             {
                 print("SET SHIELD ACTIVE");
                 shieldBuff.gameObject.SetActive(true);

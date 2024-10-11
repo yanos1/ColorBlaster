@@ -61,7 +61,7 @@ namespace GameLogic.ObstacleGeneration
 
         private void DisableDeletedColor(object obj)
         {
-            if (obj is (Color color, float duration, TreasureChestBuff buff))
+            if (obj is (Color color, float duration, Booster buff))
             {
                 foreach (var obstacle in activeObstacles)
                 {
@@ -85,7 +85,7 @@ namespace GameLogic.ObstacleGeneration
 
         private void PaintActiveObstacles(object obj)
         {
-            if (obj is (Color color, float duration, TreasureChestBuff buff))
+            if (obj is (Color color, float duration, Booster buff))
             {
                 isColorRushActive = true;
                 foreach (var obstacle in activeObstacles)

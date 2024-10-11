@@ -23,7 +23,7 @@ namespace Core.Managers
         public ObjectPoolManager PoolManager { get; private set; }
         public StyleManager StyleManager { get; private set; }
         public ColorsManager ColorsManager { get; private set; }
-        public BuffManager BuffManager { get; private set; }
+        public BoosterManager BoosterManager { get; private set; }
         public ObstacleManager ObstacleManager { get; private set; }
         public ItemCostManager CostManager { get; private set; }
         public Player Player { get; set; }
@@ -31,17 +31,19 @@ namespace Core.Managers
 
         public CoreManager(GameLoaderUI loaderUI)
         {
-         
         }
 
-        public CoreManager(GameLoaderUI loaderUI, TextAsset itemCosts, Style[] stylesList, List<ColorTheme> colorThemes, Obstacle[] baseObstaclesList, Obstacle[] bossObstaclesList, PoolEntry[] poolEntries, TreasureChestBuff[] treasureChestBuffs, Action onCoreManagersLoaded)
+        public CoreManager(GameLoaderUI loaderUI, TextAsset itemCosts, Style[] stylesList, List<ColorTheme> colorThemes,
+            Obstacle[] baseObstaclesList, Obstacle[] bossObstaclesList, PoolEntry[] poolEntries,
+            Booster[] treasureChestBuffs, Action onCoreManagersLoaded)
         {
             if (instance != null)
             {
                 throw new InvalidOperationException("CoreManager instance already exists.");
             }
+
             instance = this;
-            
+
             // Initilize CoreManagers
             loaderUI.AddProgress(10);
             ControlPanelManager = new ControlPanelManager();
@@ -53,25 +55,27 @@ namespace Core.Managers
             UserDataManager = new UserDataManager(SystemInfo.deviceUniqueIdentifier);
             loaderUI.AddProgress(10);
             MonoRunner = new GameObject("CoreManagerRunner").AddComponent<MonoRunner>();
-            MonoRunner.StartCoroutine(WaitForUserDataLoading(itemCosts,stylesList,colorThemes,baseObstaclesList,bossObstaclesList,poolEntries,treasureChestBuffs,onCoreManagersLoaded));
+            MonoRunner.StartCoroutine(WaitForUserDataLoading(itemCosts, stylesList, colorThemes, baseObstaclesList,
+                bossObstaclesList, poolEntries, onCoreManagersLoaded));
         }
 
         private IEnumerator WaitForUserDataLoading(TextAsset itemCosts, Style[] stylesList,
             List<ColorTheme> colorThemes, Obstacle[] baseObstaclesList, Obstacle[] bossObstaclesList,
-            PoolEntry[] poolEntries, TreasureChestBuff[] treasureChestBuffs, Action onCoreManagersLoaded)
+            PoolEntry[] poolEntries, Action onCoreManagersLoaded)
         {
             // Wait until UserDataManager.FinishedLoading returns true
             Debug.Log("WAITING DATA...");
             yield return new WaitUntil(() => UserDataManager.FinishedLoading());
             Debug.Log($"finished loading : {UserDataManager.FinishedLoading()}");
-            InitializeManagers(itemCosts, stylesList, colorThemes, baseObstaclesList, bossObstaclesList, poolEntries,
-                treasureChestBuffs, onCoreManagersLoaded);
+            InitializeManagers(itemCosts, stylesList, colorThemes, baseObstaclesList, bossObstaclesList, poolEntries, onCoreManagersLoaded);
         }
 
-        public void InitializeManagers(TextAsset itemCosts, Style[] styles,List<ColorTheme> colorThemes, Obstacle[] obstacles,Obstacle[] bossObstacles, PoolEntry[] poolEntries, TreasureChestBuff[] rewards, Action onComplete)
+        public void InitializeManagers(TextAsset itemCosts, Style[] styles, List<ColorTheme> colorThemes,
+            Obstacle[] obstacles, Obstacle[] bossObstacles, PoolEntry[] poolEntries,
+            Action onComplete)
         {
             // Initialize all the managers here
-            
+
             GameManager = new GameManager();
             TimeManager = new TimeManager();
 
@@ -79,13 +83,11 @@ namespace Core.Managers
 
             ColorsManager = new ColorsManager(colorThemes);
 
-            BuffManager = new BuffManager(rewards);
 
             ObstacleManager = new ObstacleManager(obstacles, bossObstacles);
             PoolManager = new ObjectPoolManager(poolEntries);
             CostManager = new ItemCostManager(itemCosts);
-            
-            
+
 
             // Notify that initialization is complete
             onComplete?.Invoke();

@@ -38,7 +38,7 @@ namespace GameLogic.ObstacleGeneration
 
         public virtual void ResetGameObject()
         {
-            Color? deleteColorBuffColor = CoreManager.instance.BuffManager.IsBuffActive(BuffType.DeleteColorBuff);
+            Color? deleteColorBuffColor = CoreManager.instance.BoosterManager.IsBuffActive(BuffType.DeleteColorBuff);
             if (deleteColorBuffColor is Color color && UtilityFunctions.CompareColors(color, GetColor()))
             {
                 return; // we detcted a color that is meant to be inactive, so we return before activating.
@@ -50,7 +50,7 @@ namespace GameLogic.ObstacleGeneration
         public override void Shatter()
         {
             print("gem earned from obstacle");
-            float speed = CoreManager.instance.BuffManager.ParticleTransferDuration;
+            float speed = CoreManager.instance.BoosterManager.ParticleTransferDuration;
             GameObject gem = CoreManager.instance.PoolManager.GetFromPool(PoolType.Gem);
             gem.GetComponent<SpriteRenderer>().color = GetColor();
             gem.GetComponent<TrailRenderer>().startColor = GetColor();

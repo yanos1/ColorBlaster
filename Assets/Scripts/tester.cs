@@ -29,9 +29,9 @@ public class tester : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            CoreManager.instance.BuffManager.AddBuff(new Vector3(0,0,0), new Color(1.000f, 0.000f, 0.000f, 1.000f), 5f);
-            CoreManager.instance.BuffManager.AddBuff(new Vector3(0,0,0), new Color(0.000f, 0.342f, 1.000f, 1.000f), 5f);
-            CoreManager.instance.BuffManager.AddBuff(new Vector3(0,0,0), new Color(0.968f, 1.000f, 0.000f, 1.000f), 5f);
+            CoreManager.instance.BoosterManager.AddBuff(new Vector3(0,0,0), new Color(1.000f, 0.000f, 0.000f, 1.000f), 5f);
+            CoreManager.instance.BoosterManager.AddBuff(new Vector3(0,0,0), new Color(0.000f, 0.342f, 1.000f, 1.000f), 5f);
+            CoreManager.instance.BoosterManager.AddBuff(new Vector3(0,0,0), new Color(0.968f, 1.000f, 0.000f, 1.000f), 5f);
 
 
         }

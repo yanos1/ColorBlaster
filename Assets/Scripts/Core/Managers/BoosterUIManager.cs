@@ -10,7 +10,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class BuffsUIManager : MonoBehaviour
+public class BoosterUIManager : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private List<BuffUI> buffsUI;
@@ -78,7 +78,7 @@ public class BuffsUIManager : MonoBehaviour
 
     private void ActivateBar(object obj)
     {
-        if (obj is (Color color, float value, TreasureChestBuff buff))
+        if (obj is (Color color, float value, Booster buff))
         {
             foreach (var (_color, buffUI) in buffToUIMap)
             {

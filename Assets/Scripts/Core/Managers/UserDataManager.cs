@@ -169,7 +169,7 @@ namespace Core.Managers
                 }),
                 userRef.Child(FirebasePath.boostersOwned.ToString()).SetValueAsync(new Dictionary<string, object>
                 {
-                    { ((int)Item.ShieldBooster).ToString(), 0 }, {((int)Item.ColorBlasterBooster).ToString(), 0}
+                    { ((int)Item.ShieldBooster).ToString(), 0 }, { ((int)Item.ColorBlasterBooster).ToString(), 0 }
                 })
             );
 
@@ -324,19 +324,62 @@ namespace Core.Managers
             return itemsOwned[avatarFirebasePath].ContainsKey(itemType);
         }
 
+        public int GetBoosterAmount(Item booster, FirebasePath path)
+        {
+            return boostersOwned[booster];
+        }
+
         public bool FinishedLoading()
         {
             return finishedLoading;
         }
-    }
 
-    public enum FirebasePath
-    {
-        stylesOwned,
-        gemsOwned,
-        colorThemesOwned,
-        avatarsOwned,
-        boostersOwned,
-        highScore
+        public void UseBooster(Item boosterType)
+        {
+            userRef.Child(FirebasePath.boostersOwned.ToString()).GetValueAsync().ContinueWithOnMainThread(task =>
+            {
+                if (task.IsCompleted)
+                {
+                    DataSnapshot boosterData = task.Result;
+                    if (boosterData.Exists)
+                    {
+                        Dictionary<string, object> updates = new Dictionary<string, object>();
+
+                        foreach (var booster in boosterData.Children)
+                        {
+                            if (booster.Key == boosterType.ToString())
+                            {
+                                int currentBoosterCount = Convert.ToInt32(booster.Value);
+
+                                // Decrease the booster count
+                                int newBoosterCount = currentBoosterCount - 1;
+                                boostersOwned[boosterType] -= 1;
+
+                                // Prepare the path and the new value for the booster.
+                                updates[booster.Key] = newBoosterCount;
+                                
+                            }
+                        }
+
+                        // Update Firebase with the new booster count.
+                        if (updates.Count > 0)
+                        {
+                            userRef.Child(FirebasePath.boostersOwned.ToString()).UpdateChildrenAsync(updates);
+                        }
+                    }
+                }
+            });
+        }
+
+
+        public enum FirebasePath
+        {
+            stylesOwned,
+            gemsOwned,
+            colorThemesOwned,
+            avatarsOwned,
+            boostersOwned,
+            highScore
+        }
     }
 }

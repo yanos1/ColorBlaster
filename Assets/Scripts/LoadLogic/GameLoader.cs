@@ -26,7 +26,7 @@ namespace LoaderLogic
         [SerializeField] private Obstacle[] bossObstaclesList;
         [SerializeField] private PoolEntry[] poolEntries;
         [SerializeField] private TextAsset itemCosts;
-        [SerializeField] private TreasureChestBuff[] treasureChestBuffs;
+        [SerializeField] private Booster[] treasureChestBuffs;
         
         // TEST FIELDS
         [SerializeField] private bool TEST_MODE;

@@ -1,38 +1,58 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core.GameData;
 using Core.Managers;
+using Extensions;
 using Extentions;
 using PoolTypes;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GameLogic.ConsumablesGeneration
 {
-    public class BuffManager
+    public class BoosterManager : MonoBehaviour
     {
         public float ParticleTransferDuration => 0.5f;
+        [SerializeField] private Booster[] boosters;
 
-        private Dictionary<Color, TreasureChestBuff> colorToBuffMap;
-        private Dictionary<Color, ValueTuple<ValueTuple<EventNames, EventNames>, float>> activeBuffsDurationsLeft;
+        private Dictionary<Color, Booster> colorToBoosterMap;
+        private Dictionary<Color, ValueTuple<Booster, float>> activeBuffsDurationsLeft;
 
 
-        public BuffManager(TreasureChestBuff[] allBuffs)
+        public void Start()
         {
-            colorToBuffMap = new Dictionary<Color, TreasureChestBuff>();
-            activeBuffsDurationsLeft = new Dictionary<Color, ((EventNames, EventNames), float)>();
-            InitColorToRewardMap(allBuffs);
+            colorToBoosterMap = new Dictionary<Color, Booster>();
+            activeBuffsDurationsLeft = new Dictionary<Color, (Booster, float)>();
+            MapColorToBooster();
+            InitBoosters();
+        }
+
+
+        private void OnEnable()
+        {
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun, StopBuffs);
             CoreManager.instance.EventManager.AddListener(EventNames.StartGame, StartUpdate);
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, StartUpdate);
         }
 
 
-        public void OnDestroy()
+        public void OnDisable()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, StopBuffs);
             CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, StartUpdate);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, StartUpdate);
+        }
+
+        private void InitBoosters()
+        {
+            foreach (var booster in boosters)
+            {
+                booster.numbersOwned.text = CoreManager.instance.UserDataManager
+                    .GetBoosterAmount(booster.boosterType, booster.firebasePath).ToString();
+            }
         }
 
         private void StartUpdate(object obj)
@@ -52,7 +72,7 @@ namespace GameLogic.ConsumablesGeneration
                     // Debug.Log($"{Time.time}  {kvp.Value.Item2}");
                     if (Time.time > kvp.Value.Item2)
                     {
-                        CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.Item2, kvp.Key);
+                        CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.deactivationEvent, kvp.Key);
                         Debug.Log($"CANCEL BUFF!");
                         keysToRemove.Add(kvp.Key);
                     }
@@ -65,99 +85,125 @@ namespace GameLogic.ConsumablesGeneration
                     activeBuffsDurationsLeft.Remove(key);
                 }
 
-                yield return new WaitForSeconds(0.5f);
+                yield return null;
             }
         }
 
+        private void EnableBoosterIfPossible(Booster booster, Color color)
+        {
+            if (IsBoosterActive(color) ||
+                CoreManager.instance.UserDataManager.GetBoosterAmount(booster.boosterType, booster.firebasePath) == 0)
+            {
+                return;
+            }
+
+
+            CoreManager.instance.UserDataManager.UseBooster(booster.boosterType);
+            AddBuff(color, booster);
+        }
+
+        private bool IsBoosterActive(Color color)
+        {
+            return activeBuffsDurationsLeft.ContainsKey(color);
+        }
         // addbuff(activation, deactivation, duration, 
 
 
-        private void InitColorToRewardMap(TreasureChestBuff[] allBuffs)
+        private void MapColorToBooster()
         {
             Color[] currentColors = CoreManager.instance.ColorsManager.AllColors;
             int i = 0;
-            foreach (var buff in allBuffs)
+            foreach (var booster in boosters)
             {
-                colorToBuffMap[currentColors[i++]] = buff;
+                colorToBoosterMap[currentColors[i]] = booster;
             }
         }
 
 
         // i had a problem with floating point.
         // this can be optimised with greater color control (reducing colors to 2 decimal points)
-        public TreasureChestBuff GetBuff(Color color)
+        public Booster GetBuff(Color color)
         {
-            foreach (var pair in colorToBuffMap)
+            foreach (var pair in colorToBoosterMap)
             {
-
                 if (UtilityFunctions.CompareColors(pair.Key, color))
                 {
                     // we disable everything but gems power up for test 
 
-                    return colorToBuffMap[pair.Key];
+                    return colorToBoosterMap[pair.Key];
                 }
             }
 
             return null; // should never reac hehre
         }
 
-        private void AddBuff(Color color, EventNames activationEvent, EventNames deactivationEvent, float duration)
+        private void AddBuff(Color color, Booster booster)
         {
             if (activeBuffsDurationsLeft.ContainsKey(color))
             {
                 Debug.Log("CONTAINED KEY!!!");
                 // Update the remaining duration for the existing buff
                 var valueTuple = activeBuffsDurationsLeft[color];
-                valueTuple.Item2 += duration; // Set the new expiration time
+                valueTuple.Item2 += booster.duration; // Set the new expiration time
                 activeBuffsDurationsLeft[color] = valueTuple;
             }
             else
             {
                 Debug.Log("Did not contain key");
                 // Set the expiration time as current Time + duration
-                float expirationTime = Time.time + duration;
-                activeBuffsDurationsLeft[color] = new ValueTuple<ValueTuple<EventNames, EventNames>, float>(
-                    (activationEvent, deactivationEvent), expirationTime);
-                CoreManager.instance.EventManager.InvokeEvent(activationEvent,
-                    (color, duration, GetBuff(color)));
+                float expirationTime = Time.time + booster.duration;
+                activeBuffsDurationsLeft[color] = (booster, booster.duration);
+                CoreManager.instance.EventManager.InvokeEvent(booster.activatonEvent,
+                    (color, booster.duration, GetBuff(color)));
             }
         }
 
 
-        public void MoveParticlesToBuffUI(TreasureChestBuff buff, Vector3 startPosition, Color color, float strength)
+        public void MoveParticlesToBuffUI(Booster booster, Vector3 startPosition, Color color, float strength)
         {
             float maxDuration = 0f;
-            int numberOfGemsToEarn = (int)(strength * buff.buffMultiPlier);
-            int buffDuration = numberOfGemsToEarn;
-            Transform targetPosition = buff.UIButton.transform;
+            int numberOfGemsToEarn = (int)(strength * booster.buffMultiPlier);
+            Transform targetPosition = booster.UIButton.transform;
             bool firstParticleReached = false;
             for (int i = 0; i < numberOfGemsToEarn; ++i)
             {
                 var duration = ParticleTransferDuration;
                 maxDuration = Mathf.Max(duration, maxDuration);
 
-                GameObject gem = CoreManager.instance.PoolManager.GetFromPool(buff.poolType);
-                gem.transform.position = startPosition;
-                UtilityFunctions.MoveObjectInRandomDirection(gem.transform, 2f);
-                gem.GetComponent<SpriteRenderer>().materials[0].color = color;   // ew thats ugly, better build a pool that manages allows downcast
-                gem.GetComponent<TrailRenderer>().startColor = color;
+                GameObject gem = CoreManager.instance.PoolManager.GetFromPool(booster.poolType);
+                InitPrefab(startPosition, color, gem);
 
                 CoreManager.instance.MonoRunner.StartCoroutine(UtilityFunctions.MoveObjectOverTime(gem,
                     gem.transform.position, Quaternion.identity,
                     targetPosition, Quaternion.identity, duration, () =>
                     {
-                        CoreManager.instance.PoolManager.ReturnToPool(buff.poolType, gem);
-                        CoreManager.instance.EventManager.InvokeEvent(buff.prefabReachTargetEvent,
-                            (color, 1f, buff));
+                        CoreManager.instance.PoolManager.ReturnToPool(booster.poolType, gem);
+
                         if (!firstParticleReached)
                         {
-                            AddBuff(color, buff.activatonEvent, buff.deactivationEvent, buffDuration);
-                            Debug.Log("INVOKE BUFF");
+                            IncrementBoostersOwned(booster, color);
                             firstParticleReached = true;
                         }
                         // TODO: Play earn sound
                     }));
             }
+        }
+
+        private static void InitPrefab(Vector3 startPosition, Color color, GameObject gem)
+        {
+            gem.transform.position = startPosition;
+            UtilityFunctions.MoveObjectInRandomDirection(gem.transform, 2f);
+            gem.GetComponent<SpriteRenderer>().materials[0].color =
+                color; // ew thats ugly, better build a pool that manages allows downcast
+            gem.GetComponent<TrailRenderer>().startColor = color;
+        }
+
+        private void IncrementBoostersOwned(Booster booster, Color color)
+        {
+            CoreManager.instance.UserDataManager.AddBooster(booster.boosterType, 1);
+            int currentNumber = int.Parse(colorToBoosterMap[color].numbersOwned.text); // Convert string to int
+            currentNumber += 1; // Increment the number
+            colorToBoosterMap[color].numbersOwned.text = currentNumber.ToString(); // Convert back to string
         }
 
 
@@ -167,7 +213,8 @@ namespace GameLogic.ConsumablesGeneration
             {
                 if (UtilityFunctions.CompareColors(pair.Key, color))
                 {
-                    CoreManager.instance.EventManager.InvokeEvent(activeBuffsDurationsLeft[pair.Key].Item1.Item2,
+                    CoreManager.instance.EventManager.InvokeEvent(
+                        activeBuffsDurationsLeft[pair.Key].Item1.deactivationEvent,
                         color);
                     activeBuffsDurationsLeft.Remove(pair.Key);
                     return;
@@ -179,7 +226,8 @@ namespace GameLogic.ConsumablesGeneration
         {
             foreach (var kvp in activeBuffsDurationsLeft)
             {
-                CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.Item2, kvp.Key); // call stop function
+                CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.deactivationEvent,
+                    kvp.Key); // call stop function
             }
 
             activeBuffsDurationsLeft.Clear();
@@ -187,17 +235,17 @@ namespace GameLogic.ConsumablesGeneration
 
         public void AddBuff(Vector3 startPosition, Color color, float buffStrength)
         {
-            TreasureChestBuff buff = GetBuff(color);
+            Booster buff = GetBuff(color);
             MoveParticlesToBuffUI(buff, startPosition, color, buffStrength);
         }
 
-        public Color? IsBuffActive(BuffType buffType) // can be optimised
+        public Color? IsBuffActive(Item buffType) // can be optimised
         {
             Color buffColor = default;
 
-            foreach (var (color, buff) in colorToBuffMap)
+            foreach (var (color, booster) in colorToBoosterMap)
             {
-                if (buff.buffType == buffType)
+                if (booster.boosterType == buffType)
                 {
                     buffColor = color;
                     foreach (var kvp in activeBuffsDurationsLeft)

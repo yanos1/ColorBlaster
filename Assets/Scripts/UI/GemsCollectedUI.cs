@@ -58,7 +58,7 @@ namespace UI
             // Scale the image with a quick bounce effect
 
             // Multiply the image color by the color passed in the object
-            if (obj is (Color gemColor, float duration, TreasureChestBuff buff))
+            if (obj is (Color gemColor, float duration, Booster buff))
             {
                 gemsImage.color += gemColor;
                 gemColorsCollected.Add(gemColor);  // add gem color for later use (for transfering coins to the wallet)
