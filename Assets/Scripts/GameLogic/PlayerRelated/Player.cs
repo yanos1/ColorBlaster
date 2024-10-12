@@ -1,5 +1,6 @@
 ﻿using Core.Managers;
 using Extentions;
+using GameLogic.Boosters;
 using GameLogic.ConsumablesGeneration;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -70,9 +71,10 @@ namespace GameLogic.PlayerRelated
 
         private void ActivateShield(object obj)
         {
-            if (obj is (Color color, float duration, Booster buff))
+            print("ATTEMPT TO ACTIVE SHIELD 222");
+            if (obj is (Color color, float duration, BoosterButtonController buff))
             {
-                print("SET SHIELD ACTIVE");
+                print("SET SHIELD ACTIVE222" );
                 shieldBuff.gameObject.SetActive(true);
                 shieldBuff.SetColor(color);
             }

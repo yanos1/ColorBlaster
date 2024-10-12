@@ -18,6 +18,7 @@ namespace GameLogic.ObstacleGeneration
     {
         // [SerializeField] private Image gemUIimage;
         private float gemTravelingDistance = 1.2f;
+        private float gemTravelDuration = 0.2f;
 
 
         public override void Awake()
@@ -51,13 +52,13 @@ namespace GameLogic.ObstacleGeneration
         public override void Shatter()
         {
             print("gem earned from obstacle");
-            float speed = CoreManager.instance.BoosterManager.ParticleTransferDuration;
+            
             GameObject gem = CoreManager.instance.PoolManager.GetFromPool(PoolType.Gem);
             gem.GetComponent<SpriteRenderer>().color = GetColor();
             gem.GetComponent<TrailRenderer>().startColor = GetColor();
             CoreManager.instance.MonoRunner.StartCoroutine(UtilityFunctions.MoveObjectOverTime(gem, transform.position,
                 transform.rotation,
-                transform.position +Vector3.up*gemTravelingDistance, transform.rotation, speed,
+                transform.position +Vector3.up*gemTravelingDistance, transform.rotation, gemTravelDuration,
                 () =>
                 {
                     CoreManager.instance.EventManager.InvokeEvent(EventNames.GemPrefabArrived, null);

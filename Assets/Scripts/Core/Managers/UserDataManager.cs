@@ -17,7 +17,6 @@ namespace Core.Managers
         public Dictionary<FirebasePath, Dictionary<Item, bool>> ItemsOwned => itemsOwned;
         public Dictionary<Item, int> BoostersOwned => boostersOwned;
 
-        public Action onComplete;
 
         private DatabaseReference _dbReference;
         private DatabaseReference userRef;
@@ -337,7 +336,7 @@ namespace Core.Managers
             return finishedLoading;
         }
 
-        public void UseBooster(Item boosterType)
+        public void UseBooster(Item boosterType, Action onComplete = null)
         {
             userRef.Child(FirebasePath.boostersOwned.ToString()).GetValueAsync().ContinueWithOnMainThread(task =>
             {
@@ -350,7 +349,8 @@ namespace Core.Managers
 
                         foreach (var booster in boosterData.Children)
                         {
-                            if (booster.Key == boosterType.ToString())
+                            Debug.Log($"key {booster.Key} type given {boosterType.ToString()}");
+                            if (booster.Key == ((int)boosterType).ToString())
                             {
                                 int currentBoosterCount = Convert.ToInt32(booster.Value);
 
@@ -360,6 +360,8 @@ namespace Core.Managers
 
                                 // Prepare the path and the new value for the booster.
                                 updates[booster.Key] = newBoosterCount;
+                                Debug.Log("UPDATE UI 222");
+                                onComplete?.Invoke();
                                 
                             }
                         }

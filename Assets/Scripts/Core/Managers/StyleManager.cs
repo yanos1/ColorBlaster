@@ -47,6 +47,7 @@ namespace Core.Managers
                     currentStyle = style;
                 }
             }
+            ApplyStyle(currentStyle.StyleName);
             // // Try to load the saved style, defaulting to Neon if no saved style is found
             // CoreManager.instance.SaveManager.Load<StyleSaver>(savedData =>
             // {
@@ -104,6 +105,7 @@ namespace Core.Managers
             currentStyle = _styles.FirstOrDefault(style => style.StyleName == newStyle);
             foreach (var obj in _styleableObjects)
             {
+                Debug.Log($"APPLY STYLE FOR {obj.name}");
                 obj.ChangeStyle();
             }
         }

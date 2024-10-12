@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Extentions;
+using GameLogic.Boosters;
 using GameLogic.ConsumablesGeneration;
 using UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Core.Managers
 {
@@ -11,41 +13,16 @@ namespace Core.Managers
         // Start is called before the first frame update
         [SerializeField] private List<BuffUI> buffsUI;
 
-        private Dictionary<Color, BuffUI> buffToUIMap; // this will let us know if a uiBuff is already active for a cetrain buff
+        private Dictionary<Color, BuffUI>
+            buffToUIMap; // this will let us know if a uiBuff is already active for a cetrain buff
 
         void Start()
         {
             buffToUIMap = new Dictionary<Color, BuffUI>();
         }
 
-        private void OnEnable()
-        {
-            CoreManager.instance.EventManager.AddListener(EventNames.ColorRushPrefabArrived, ActivateBar);
-            CoreManager.instance.EventManager.AddListener(EventNames.ShieldPrefabArrived, ActivateBar);
-            CoreManager.instance.EventManager.AddListener(EventNames.GemPrefabArrived, ActivateBar);
-            CoreManager.instance.EventManager.AddListener(EventNames.DeleteColorPrefabArrived, ActivateBar);
-            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateColorRush, DeactivateBar);
-            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateShield, DeactivateBar);
-            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateGemRush, DeactivateBar);
-            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateDeleteColor, DeactivateBar);
-            CoreManager.instance.EventManager.AddListener(EventNames.EndRun, DeactivateUI);
 
-        }
-
-        private void OnDisable()
-        {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.ColorRushPrefabArrived, ActivateBar);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.ShieldPrefabArrived, ActivateBar);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.GemPrefabArrived, ActivateBar);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.DeleteColorPrefabArrived, ActivateBar);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateDeleteColor, DeactivateBar);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, DeactivateBar);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateShield, DeactivateBar);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateGemRush, DeactivateBar);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, DeactivateUI);
-        }
-
-        private void DeactivateUI(object obj)
+        public void DeactivateUI()
         {
             foreach (var buffUI in buffsUI)
             {
@@ -53,53 +30,43 @@ namespace Core.Managers
             }
         }
 
-        private void DeactivateBar(object obj)
+        public void DeactivateBoosterUI(Color color)
         {
-            if (obj is Color color)
+            foreach (var (_color, buffUI) in buffToUIMap)
             {
-                print("DEACTIVATE BAT!!fff");
-                foreach (var (_color, buffUI) in buffToUIMap)
+                if (UtilityFunctions.CompareColors(_color, color))
                 {
-                    if (UtilityFunctions.CompareColors(_color, color))
-                    {
-                        buffUI.gameObject.SetActive(false);
-                        buffToUIMap.Remove(_color);
-                        return;
-                    }
+                    buffUI.gameObject.SetActive(false);
+                    buffToUIMap.Remove(_color);
+                    return;
                 }
             }
         }
 
 
-
-        private void ActivateBar(object obj)
+        public void ActivateBooster(BoosterButtonController boosterButtonController, Color color)
         {
-            if (obj is (Color color, float value, Booster buff))
+            foreach (var (_color, buffUI) in buffToUIMap)
             {
-                foreach (var (_color, buffUI) in buffToUIMap)
+                if (UtilityFunctions.CompareColors(_color, color))
                 {
-                    print("EXISTED!");
-
-                    if (UtilityFunctions.CompareColors(_color, color))
-                    {
-                        buffUI.IncreaseBuff(value);
-                        return;
-                    }
+                    buffUI.IncreaseBuff(boosterButtonController.Booster.duration);
+                    return;
                 }
+            }
 
-                Sprite boosterSprite = buff.UIButton.GetComponent<SpriteRenderer>().sprite;
-                foreach (var buffUI in buffsUI)
+            Sprite boosterSprite = boosterButtonController.GetComponent<Image>().sprite;
+            foreach (var buffUI in buffsUI)
+            {
+                if (!buffUI.gameObject.activeInHierarchy)
                 {
-                    if (!buffUI.gameObject.activeInHierarchy)
-                    {
-                        buffUI.gameObject.SetActive(true);
-                        buffToUIMap[color] = buffUI;
+                    buffUI.gameObject.SetActive(true);
+                    buffToUIMap[color] = buffUI;
 
-                        buffUI.InitBuff(boosterSprite,color,value);
-                        print("DID NOT EXIST");
+                    buffUI.InitBuff(boosterSprite, color, boosterButtonController.Booster.duration);
+                    print("DID NOT EXIST");
 
-                        return;
-                    }
+                    return;
                 }
             }
         }

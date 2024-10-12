@@ -12,6 +12,7 @@ namespace Core.Managers
     public class BoosterManager : MonoBehaviour
     {
         public float ParticleTransferDuration => 0.5f;
+        [SerializeField] private BoosterUIManager boosterUI;
         [SerializeField] private BoosterButtonController[] boosterButtonControllers;
 
         private Dictionary<Color, BoosterButtonController> colorToBoosterMap;
@@ -20,7 +21,7 @@ namespace Core.Managers
 
         #region Unity Event Functions
 
-        public void Start()
+        public void Awake()
         {
             colorToBoosterMap = new Dictionary<Color, BoosterButtonController>();
             activeBuffsDurationsLeft = new Dictionary<Color, (BoosterButtonController, float)>();
@@ -33,6 +34,8 @@ namespace Core.Managers
             CoreManager.instance.EventManager.AddListener(EventNames.EndRun, StopBuffs);
             CoreManager.instance.EventManager.AddListener(EventNames.StartGame, StartUpdate);
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, StartUpdate);
+            CoreManager.instance.EventManager.AddListener(EventNames.AddBooster, OnAddBooster);
+            CoreManager.instance.EventManager.AddListener(EventNames.StopBooster, OnStopBooster);
         }
 
         private void OnDisable()
@@ -40,6 +43,9 @@ namespace Core.Managers
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, StopBuffs);
             CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, StartUpdate);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, StartUpdate);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.AddBooster, OnAddBooster);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.StopBooster, OnStopBooster);
+
         }
 
         #endregion
@@ -47,10 +53,16 @@ namespace Core.Managers
 
         #region Public Functions
 
-        public void AddBuff(Vector3 startPosition, Color color, float buffStrength)
+        public void OnAddBooster(object obj)
         {
-            BoosterButtonController boosterController = GetBooster(color);
-            MoveParticlesToBuffUI(boosterController, startPosition, color, buffStrength);
+            print("CALL BOOSTER! 222");
+            if (obj is (Vector3 startPosition, Color color, int buffStrength))
+            {
+                print("BOOSTER ACCEPTED 222");
+                BoosterButtonController boosterController = GetBooster(color);
+                MoveParticlesToBuffUI(boosterController, startPosition, color, buffStrength);
+            }
+ 
         }
 
         public Color? IsBuffActive(Item buffType) // can be optimised
@@ -75,17 +87,21 @@ namespace Core.Managers
             return null;
         }
 
-        public void StopBuff(Color color)
+        public void OnStopBooster(object obj)
         {
-            foreach (var pair in activeBuffsDurationsLeft)
+            if (obj is Color color)
             {
-                if (UtilityFunctions.CompareColors(pair.Key, color))
+                foreach (var pair in activeBuffsDurationsLeft)
                 {
-                    CoreManager.instance.EventManager.InvokeEvent(
-                        activeBuffsDurationsLeft[pair.Key].Item1.Booster.deactivationEvent,
-                        color);
-                    activeBuffsDurationsLeft.Remove(pair.Key);
-                    return;
+                    if (UtilityFunctions.CompareColors(pair.Key, color))
+                    {
+                        CoreManager.instance.EventManager.InvokeEvent(
+                            activeBuffsDurationsLeft[pair.Key].Item1.Booster.deactivationEvent,
+                            color);
+                        activeBuffsDurationsLeft.Remove(pair.Key);
+                        boosterUI.DeactivateBoosterUI(color);
+                        return;
+                    }
                 }
             }
         }
@@ -104,7 +120,7 @@ namespace Core.Managers
                         boosterButtonController.Booster.firebasePath).ToString();
                 boosterButtonController.BoosterButton.onClick.AddListener(() =>
                     EnableBoosterIfPossible(boosterButtonController,
-                        colorToBoosterMap.FirstOrDefault(kvp => kvp.Value == boosterButtonController.Booster).Key));
+                        colorToBoosterMap.FirstOrDefault(kvp => kvp.Value == boosterButtonController).Key));
             }
         }
 
@@ -146,14 +162,16 @@ namespace Core.Managers
             {
                 return;
             }
-
-            CoreManager.instance.UserDataManager.UseBooster(boosterButtonController.Booster.boosterType);
-            AddBuff(color, boosterButtonController);
+            print("ENABLE BOOSTER NOW ! 222");
+            CoreManager.instance.UserDataManager.UseBooster(boosterButtonController.Booster.boosterType, boosterButtonController.UpdateUI);
+            ActivateBooster(color, boosterButtonController);
         }
 
         private bool IsBoosterActive(Color color)
         {
-            return activeBuffsDurationsLeft.ContainsKey(color);
+            bool active = activeBuffsDurationsLeft.ContainsKey(color);
+            Debug.Log($"booster is active on color {color} : {active} 222");
+            return active;
         }
 
         private void MapColorToBooster()
@@ -162,7 +180,7 @@ namespace Core.Managers
             int i = 0;
             foreach (var boosterButtonController in boosterButtonControllers)
             {
-                colorToBoosterMap[currentColors[i]] = boosterButtonController;
+                colorToBoosterMap[currentColors[i++]] = boosterButtonController;
             }
         }
 
@@ -175,11 +193,12 @@ namespace Core.Managers
                     return colorToBoosterMap[pair.Key];
                 }
             }
+            print("RETURNED NULL  222");
 
             return null; // should never reach here
         }
 
-        private void AddBuff(Color color, BoosterButtonController boosterButtonController)
+        private void ActivateBooster(Color color, BoosterButtonController boosterButtonController)
         {
             if (activeBuffsDurationsLeft.ContainsKey(color))
             {
@@ -195,6 +214,8 @@ namespace Core.Managers
                 CoreManager.instance.EventManager.InvokeEvent(boosterButtonController.Booster.activationEvent,
                     (color, boosterButtonController.Booster.duration, GetBooster(color)));
             }
+            print("BOOSTER ENABLED 222");
+            boosterUI.ActivateBooster(boosterButtonController,color);
         }
 
         private void MoveParticlesToBuffUI(BoosterButtonController boosterButtonController, Vector3 startPosition, Color color, float strength)

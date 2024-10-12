@@ -18,8 +18,10 @@ namespace UI
         {
             if (base.BuyItemIfPossible())
             {
-                CoreManager.instance.UserDataManager.AddBooster(itemType, 1);
-                numberOwned.text = "Owned: " + (int.Parse(Regex.Match(numberOwned.text,@"\d+").ToString()) + 1);
+                CoreManager.instance.UserDataManager.AddBooster(itemType, 1,
+                        () => numberOwned.text =
+                            "Owned: " + (int.Parse(Regex.Match(numberOwned.text, @"\d+").ToString()) + 1)
+                    );
             }
 
             return true;

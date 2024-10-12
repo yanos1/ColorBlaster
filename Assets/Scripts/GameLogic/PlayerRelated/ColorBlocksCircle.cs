@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using Core.Managers;
 using Extentions;
+using GameLogic.Boosters;
 using GameLogic.Consumables;
 using GameLogic.ConsumablesGeneration;
 using GameLogic.ObstacleGeneration;
@@ -70,7 +71,7 @@ namespace GameLogic.PlayerRelated
         }
         private void OnColorRushPickUp(object obj)
         {
-            if (obj is (Color color, float duration, Booster buff))
+            if (obj is (Color color, float duration, BoosterButtonController buff))
             {
                 foreach (var block in blocks)
                 {
@@ -91,6 +92,7 @@ namespace GameLogic.PlayerRelated
                 Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
                 block.SetColor(currentColors[i++%currentColors.Length]);
                 block.Renderer.sharedMaterials[1] = currentStyle.Material;
+                print("11");
                 block.Renderer.sharedMaterials[1].shader = currentStyle.Shader;
             }
         }

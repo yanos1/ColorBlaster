@@ -16,7 +16,7 @@ namespace GameLogic.PlayerRelated
             if (obstaclePart is not null)
             {
                 //TODO enter sound
-                CoreManager.instance.BoosterManager.StopBuff(GetColor());
+                CoreManager.instance.EventManager.InvokeEvent(EventNames.StopBooster, GetColor());
                 obstaclePart.Shatter();
                 Shatter();
             }

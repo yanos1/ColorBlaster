@@ -18,11 +18,13 @@ namespace GameLogic.PlayerRelated
         private Vector3 startingPosition;
         private Quaternion startingRotation;
 
-        private void Start()
+        public override void Awake()
         {
+            base.Awake();
             startingPosition = transform.position;
             startingRotation = transform.rotation;
             CoreManager.instance.StyleManager.AddStyleableObject(this);
+            ApplyStyle();
         }
 
         private void OnDestroy()

@@ -14,10 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boosterType: 102
   poolType: 16
-  buffMultiPlier: 3
-  duration: 15
-  activatonEvent: 18
+  buffMultiplier: 0
+  duration: 12
+  activationEvent: 18
   deactivationEvent: 19
-  UIButton: {fileID: 0}
-  numbersOwned: {fileID: 0}
-  firebasePath: 0
+  firebasePath: 4

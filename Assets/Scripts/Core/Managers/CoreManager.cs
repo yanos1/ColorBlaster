@@ -23,7 +23,6 @@ namespace Core.Managers
         public ObjectPoolManager PoolManager { get; private set; }
         public StyleManager StyleManager { get; private set; }
         public ColorsManager ColorsManager { get; private set; }
-        public BoosterManager BoosterManager { get; private set; }
         public ObstacleManager ObstacleManager { get; private set; }
         public ItemCostManager CostManager { get; private set; }
         public Player Player { get; set; }

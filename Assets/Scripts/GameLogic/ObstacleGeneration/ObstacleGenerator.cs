@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Core.Managers;
 using Extentions;
+using GameLogic.Boosters;
 using GameLogic.ConsumablesGeneration;
 using GameLogic.StyleRelated;
 using Unity.VisualScripting;
@@ -61,7 +62,7 @@ namespace GameLogic.ObstacleGeneration
 
         private void DisableDeletedColor(object obj)
         {
-            if (obj is (Color color, float duration, Booster buff))
+            if (obj is (Color color, float duration, BoosterButtonController buff))
             {
                 foreach (var obstacle in activeObstacles)
                 {
@@ -85,7 +86,7 @@ namespace GameLogic.ObstacleGeneration
 
         private void PaintActiveObstacles(object obj)
         {
-            if (obj is (Color color, float duration, Booster buff))
+            if (obj is (Color color, float duration, BoosterButtonController buff))
             {
                 isColorRushActive = true;
                 foreach (var obstacle in activeObstacles)

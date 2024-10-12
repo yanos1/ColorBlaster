@@ -29,10 +29,30 @@ namespace GameLogic.StyleRelated
 
         public virtual Style ApplyStyle()
         {
-            
             Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
-            // Apply the material from the style
+
+            // Get the current materials of the object
+            Material[] currentMaterials = _renderer.sharedMaterials;
+
+            // Check if the object has fewer than 2 materials
+            if (currentMaterials.Length < 2)
+            {
+                // Create a new array with 2 materials
+                Material[] newMaterials = new Material[2];
+
+                // Assign the original material to the first slot
+                newMaterials[0] = currentMaterials[0];
+                // Assign a placeholder or the current style material to the second slot
+                newMaterials[1] = currentStyle.Material;
+
+                // Apply the new materials array to the renderer
+                _renderer.sharedMaterials = newMaterials;
+            }
+            // print($"curret style material on {name} : {currentStyle.Material}");
+
+            // Now you can safely modify the second material
             _renderer.sharedMaterials[1] = currentStyle.Material;
+
             // Apply texture and shader from the style (if needed)
             if (currentStyle.Texture != null)
             {
@@ -43,23 +63,24 @@ namespace GameLogic.StyleRelated
             {
                 _renderer.sharedMaterials[1].shader = currentStyle.Shader;
             }
-            Debug.Log("styles applied !");
+
+            // print($"{name} has {_renderer.sharedMaterials.Length} material elements after assignment");
+            // Debug.Log("Styles applied!");
+
             return currentStyle;
         }
-        
+
 
         public virtual void Shatter()
         {
             // Play the shatter sound *ADD LATER*
             // _audioSource.Play();
             // Instantiate the shatter effect at the part's position
-            print(name); 
-            
+            print(name);
+
             print(CoreManager.instance.PoolManager);
             GameObject shaterPrefab = CoreManager.instance.StyleManager.GetShatterPrefab();
-            print($"shatter prefab {shaterPrefab}");
             ShapeShiftingParticleSystem particles = shaterPrefab.GetComponent<ShapeShiftingParticleSystem>();
-            print($"particeles : {particles}");
             particles.Init(this);
 
             // Disable the part or handle other shatter logic
@@ -77,7 +98,5 @@ namespace GameLogic.StyleRelated
             print($"renderer {_renderer}");
             _renderer.materials[0].color = newColor;
         }
-        
-      
     }
 }

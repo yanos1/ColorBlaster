@@ -44,12 +44,10 @@ namespace GameLogic.PlayerRelated
 
             if (touchPosition != null)
             {
-                print("returned touch postion");
                 return touchPosition; // Return touch position if detected
             }
 
             Vector2? mousePosition = _inputManager.GetMousePosition();
-            print($"returned mouse pos {mousePosition}");
             return mousePosition; // Return mouse position if detected, otherwise null
         }
 
@@ -64,15 +62,12 @@ namespace GameLogic.PlayerRelated
                 // Calculate the target position based on the swipe direction
 
                 float targetYPosition = transform.position.y + (swipeDirection.y);
-                print($"target y {targetYPosition} min y {minYPosition} max y {maxYPosition}");
                 targetYPosition = Mathf.Clamp(targetYPosition, minYPosition, maxYPosition);
-                print($"target y : {targetYPosition}");
                 if (Mathf.Approximately(targetYPosition, transform.position.y))
                 {
                     return;   // we are already at edge position
                 }
                 Vector3 targetPosition = transform.position + (Vector3)(minMoveDistance * swipeDirection);
-                print($"try to swipe to {targetPosition} from {transform.position}");
                 // Move the player to the target position (you may want to clamp or smooth this movement)
                 transform.position = Vector3.MoveTowards(transform.position, targetPosition,
                     CoreManager.instance.ControlPanelManager.playerMovementSpeed);

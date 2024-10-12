@@ -85,5 +85,7 @@ namespace Core.Managers
         DatabaseLoaded = 28,
         SessionUp = 29,
         BoughtItem=30,
+        AddBooster=31,
+        StopBooster=32,
     }
 }

@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 291898d457e9497c83c9e5bce64bbb30, type: 3}
   m_Name: ColorRushBuff
   m_EditorClassIdentifier: 
-  buffType: 3
+  boosterType: 103
   poolType: 16
-  buffMultiPlier: 1.5
-  activatonEvent: 14
+  buffMultiplier: 0
+  duration: 8
+  activationEvent: 14
   deactivationEvent: 17
-  prefabReachTargetEvent: 20
-  UIImage: {fileID: 2508768222581782103, guid: 11df89a1bd4735640a6f5c97a6d3ff27, type: 3}
+  firebasePath: 4

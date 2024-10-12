@@ -9,7 +9,6 @@ public class Booster : ScriptableObject
 {
     public Item boosterType;
     public PoolType poolType;
-    public float buffMultiplier;
     public float duration;
     public EventNames activationEvent;
     public EventNames deactivationEvent;
