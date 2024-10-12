@@ -3,13 +3,14 @@ using Core.Managers;
 using GameLogic.ObstacleGeneration;
 using PoolTypes;
 using UnityEngine;
+using Core.Managers;
 
 namespace ScriptableObjects
 {
     [CreateAssetMenu(fileName = "NewStyle", menuName = "Styles/Style", order = 1)]
     public class Style : ScriptableObject
     {
-        public static FirebasePath path = FirebasePath.stylesOwned;
+        public static UserDataManager.FirebasePath path = UserDataManager.FirebasePath.stylesOwned;
 
         [SerializeField] private Item styleName;
         [SerializeField] private Material material;

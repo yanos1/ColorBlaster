@@ -1,35 +1,32 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.GameData;
-using Core.Managers;
-using Extensions;
 using Extentions;
-using PoolTypes;
-using TMPro;
-using UnityEditor;
+using GameLogic.Boosters;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace GameLogic.ConsumablesGeneration
+namespace Core.Managers
 {
     public class BoosterManager : MonoBehaviour
     {
         public float ParticleTransferDuration => 0.5f;
-        [SerializeField] private Booster[] boosters;
+        [SerializeField] private BoosterButtonController[] boosterButtonControllers;
 
-        private Dictionary<Color, Booster> colorToBoosterMap;
-        private Dictionary<Color, ValueTuple<Booster, float>> activeBuffsDurationsLeft;
+        private Dictionary<Color, BoosterButtonController> colorToBoosterMap;
+        private Dictionary<Color, ValueTuple<BoosterButtonController, float>> activeBuffsDurationsLeft;
 
+
+        #region Unity Event Functions
 
         public void Start()
         {
-            colorToBoosterMap = new Dictionary<Color, Booster>();
-            activeBuffsDurationsLeft = new Dictionary<Color, (Booster, float)>();
+            colorToBoosterMap = new Dictionary<Color, BoosterButtonController>();
+            activeBuffsDurationsLeft = new Dictionary<Color, (BoosterButtonController, float)>();
             MapColorToBooster();
             InitBoosters();
         }
-
 
         private void OnEnable()
         {
@@ -38,20 +35,76 @@ namespace GameLogic.ConsumablesGeneration
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, StartUpdate);
         }
 
-
-        public void OnDisable()
+        private void OnDisable()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, StopBuffs);
             CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, StartUpdate);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, StartUpdate);
         }
 
+        #endregion
+
+
+        #region Public Functions
+
+        public void AddBuff(Vector3 startPosition, Color color, float buffStrength)
+        {
+            BoosterButtonController boosterController = GetBooster(color);
+            MoveParticlesToBuffUI(boosterController, startPosition, color, buffStrength);
+        }
+
+        public Color? IsBuffActive(Item buffType) // can be optimised
+        {
+            Color buffColor = default;
+
+            foreach (var (color, boosterButtonController) in colorToBoosterMap)
+            {
+                if (boosterButtonController.Booster.boosterType == buffType)
+                {
+                    buffColor = color;
+                    foreach (var kvp in activeBuffsDurationsLeft)
+                    {
+                        if (UtilityFunctions.CompareColors(kvp.Key, buffColor))
+                        {
+                            return buffColor;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public void StopBuff(Color color)
+        {
+            foreach (var pair in activeBuffsDurationsLeft)
+            {
+                if (UtilityFunctions.CompareColors(pair.Key, color))
+                {
+                    CoreManager.instance.EventManager.InvokeEvent(
+                        activeBuffsDurationsLeft[pair.Key].Item1.Booster.deactivationEvent,
+                        color);
+                    activeBuffsDurationsLeft.Remove(pair.Key);
+                    return;
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region Private Functions
+
         private void InitBoosters()
         {
-            foreach (var booster in boosters)
+            foreach (var boosterButtonController in boosterButtonControllers)
             {
-                booster.numbersOwned.text = CoreManager.instance.UserDataManager
-                    .GetBoosterAmount(booster.boosterType, booster.firebasePath).ToString();
+                boosterButtonController.NumbersOwnedText.text = CoreManager.instance.UserDataManager
+                    .GetBoosterAmount(boosterButtonController.Booster.boosterType,
+                        boosterButtonController.Booster.firebasePath).ToString();
+                boosterButtonController.BoosterButton.onClick.AddListener(() =>
+                    EnableBoosterIfPossible(boosterButtonController,
+                        colorToBoosterMap.FirstOrDefault(kvp => kvp.Value == boosterButtonController.Booster).Key));
             }
         }
 
@@ -69,11 +122,9 @@ namespace GameLogic.ConsumablesGeneration
                 keysToRemove.Clear();
                 foreach (var kvp in activeBuffsDurationsLeft)
                 {
-                    // Debug.Log($"{Time.time}  {kvp.Value.Item2}");
                     if (Time.time > kvp.Value.Item2)
                     {
-                        CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.deactivationEvent, kvp.Key);
-                        Debug.Log($"CANCEL BUFF!");
+                        CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.Booster.deactivationEvent, kvp.Key);
                         keysToRemove.Add(kvp.Key);
                     }
                 }
@@ -81,7 +132,6 @@ namespace GameLogic.ConsumablesGeneration
                 // Remove expired buffs
                 foreach (var key in keysToRemove)
                 {
-                    Debug.Log($"REMOVING {key}");
                     activeBuffsDurationsLeft.Remove(key);
                 }
 
@@ -89,102 +139,89 @@ namespace GameLogic.ConsumablesGeneration
             }
         }
 
-        private void EnableBoosterIfPossible(Booster booster, Color color)
+        private void EnableBoosterIfPossible(BoosterButtonController boosterButtonController, Color color)
         {
             if (IsBoosterActive(color) ||
-                CoreManager.instance.UserDataManager.GetBoosterAmount(booster.boosterType, booster.firebasePath) == 0)
+                CoreManager.instance.UserDataManager.GetBoosterAmount(boosterButtonController.Booster.boosterType, boosterButtonController.Booster.firebasePath) == 0)
             {
                 return;
             }
 
-
-            CoreManager.instance.UserDataManager.UseBooster(booster.boosterType);
-            AddBuff(color, booster);
+            CoreManager.instance.UserDataManager.UseBooster(boosterButtonController.Booster.boosterType);
+            AddBuff(color, boosterButtonController);
         }
 
         private bool IsBoosterActive(Color color)
         {
             return activeBuffsDurationsLeft.ContainsKey(color);
         }
-        // addbuff(activation, deactivation, duration, 
-
 
         private void MapColorToBooster()
         {
             Color[] currentColors = CoreManager.instance.ColorsManager.AllColors;
             int i = 0;
-            foreach (var booster in boosters)
+            foreach (var boosterButtonController in boosterButtonControllers)
             {
-                colorToBoosterMap[currentColors[i]] = booster;
+                colorToBoosterMap[currentColors[i]] = boosterButtonController;
             }
         }
 
-
-        // i had a problem with floating point.
-        // this can be optimised with greater color control (reducing colors to 2 decimal points)
-        public Booster GetBuff(Color color)
+        private BoosterButtonController GetBooster(Color color)
         {
             foreach (var pair in colorToBoosterMap)
             {
                 if (UtilityFunctions.CompareColors(pair.Key, color))
                 {
-                    // we disable everything but gems power up for test 
-
                     return colorToBoosterMap[pair.Key];
                 }
             }
 
-            return null; // should never reac hehre
+            return null; // should never reach here
         }
 
-        private void AddBuff(Color color, Booster booster)
+        private void AddBuff(Color color, BoosterButtonController boosterButtonController)
         {
             if (activeBuffsDurationsLeft.ContainsKey(color))
             {
-                Debug.Log("CONTAINED KEY!!!");
                 // Update the remaining duration for the existing buff
                 var valueTuple = activeBuffsDurationsLeft[color];
-                valueTuple.Item2 += booster.duration; // Set the new expiration time
+                valueTuple.Item2 += boosterButtonController.Booster.duration;
                 activeBuffsDurationsLeft[color] = valueTuple;
             }
             else
             {
-                Debug.Log("Did not contain key");
-                // Set the expiration time as current Time + duration
-                float expirationTime = Time.time + booster.duration;
-                activeBuffsDurationsLeft[color] = (booster, booster.duration);
-                CoreManager.instance.EventManager.InvokeEvent(booster.activatonEvent,
-                    (color, booster.duration, GetBuff(color)));
+                float expirationTime = Time.time + boosterButtonController.Booster.duration;
+                activeBuffsDurationsLeft[color] = (boosterButtonController, expirationTime);
+                CoreManager.instance.EventManager.InvokeEvent(boosterButtonController.Booster.activationEvent,
+                    (color, boosterButtonController.Booster.duration, GetBooster(color)));
             }
         }
 
-
-        public void MoveParticlesToBuffUI(Booster booster, Vector3 startPosition, Color color, float strength)
+        private void MoveParticlesToBuffUI(BoosterButtonController boosterButtonController, Vector3 startPosition, Color color, float strength)
         {
             float maxDuration = 0f;
-            int numberOfGemsToEarn = (int)(strength * booster.buffMultiPlier);
-            Transform targetPosition = booster.UIButton.transform;
+            Transform targetPosition = boosterButtonController.BoosterButton.transform;
             bool firstParticleReached = false;
-            for (int i = 0; i < numberOfGemsToEarn; ++i)
+
+            for (int i = 0; i < strength; ++i)
             {
                 var duration = ParticleTransferDuration;
                 maxDuration = Mathf.Max(duration, maxDuration);
 
-                GameObject gem = CoreManager.instance.PoolManager.GetFromPool(booster.poolType);
+                GameObject gem = CoreManager.instance.PoolManager.GetFromPool(boosterButtonController.Booster.poolType);
                 InitPrefab(startPosition, color, gem);
 
                 CoreManager.instance.MonoRunner.StartCoroutine(UtilityFunctions.MoveObjectOverTime(gem,
                     gem.transform.position, Quaternion.identity,
                     targetPosition, Quaternion.identity, duration, () =>
                     {
-                        CoreManager.instance.PoolManager.ReturnToPool(booster.poolType, gem);
+                        CoreManager.instance.PoolManager.ReturnToPool(boosterButtonController.Booster.poolType, gem);
 
                         if (!firstParticleReached)
                         {
-                            IncrementBoostersOwned(booster, color);
+                            IncrementBoostersOwned(boosterButtonController);
                             firstParticleReached = true;
                         }
-                        // TODO: Play earn sound
                     }));
             }
         }
@@ -193,72 +230,27 @@ namespace GameLogic.ConsumablesGeneration
         {
             gem.transform.position = startPosition;
             UtilityFunctions.MoveObjectInRandomDirection(gem.transform, 2f);
-            gem.GetComponent<SpriteRenderer>().materials[0].color =
-                color; // ew thats ugly, better build a pool that manages allows downcast
+            gem.GetComponent<SpriteRenderer>().materials[0].color = color;
             gem.GetComponent<TrailRenderer>().startColor = color;
         }
 
-        private void IncrementBoostersOwned(Booster booster, Color color)
+        private void IncrementBoostersOwned(BoosterButtonController boosterButtonController)
         {
-            CoreManager.instance.UserDataManager.AddBooster(booster.boosterType, 1);
-            int currentNumber = int.Parse(colorToBoosterMap[color].numbersOwned.text); // Convert string to int
-            currentNumber += 1; // Increment the number
-            colorToBoosterMap[color].numbersOwned.text = currentNumber.ToString(); // Convert back to string
-        }
-
-
-        public void StopBuff(Color color)
-        {
-            foreach (var pair in activeBuffsDurationsLeft)
-            {
-                if (UtilityFunctions.CompareColors(pair.Key, color))
-                {
-                    CoreManager.instance.EventManager.InvokeEvent(
-                        activeBuffsDurationsLeft[pair.Key].Item1.deactivationEvent,
-                        color);
-                    activeBuffsDurationsLeft.Remove(pair.Key);
-                    return;
-                }
-            }
+            CoreManager.instance.UserDataManager.AddBooster(boosterButtonController.Booster.boosterType, 1, boosterButtonController.UpdateUI);
+            
         }
 
         private void StopBuffs(object obj)
         {
             foreach (var kvp in activeBuffsDurationsLeft)
             {
-                CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.deactivationEvent,
+                CoreManager.instance.EventManager.InvokeEvent(kvp.Value.Item1.Booster.deactivationEvent,
                     kvp.Key); // call stop function
             }
 
             activeBuffsDurationsLeft.Clear();
         }
 
-        public void AddBuff(Vector3 startPosition, Color color, float buffStrength)
-        {
-            Booster buff = GetBuff(color);
-            MoveParticlesToBuffUI(buff, startPosition, color, buffStrength);
-        }
-
-        public Color? IsBuffActive(Item buffType) // can be optimised
-        {
-            Color buffColor = default;
-
-            foreach (var (color, booster) in colorToBoosterMap)
-            {
-                if (booster.boosterType == buffType)
-                {
-                    buffColor = color;
-                    foreach (var kvp in activeBuffsDurationsLeft)
-                    {
-                        if (UtilityFunctions.CompareColors(kvp.Key, buffColor))
-                        {
-                            return buffColor;
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
+        #endregion
     }
 }

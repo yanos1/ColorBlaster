@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.GameData;
 using Core.Managers;
 using Extentions;
 using GameLogic.ConsumablesGeneration;
@@ -38,11 +39,11 @@ namespace GameLogic.ObstacleGeneration
 
         public virtual void ResetGameObject()
         {
-            Color? deleteColorBuffColor = CoreManager.instance.BoosterManager.IsBuffActive(BuffType.DeleteColorBuff);
-            if (deleteColorBuffColor is Color color && UtilityFunctions.CompareColors(color, GetColor()))
-            {
-                return; // we detcted a color that is meant to be inactive, so we return before activating.
-            }
+            // Color? deleteColorBuffColor = CoreManager.instance.BoosterManager.IsBuffActive(Item.DeleteColorBuff);
+            // if (deleteColorBuffColor is Color color && UtilityFunctions.CompareColors(color, GetColor()))
+            // {
+            //     return; // we detcted a color that is meant to be inactive, so we return before activating.
+            // }
 
             gameObject.SetActive(true);
         }

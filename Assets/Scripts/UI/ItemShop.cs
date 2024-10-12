@@ -104,7 +104,7 @@ public abstract class ShopItem : MonoBehaviour, IPurchasable
     public Button BuyButton;
     public int price;
     public TextMeshProUGUI priceText;
-    public FirebasePath firebasePath;
+    public UserDataManager.FirebasePath firebasePath;
 
     public virtual bool BuyItemIfPossible()
 

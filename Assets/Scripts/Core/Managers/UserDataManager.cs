@@ -285,7 +285,7 @@ namespace Core.Managers
         public void AddAvatar(Item avatar) => AddItem(avatar, FirebasePath.avatarsOwned);
 
         // Add boosters
-        public void AddBooster(Item booster, int quantity)
+        public void AddBooster(Item booster, int quantity, Action onComplete)
         {
             if (boostersOwned.ContainsKey(booster))
             {
@@ -297,7 +297,10 @@ namespace Core.Managers
             }
 
             userRef.Child(FirebasePath.boostersOwned.ToString()).Child(((int)booster).ToString())
-                .SetValueAsync(boostersOwned[booster]);
+                .SetValueAsync(boostersOwned[booster]).ContinueWithOnMainThread(task =>
+                {
+                    onComplete?.Invoke();
+                });
         }
 
         // Add gems
