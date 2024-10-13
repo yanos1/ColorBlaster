@@ -7,74 +7,61 @@ using Interfaces;
 using PoolTypes;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace GameLogic.PlayerRelated
 {
-    public class Bullet : StyleableObject, IResettable
+    namespace GameLogic.PlayerRelated
     {
-        [SerializeField] private float moveSpeed;
-        [SerializeField] private Color baseColor;
-        [SerializeField] private Rigidbody2D rb;
-        private float BulletOutOfBoundsYPosition = 4.9f;
-
-        private void OnEnable()
+        public abstract class Bullet : StyleableObject, IResettable
         {
-            ResetGameObject();
-        }
 
-        public override Style ApplyStyle()
-        {
-            Style currentStyle = base.ApplyStyle();
-            return currentStyle;
-        }
+            public float BulletOutOfBoundsYPosition => bulletOutOfBoundsYPosition;
+        
+            private float bulletOutOfBoundsYPosition = 4.9f;
 
-        private void FixedUpdate()
-        {
-            rb.MovePosition(transform.position + Vector3.up * (Time.deltaTime * moveSpeed));
-            if (transform.position.y > BulletOutOfBoundsYPosition)
+            [SerializeField] protected PoolType bulletType;
+            [SerializeField] private float moveSpeed;
+            [SerializeField] private Rigidbody2D rb;
+        
+        
+            public virtual void OnEnable()
             {
-                CoreManager.instance.PoolManager.ReturnToPool(PoolType.Bullet, gameObject);
-            }
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            ColorBlock colorBlock = other.gameObject.GetComponent<ColorBlock>();
-            if (colorBlock is not null && GetColor() == Color.white)
-            {
-                Color color = colorBlock.GetColor();
-                SetColor(color);
+                ResetGameObject();
             }
 
-            ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();
-            if (obstacle is not null)
+            // Provide a default implementation (can be overridden in child classes)
+            public virtual void OnTriggerEnter2D(Collider2D col)
             {
-                // print($"is different:   {_renderer.color == obstacle.GetColor()}");
-                if (UtilityFunctions.CompareColors(GetColor(),obstacle.GetColor()))
+                // Default behavior, which can be empty or overridden by subclasses
+            }
+        
+            public virtual void ResetGameObject()
+            {
+                gameObject.SetActive(true);
+            }
+        
+
+            public override Style ApplyStyle()
+            {
+                Style currentStyle = base.ApplyStyle();
+                return currentStyle;
+            }
+
+            public virtual void FixedUpdate()
+            {
+                rb.MovePosition(transform.position + Vector3.up * (Time.deltaTime * moveSpeed));
+                if (transform.position.y > bulletOutOfBoundsYPosition)
                 {
-                    obstacle.Shatter();
+                    CoreManager.instance.PoolManager.ReturnToPool(bulletType, gameObject);
                 }
-                else
-                {
-                    // List<Color> filteredColors = new List<Color>(CoreManager.instance.ColorsManager.CurrentColors);
-                    // filteredColors.Remove(_renderer.color);  // Remove the current color
-                    //
-                    // obstacle.SetColor(filteredColors[Random.Range(0, filteredColors.Count)]);
-                    
-                }
-                print("RETURN T +O POOOOLL");
-                CoreManager.instance.PoolManager.ReturnToPool(PoolType.Bullet, gameObject);
             }
-        }
 
-        public void ResetGameObject()
-        {
-            SetColor(baseColor);
-        }
-
-        public override void ChangeStyle()
-        {
-            ApplyStyle();
+            public override void ChangeStyle()
+            {
+                ApplyStyle();
+            }
         }
     }
+
 }

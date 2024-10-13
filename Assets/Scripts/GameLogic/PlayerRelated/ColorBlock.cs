@@ -36,6 +36,7 @@ namespace GameLogic.PlayerRelated
 
         public override Style ApplyStyle()
         {
+            print("style applied for color block !");
             Style currentStyle = base.ApplyStyle();
             return currentStyle;
         }

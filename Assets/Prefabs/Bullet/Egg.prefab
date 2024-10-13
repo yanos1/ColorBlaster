@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4397919419140069209}
   - component: {fileID: 8096280407654148459}
   - component: {fileID: 283620447706932555}
-  - component: {fileID: 5802169649485141360}
   - component: {fileID: -5576568425774821899}
+  - component: {fileID: 2752767525897660242}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: Egg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,21 +122,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.50000006
---- !u!114 &5802169649485141360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2242495670987547168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03cd04848c39491987f8a673aa04bd81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 10
-  baseColor: {r: 1, g: 1, b: 1, a: 1}
-  rb: {fileID: -5576568425774821899}
 --- !u!50 &-5576568425774821899
 Rigidbody2D:
   serializedVersion: 4
@@ -164,3 +149,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &2752767525897660242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2242495670987547168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c9861bef6e541f3a0fdd193f17fd28b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletType: 12
+  moveSpeed: 10
+  rb: {fileID: -5576568425774821899}

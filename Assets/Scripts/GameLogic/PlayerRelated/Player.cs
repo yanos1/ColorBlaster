@@ -20,6 +20,8 @@ namespace GameLogic.PlayerRelated
         }
 
         [SerializeField] public TouchInputManager inputManager;
+        [SerializeField] private ColorWheel colorWheel;
+        [SerializeField] private MachineGun machineGun;
         [SerializeField] private Shooter shooter;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private Shield shieldBuff;
@@ -49,8 +51,10 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.AddListener(EventNames.KillPlayer, Fall);
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, MakeAlive);
             CoreManager.instance.EventManager.AddListener(EventNames.Revive, ResetGameObject);
-            CoreManager.instance.EventManager.AddListener(EventNames.ActivateShield, ActivateShield);
-            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateShield, DeactivateShield);
+            CoreManager.instance.EventManager.AddListener(EventNames.ActivateShield, OnActivateShield);
+            CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, OnActivateColorRush);
+            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateShield, OnDeactivateShield);
+            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateColorRush, OnDeactivateColorRush);
 
         }
  
@@ -59,17 +63,29 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.RemoveListener(EventNames.KillPlayer, Fall);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, MakeAlive);
             CoreManager.instance.EventManager.RemoveListener(EventNames.Revive, ResetGameObject);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateShield, ActivateShield);
-            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateShield, DeactivateShield);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateShield, OnActivateShield);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateShield, OnDeactivateShield);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, OnActivateColorRush);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, OnDeactivateColorRush);
 
         }
 
-        private void DeactivateShield(object obj)
+        private void OnDeactivateColorRush(object obj)
+        {
+            machineGun.gameObject.SetActive(false);
+        }
+
+        private void OnActivateColorRush(object obj)
+        {
+            machineGun.gameObject.SetActive(true);
+        }
+
+        private void OnDeactivateShield(object obj)
         {
             shieldBuff.gameObject.SetActive(false);
         }
 
-        private void ActivateShield(object obj)
+        private void OnActivateShield(object obj)
         {
             print("ATTEMPT TO ACTIVE SHIELD 222");
             if (obj is (Color color, float duration, BoosterButtonController buff))

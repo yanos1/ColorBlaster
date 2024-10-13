@@ -14,7 +14,7 @@ using Random = UnityEngine.Random;
 namespace GameLogic.PlayerRelated
 {
     // this manager styles the circle of colors aorund the plyer based on the current style
-    public class ColorBlocksCircle : MonoBehaviour
+    public class ColorWheel : MonoBehaviour
     {
         [SerializeField] private ColorBlock[] blocks;
         [SerializeField] private Style colorRushStyle;
@@ -71,30 +71,31 @@ namespace GameLogic.PlayerRelated
         }
         private void OnColorRushPickUp(object obj)
         {
-            if (obj is (Color color, float duration, BoosterButtonController buff))
-            {
-                foreach (var block in blocks)
-                {
-                    block.Renderer.color = color;
-                    block.Renderer.sharedMaterials[1] = colorRushStyle.Material;
-                    block.Renderer.sharedMaterials[1].shader = colorRushStyle.Shader;
-                }
-            }
+            // if (obj is (Color color, float duration, BoosterButtonController buff))
+            // {
+            //     foreach (var block in blocks)
+            //     {
+            //         block.SetColor(color);
+            //         block.Renderer.sharedMaterials[1] = colorRushStyle.Material;
+            //         block.Renderer.sharedMaterials[1].shader = colorRushStyle.Shader;
+            //     }
+            // }
+            
         }
 
         private void OnColorRushEnd(object obj)
         {
-            int i = 0;
-            print("DEACTIVATE !!!!!!!!!!");
-            foreach (var block in blocks)
-            {
-                Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
-                Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
-                block.SetColor(currentColors[i++%currentColors.Length]);
-                block.Renderer.sharedMaterials[1] = currentStyle.Material;
-                print("11");
-                block.Renderer.sharedMaterials[1].shader = currentStyle.Shader;
-            }
+            // int i = 0;
+            // print("DEACTIVATE !!!!!!!!!!");
+            // foreach (var block in blocks)
+            // {
+            //     Style currentStyle = CoreManager.instance.StyleManager.GetStyle();
+            //     Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
+            //     block.SetColor(currentColors[i++%currentColors.Length]);
+            //     block.Renderer.sharedMaterials[1] = currentStyle.Material;
+            //     print("11");
+            //     block.Renderer.sharedMaterials[1].shader = currentStyle.Shader;
+            // }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -118,10 +119,12 @@ namespace GameLogic.PlayerRelated
         {
             if (shootingCoroutine == null)
             {
+                print("wasnt shooting now shooting");
                 shootingCoroutine = StartCoroutine(SetIsShootingForShortDuration());
             }
             else
             {
+                print("was shooting");
                 StopCoroutine(shootingCoroutine);
                 shootingCoroutine = StartCoroutine(SetIsShootingForShortDuration());
             }

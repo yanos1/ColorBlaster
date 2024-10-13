@@ -14,7 +14,7 @@
         NormalWallObstacle3 = 9,
         HardChasingWallObstacle1=10,
         PastelShatterPrefab=11,
-        Bullet = 12,
+        Egg = 12,
         NormalChasingWallObstacle1=13,
         HardOffsettingObstacle1 =14,
         TreasureChestObstacle = 15,
@@ -30,16 +30,10 @@
         HardRotatingTriangleObstacle=25,
         EasyWallObstacle6=26,
         VeryHardRocketObstacle=27,
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+        Bomb=28,
+        BombExplosion=29,
         
     }
 }

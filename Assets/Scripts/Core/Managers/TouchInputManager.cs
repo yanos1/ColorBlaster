@@ -20,9 +20,17 @@ namespace Core.Managers
         private Vector2 swipeDirection;
         private TouchControl currentTouch;
 
+        public Mouse Mouse => mouse;
+        public Touchscreen Screen => screen;
+        
+        private Mouse mouse;
+        private Touchscreen screen;
+
         private void OnEnable()
         {
             CoreManager.instance.EventManager.AddListener(EventNames.StartGame, ActivateGameTouchControl);
+            mouse = Mouse.current;
+            screen = Touchscreen.current;
         }
 
         private void OnDisable()

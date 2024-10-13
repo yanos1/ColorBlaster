@@ -489,6 +489,12 @@ MonoBehaviour:
   - type: 27
     prefab: {fileID: 6536520909376827037, guid: 139b045da6135764a98ecce5fff316ba, type: 3}
     count: 2
+  - type: 29
+    prefab: {fileID: 5823200199252165102, guid: 211e473320c784f4898906bfe82720ee, type: 3}
+    count: 10
+  - type: 28
+    prefab: {fileID: 7542408259323193119, guid: d399aab94a794b846a22e66bb7b13f90, type: 3}
+    count: 20
   itemCosts: {fileID: 4900000, guid: 4537f4657d3f4262a4c3442c5e3acc61, type: 3}
   treasureChestBuffs:
   - {fileID: 11400000, guid: 06d5de28f82987e44a72c4fc92582adf, type: 2}

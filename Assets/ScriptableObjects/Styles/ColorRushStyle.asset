@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32f2cbed24c941ab9487683dc23a98aa, type: 3}
   m_Name: ColorRushStyle
   m_EditorClassIdentifier: 
-  styleName: 0
+  styleName: 108
   material: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   texture: {fileID: 0}
   shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
