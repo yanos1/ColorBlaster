@@ -59,16 +59,16 @@ namespace Core.Managers
             levelSpeeds = Array.ConvertAll(PlayerPrefs.GetString("LevelSpeeds", "2.1,2.3,2.5,2.7,2.9").Split(","),
                 float.Parse);
             colorWheelShootingRotationSpeed = PlayerPrefs.GetFloat("ColorWheelShootingRotationSpeed", 20f);
-            obstacleRotationSpeed = PlayerPrefs.GetFloat("ObstacleRotationSpeed", 12f);
+            obstacleRotationSpeed = PlayerPrefs.GetFloat("ObstacleRotationSpeed", 15f);
             colorWheelRotationSpeedIncrease = PlayerPrefs.GetInt("colorWheelRotationSpeedIncrease", 13);
             obstacleRotationSpeedIncreasePerLevel = PlayerPrefs.GetFloat("ObstacleRotationSpeedIncreasePerLevel", 2f);
             shootingCooldown = PlayerPrefs.GetFloat("ShootingCooldown", 0.15f);
-            playerMovementSpeed = PlayerPrefs.GetFloat("PlayerMovementSpeed", 6.5f);
+            playerMovementSpeed = PlayerPrefs.GetFloat("PlayerMovementSpeed", 20f);
             chasingObstaclesMovespeed = PlayerPrefs.GetFloat("ChasingObstaclesMovespeed", 1.3f);
             movingObstaclesMovespeed = PlayerPrefs.GetFloat("MovingObstaclesMovespeed", 1.9f);
             offsettingobstaclesMovespeed = PlayerPrefs.GetFloat("OffsettingObstaclesMovespeed", 1.5f);
 
-            obstaclesPerLevel = PlayerPrefs.GetInt("ObstaclesPerLevel", 10);
+            obstaclesPerLevel = PlayerPrefs.GetInt("ObstaclesPerLevel", 7);
             sessionMultiplier = PlayerPrefs.GetFloat("SessionMultiplier", 1.1f);
 
             numbersOfRocketsToShootPerLevel = PlayerPrefs.GetInt("NumbersOfRocketsToShootPerLevel", 2);
@@ -85,7 +85,7 @@ namespace Core.Managers
             minBossLevelDifficulty = PlayerPrefs.GetInt("MinBossLevelDifficulty", 4);
             maxBossLevelDifficulty = PlayerPrefs.GetInt("MaxBossLevelDifficulty", 12);
             bossLevelDifficultyIncreasePerLevel = PlayerPrefs.GetFloat("bossLevelDifficultyIncreasePerLevel", 1.5f);
-            distanceBetweenObstacles = PlayerPrefs.GetFloat("DistanceBetweenObstacles", 70f);
+            distanceBetweenObstacles = PlayerPrefs.GetFloat("DistanceBetweenObstacles", 60f);
         }
 
         private int[][] ParseArray(string str)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using Core.GameData;
 using Core.Managers;
 using Extentions;
 using GameLogic.Boosters;
@@ -62,7 +63,8 @@ namespace GameLogic.PlayerRelated
 
         private void SetColorWheelColors(object obj)
         {
-            Color[] currentColors = CoreManager.instance.ColorsManager.CurrentColors;
+            Item colorTheme = CoreManager.instance.UserDataManager.GetEquippedItem(UserDataManager.FirebasePath.colorThemesOwned);
+            Color[] currentColors = CoreManager.instance.ColorsManager.GetThemeColors(colorTheme);
 
             for (int i = 0; i < blocks.Length; ++i)
             {
@@ -98,22 +100,7 @@ namespace GameLogic.PlayerRelated
             // }
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            // if (invincible) return;
-            ObstaclePart part = other.GetComponent<ObstaclePart>();
-            if (part is not null && !CoreManager.instance.Player.IsDead)
-            {
-                ShatterColorBlocks();
-                CoreManager.instance.EventManager.InvokeEvent(EventNames.KillPlayer, null);
-            }
-
-            Consumable consumable = other.GetComponent<Consumable>();
-            if (consumable is not null)
-            {
-                consumable.Consume();
-            }
-        }
+    
 
         private void SetIsShooting(object obj)
         {
@@ -142,7 +129,7 @@ namespace GameLogic.PlayerRelated
         }
 
 
-        private void RestoreBlocks(object obj)
+        public void RestoreBlocks(object obj)
         {
             float maxReviveDuration = 0;
             float baseReviveDuration = 0.5f;
@@ -174,7 +161,7 @@ namespace GameLogic.PlayerRelated
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
-        private void ShatterColorBlocks()
+        public void ShatterColorBlocks()
         {
             playerDead = true;
             foreach (var block in blocks)

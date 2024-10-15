@@ -12,8 +12,8 @@ namespace Core.Managers
 {
     public class TouchInputManager : MonoBehaviour
     {
-        private float minDistanceToMove = 0.7f;  // Minimum distance to consider a valid move
-        private bool isShooting = false;         // To track if shooting has occurred
+        private float minDistanceToMove = 0.7f; // Minimum distance to consider a valid move
+        private bool isShooting = false; // To track if shooting has occurred
         private Vector2 touchPosition;
         private Vector2 mousePosition;
         private Vector2 lastTouchPosition;
@@ -22,7 +22,7 @@ namespace Core.Managers
 
         public Mouse Mouse => mouse;
         public Touchscreen Screen => screen;
-        
+
         private Mouse mouse;
         private Touchscreen screen;
 
@@ -51,30 +51,37 @@ namespace Core.Managers
                 if (Touchscreen.current != null)
                 {
                     var touches = GetTouches();
+
+                    touchPosition = default;
+                    currentTouch = default;
+
                     if (touches.Count > 0)
                     {
                         currentTouch = touches[0];
-                        if (!IsTouchOverUI())  // Only process if not over UI
+                        if (!IsTouchOverUI()) // Only process if not over UI
                         {
                             touchPosition = GetTouchPosition(currentTouch);
-                            swipeDirection = DetectSwipeInput(currentTouch);  // Detect swipe for touch input
-                        }
-                        else
-                        {
-                            touchPosition = default;
-                            currentTouch = default;
+                            swipeDirection = DetectSwipeInput(currentTouch); // Detect swipe for touch input
                         }
                     }
                 }
 
-                // Handle mouse input
-                mousePosition = HandleMouseInput();
-                if (Mouse.current != null && Mouse.current.leftButton.isPressed)
+                else if (Mouse.current != null && Mouse.current.leftButton.isPressed)
                 {
-                    if (!IsPointerOverUI())  // Only process if not over UI
+                    // Handle mouse input
+                    if (IsPointerOverUI())
                     {
-                        swipeDirection = DetectMouseSwipe();  // Detect swipe for mouse input
+                        mousePosition = default;
                     }
+                    else
+                    {
+                        mousePosition = HandleMouseInput();
+                        swipeDirection = DetectMouseSwipe(); // Detect swipe for mouse input
+                    }
+                }
+                else
+                {
+                    mousePosition = default;
                 }
 
                 yield return null;
@@ -87,14 +94,14 @@ namespace Core.Managers
             // Track the swipe phase for touch input
             if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Began)
             {
-                lastTouchPosition = GetTouchPosition(touch);  // Start of the swipe
+                lastTouchPosition = GetTouchPosition(touch); // Start of the swipe
             }
             else if (touch.phase.ReadValue() == UnityEngine.InputSystem.TouchPhase.Moved)
             {
                 Vector2 currentTouchPosition = GetTouchPosition(touch);
                 Vector2 swipeDelta = currentTouchPosition - lastTouchPosition;
 
-                if (Mathf.Abs(swipeDelta.y) > minDistanceToMove)  // Check for vertical movement
+                if (Mathf.Abs(swipeDelta.y) > minDistanceToMove) // Check for vertical movement
                 {
                     return swipeDelta.y > 0 ? Vector2.up : Vector2.down;
                 }
@@ -109,14 +116,14 @@ namespace Core.Managers
             // Handle mouse swipe detection
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                lastTouchPosition = HandleMouseInput();  // Register the start of the swipe
+                lastTouchPosition = HandleMouseInput(); // Register the start of the swipe
             }
             else if (Mouse.current.leftButton.isPressed)
             {
                 Vector2 currentMousePosition = HandleMouseInput();
                 Vector2 swipeDelta = currentMousePosition - lastTouchPosition;
 
-                if (Mathf.Abs(swipeDelta.y) > minDistanceToMove)  // Check for vertical movement
+                if (Mathf.Abs(swipeDelta.y) > minDistanceToMove) // Check for vertical movement
                 {
                     return swipeDelta.y > 0 ? Vector2.up : Vector2.down;
                 }
@@ -147,17 +154,10 @@ namespace Core.Managers
         // Handle mouse input for position
         private Vector2 HandleMouseInput()
         {
-            if (Mouse.current != null && Mouse.current.leftButton.isPressed)
-            {
-                Vector2 currentMousePosition = Mouse.current.position.ReadValue();
-                Vector3 positionNearClip = new Vector3(currentMousePosition.x, currentMousePosition.y,
-                    CameraManager.instance.MainCamera.nearClipPlane);
-                return CameraManager.instance.MainCamera.ScreenToWorldPoint(positionNearClip);
-            }
-            else
-            {
-                return default;
-            }
+            Vector2 currentMousePosition = Mouse.current.position.ReadValue();
+            Vector3 positionNearClip = new Vector3(currentMousePosition.x, currentMousePosition.y,
+                CameraManager.instance.MainCamera.nearClipPlane);
+            return CameraManager.instance.MainCamera.ScreenToWorldPoint(positionNearClip);
         }
 
         // Public function to get touch position
@@ -169,6 +169,7 @@ namespace Core.Managers
         // Public function to get mouse position
         public Vector2? GetMousePosition()
         {
+            print($"mouse position : {mousePosition}");
             return mousePosition != default ? mousePosition : null;
         }
 
@@ -186,14 +187,15 @@ namespace Core.Managers
             {
                 if (EventSystem.current.IsPointerOverGameObject(currentTouch.touchId.ReadValue()))
                 {
-                    return true;  // Touch is over a UI element
+                    return true; // Touch is over a UI element
                 }
             }
-            return false;  // Touch is not over a UI element
+
+            return false; // Touch is not over a UI element
         }
 
         // Check if mouse pointer is over a UI element
-        private bool IsPointerOverUI()
+        public bool IsPointerOverUI()
         {
             return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
         }

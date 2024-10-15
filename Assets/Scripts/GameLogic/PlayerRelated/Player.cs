@@ -2,6 +2,7 @@
 using Extentions;
 using GameLogic.Boosters;
 using GameLogic.ConsumablesGeneration;
+using GameLogic.ObstacleGeneration;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace GameLogic.PlayerRelated
             set => isDead = value;
         }
 
+        [SerializeField] private PlayerAvatarHandler avatarHandler;
         [SerializeField] public TouchInputManager inputManager;
         [SerializeField] private ColorWheel colorWheel;
         [SerializeField] private MachineGun machineGun;
@@ -39,6 +41,7 @@ namespace GameLogic.PlayerRelated
         private void Awake()
         {
             CoreManager.instance.Player = this;
+            avatarHandler.SetPlayerAvatar();
             rb = GetComponent<Rigidbody2D>();
             startPos = transform.position;
             isDead = false;
@@ -48,7 +51,6 @@ namespace GameLogic.PlayerRelated
 
         private void OnEnable()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.KillPlayer, Fall);
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, MakeAlive);
             CoreManager.instance.EventManager.AddListener(EventNames.Revive, ResetGameObject);
             CoreManager.instance.EventManager.AddListener(EventNames.ActivateShield, OnActivateShield);
@@ -60,7 +62,6 @@ namespace GameLogic.PlayerRelated
  
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.KillPlayer, Fall);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, MakeAlive);
             CoreManager.instance.EventManager.RemoveListener(EventNames.Revive, ResetGameObject);
             CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateShield, OnActivateShield);
@@ -69,15 +70,36 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, OnDeactivateColorRush);
 
         }
+        
+        
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            // if (invincible) return;
+            ObstaclePart part = other.GetComponent<ObstaclePart>();
+            if (part is not null && !CoreManager.instance.Player.IsDead)
+            {
+                colorWheel.ShatterColorBlocks();
+                Die();
+                CoreManager.instance.EventManager.InvokeEvent(EventNames.KillPlayer, null);
+            }
+
+            Consumable consumable = other.GetComponent<Consumable>();
+            if (consumable is not null)
+            {
+                consumable.Consume();
+            }
+        }
 
         private void OnDeactivateColorRush(object obj)
         {
             machineGun.gameObject.SetActive(false);
+            colorWheel.gameObject.SetActive(true);
         }
 
         private void OnActivateColorRush(object obj)
         {
             machineGun.gameObject.SetActive(true);
+            colorWheel.gameObject.SetActive(false);
         }
 
         private void OnDeactivateShield(object obj)
@@ -98,7 +120,7 @@ namespace GameLogic.PlayerRelated
         
         
 
-        private void Fall(object obj)
+        private void Die()
         {
             isDead = true;
             StartCoroutine(UtilityFunctions.MoveObjectOverTime(

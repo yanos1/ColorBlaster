@@ -76,9 +76,6 @@ namespace GameLogic.StyleRelated
             // Play the shatter sound *ADD LATER*
             // _audioSource.Play();
             // Instantiate the shatter effect at the part's position
-            print(name);
-
-            print(CoreManager.instance.PoolManager);
             GameObject shaterPrefab = CoreManager.instance.StyleManager.GetShatterPrefab();
             ShapeShiftingParticleSystem particles = shaterPrefab.GetComponent<ShapeShiftingParticleSystem>();
             particles.Init(this);

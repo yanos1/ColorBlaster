@@ -384,16 +384,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 68a3958377c88094fb60914059da531d, type: 2}
   - {fileID: 11400000, guid: b159f557ac1d9424a97aec324c2c9ebd, type: 2}
   colorThemes:
-  - type: 1
-    color1: {r: 0.3075471, g: 0.54379576, b: 1, a: 1}
-    color2: {r: 1, g: 0.8875291, b: 0.3075471, a: 1}
-    color3: {r: 1, g: 0.3446009, b: 0.2471698, a: 1}
-    color4: {r: 0.536625, g: 0.97735846, b: 0.56383085, a: 1}
-  - type: 2
-    color1: {r: 0.46195084, g: 0.514708, b: 0.9169811, a: 1}
-    color2: {r: 0.90188676, g: 0.5224136, b: 0.8323069, a: 1}
-    color3: {r: 0.79607844, g: 0.3764706, b: 0.40992755, a: 1}
-    color4: {r: 0.93962264, g: 0.8474391, b: 0.019501582, a: 1}
+  - {fileID: 11400000, guid: cfa0c4c5bc2276a49aedf4713af2c1ae, type: 2}
+  - {fileID: 11400000, guid: 375fe67e2637fdc4cbf37d098e522569, type: 2}
   baseObstaclesList:
   - {fileID: 4593088555778702884, guid: e9cc0ce5ffa0e9949b2cb860b20f9196, type: 3}
   - {fileID: 1886096160865127755, guid: 5c960a1a1a66a4b4499a4f4874048c5c, type: 3}
@@ -412,6 +404,7 @@ MonoBehaviour:
   - {fileID: 3074399371540892993, guid: 10eeaf00210d36a429e09ce9bfd9e0b2, type: 3}
   - {fileID: 1680389936656010855, guid: 7de90400959fc2c4d81fc5dc8e7aebd4, type: 3}
   - {fileID: 8105898414595832603, guid: e67203c94d2893842b7fa2b347214792, type: 3}
+  - {fileID: 4698200018929776202, guid: aa39d03f7bd60df49904bcffa1287c74, type: 3}
   bossObstaclesList:
   - {fileID: 5422812282413597159, guid: 335a29bf0c3cfe24ab87cff3d539575c, type: 3}
   - {fileID: 2031825499238378032, guid: 5d789d75d48a6a84ab11a6617d92ce8a, type: 3}
@@ -495,6 +488,9 @@ MonoBehaviour:
   - type: 28
     prefab: {fileID: 7542408259323193119, guid: d399aab94a794b846a22e66bb7b13f90, type: 3}
     count: 20
+  - type: 24
+    prefab: {fileID: 6677516199005668940, guid: aa39d03f7bd60df49904bcffa1287c74, type: 3}
+    count: 3
   itemCosts: {fileID: 4900000, guid: 4537f4657d3f4262a4c3442c5e3acc61, type: 3}
   treasureChestBuffs:
   - {fileID: 11400000, guid: 06d5de28f82987e44a72c4fc92582adf, type: 2}

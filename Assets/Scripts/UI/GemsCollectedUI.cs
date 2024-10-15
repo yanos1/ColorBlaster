@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Core.Managers;
 using Extentions;
 using GameLogic.ConsumablesGeneration;
+using ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -9,7 +9,7 @@ namespace GameLogic.PlayerRelated
         private float maxYPosition; // Maximum Y position the player can move to
         private float minYPosition; // Minimum Y position the player can move to
 
-        private float minMoveDistance = 0.3f; // Minimum distance to move
+        private float minMoveDistance = 0.05f; // Minimum distance to move
         private TouchInputManager _inputManager;
 
 
@@ -22,10 +22,9 @@ namespace GameLogic.PlayerRelated
         void Update()
         {
             if (CoreManager.instance.Player.IsDead) return;
-            if (_inputManager.IsTouchOverUI()) return;
             // Check for touch input first
+            // if (_inputManager.IsPointerOverUI())return;
             Vector2? inputPosition = GetInputPosition();
-
             if (inputPosition != null)
             {
                 HandleHorizontalMovement((Vector2)inputPosition); // Move based on touch or mouse input

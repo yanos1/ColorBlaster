@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Core.GameData;
 using Core.Managers;
 using Extensions;
@@ -34,6 +37,8 @@ namespace UI
             InitializeConsumablesItems();
         }
 
+        #region INIT
+
         private void InitializeButtonToPanelMap()
         {
             foreach (SerializableTuple<Button, GameObject> kvp in buttonToPanelMap)
@@ -60,10 +65,10 @@ namespace UI
         {
             foreach (var booster in boosters)
             {
-                print(booster.itemType);
+                booster.buyButton.onClick.AddListener(() => BuyItemIfPossible(booster));
+
                 _dataManager.BoostersOwned.TryGetValue(booster.itemType, out int amount);
-                
-                booster.numberOwned.text = "Owned " +  amount;
+                booster.numberOwned.text = "Owned " + amount;
             }
         }
 
@@ -77,15 +82,108 @@ namespace UI
         {
             foreach (var item in shopItems)
             {
-                if (_dataManager.IsItemEquipped(item.itemType, item.firebasePath))
+                item.buyButton.onClick.AddListener(() => BuyItemIfPossible(item));
+                item.EquipButton.onClick.AddListener(() => EquipNewItem(item));
+
+                ConfigButton(item);
+            }
+        }
+
+        private void ConfigButton(NonConsumableShopItem item)
+        {
+            bool hasItem = _dataManager.HasItem(item.itemType, item.firebasePath);
+
+            bool itemEquipped = _dataManager.IsItemEquipped(item.itemType, item.firebasePath);
+
+
+            if (!hasItem)
+            {
+                print($"{item} is not owned and not equipped");
+
+                item.SetNotOwned();
+            }
+
+            else if (itemEquipped)
+            {
+                print($"{item} is owned and equipped");
+                item.SetOwnedAndEquipped();
+            }
+
+            else
+            {
+                print($"{item} is owned but not equipped");
+                item.SetOwned();
+            }
+        }
+
+        #endregion
+
+        public async virtual void BuyItemIfPossible<T>(T itemToBuy) where T : ShopItem
+        {
+            // Check if the user has enough gems
+            if (CoreManager.instance.UserDataManager.GemsOwned >= itemToBuy.Price)
+            {
+                // Deduct the gems
+                CoreManager.instance.UserDataManager.AddGems(-itemToBuy.Price);
+
+                // Handle the specific item type
+                if (itemToBuy is ConsumableShopItem consumable)
                 {
-                    item.SetEquipped();
+                    // Add the consumable booster and update UI
+                    CoreManager.instance.UserDataManager.AddBooster(consumable.itemType, 1,
+                        () => consumable.numberOwned.text =
+                            "Owned: " + (int.Parse(Regex.Match(consumable.numberOwned.text, @"\d+").ToString()) + 1)
+                    );
+                }
+                else if (itemToBuy is NonConsumableShopItem nonConsumable)
+                {
+                    // Add the non-consumable item
+                    await CoreManager.instance.UserDataManager.AddItem(nonConsumable.itemType,
+                        nonConsumable.firebasePath);
+                    nonConsumable.BuyItem();
+                    // foreach (var item in GetShopItemsList(nonConsumable))
+                    // {
+                    //     item.ActivateEquipIfOwned();
+                    // }
                 }
 
-                if (_dataManager.HasItem(item.itemType, item.firebasePath))
+                // Invoke the bought item event
+                CoreManager.instance.EventManager.InvokeEvent(EventNames.BoughtItem, itemToBuy.Price);
+            }
+            else
+            {
+                // TODO: Add can't afford juice
+            }
+        }
+
+        public void EquipNewItem(NonConsumableShopItem itemToEquip)
+        {
+            List<NonConsumableShopItem> items = GetShopItemsList(itemToEquip);
+            foreach (var item in items)
+            {
+                if (item == itemToEquip)
                 {
-                    item.equipButton.gameObject.SetActive(true);
+                    item.EquipItem();
+                    continue;
                 }
+
+                if (item.IsOwned)
+                {
+                    item.EnableEquipButton();
+                }
+            }
+        }
+
+
+        private List<NonConsumableShopItem> GetShopItemsList(NonConsumableShopItem itemToBuy)
+        {
+            if (itemToBuy.firebasePath == UserDataManager.FirebasePath.avatarsOwned)
+            {
+                return avatars;
+            }
+            else
+            {
+                return colorThemes;
             }
         }
 
@@ -97,36 +195,19 @@ namespace UI
 }
 
 
-public abstract class ShopItem : MonoBehaviour, IPurchasable
+public abstract class ShopItem : MonoBehaviour
 {
+    public int Price => price;
     public Item itemType;
-    public Image image;
-    public Button BuyButton;
-    public int price;
+    [FormerlySerializedAs("BuyButton")] public Button buyButton;
+    public Sprite sprite;
+    private int price;
     public TextMeshProUGUI priceText;
     public UserDataManager.FirebasePath firebasePath;
 
-    public virtual bool BuyItemIfPossible()
-
-    {
-        if (CoreManager.instance.UserDataManager.GemsOwned >= price)
-        {
-            
-            CoreManager.instance.UserDataManager.AddGems(-price);
-            
-            CoreManager.instance.EventManager.InvokeEvent(EventNames.BoughtItem, price);
-            return true;
-        }
-        else
-        {
-            //TODO add cant affoard juice
-            return false;
-        }
-    }
 
     public virtual void Start()
     {
-        BuyButton.onClick.AddListener(() => BuyItemIfPossible());
         price = CoreManager.instance.CostManager.GetItemCost(itemType);
         priceText.text = price.ToString();
     }

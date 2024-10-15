@@ -145,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8861390499341487928, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.89
+      value: -1.76
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2084105168619154934, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
@@ -160,11 +160,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1438453581969382882}
   m_SourcePrefab: {fileID: 100100000, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
---- !u!212 &446924088940063569 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 2823863115819416238, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
-  m_PrefabInstance: {fileID: 2378933721436262911}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1261664808450118251 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3495355062483403668, guid: 6cc641c254567a04a82a088b1719c7b3, type: 3}
@@ -207,5 +202,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f785f708ca369e4e9ef618f7815d740, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _renderer: {fileID: 446924088940063569}
   direction: 1

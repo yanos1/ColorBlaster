@@ -11,15 +11,15 @@ using static Core.Managers.UserDataManager;
 namespace Core.Managers
 {
 
-    public class StyleSaver : ISaveData
-    {
-        public string StyleName;
-
-        public StyleSaver(string styleName)
-        {
-            StyleName = styleName;
-        }
-    }
+    // public class StyleSaver : ISaveData
+    // {
+    //     public string StyleName;
+    //
+    //     public StyleSaver(string styleName)
+    //     {
+    //         StyleName = styleName;
+    //     }
+    // }
 
     public class StyleManager
     {
@@ -33,17 +33,12 @@ namespace Core.Managers
         {
             _styleableObjects = new List<StyleableObject>();
             _styles = styles;
-            foreach (var VARIABLE in _styles)
-            {
-                Debug.Log($" style : {VARIABLE.StyleName}");
-            }
+         
 
             foreach (var style in _styles)
             {
-                Debug.Log($"current style {style.StyleName}");
                 if (CoreManager.instance.UserDataManager.IsItemEquipped(style.StyleName, Style.path))
                 { 
-                    Debug.Log("FOUND STYLE!");
                     currentStyle = style;
                 }
             }

@@ -13,12 +13,14 @@ namespace Core.Managers
         private int _currentGemsPicked;
         private int _currentDistanceTraveled;
         private int _bestDistanceTraveled;
-        private float _timeBetweenUpdates = 0.17f;
+        private float basicTimeToUpdateScore = 0.16f;
+        private float _timeBetweenUpdates;
 
         public void Start()
         {
             _currentDistanceTraveled = 0;
             _currentGemsPicked = 0;
+            _timeBetweenUpdates = basicTimeToUpdateScore;
             InitializeHighScore();
         }
 
@@ -46,7 +48,7 @@ namespace Core.Managers
 
         private void DecreaseTimeBetweenUpdates(object obj)
         {
-            _timeBetweenUpdates = Mathf.Max(_timeBetweenUpdates-0.01f, 0.05f);
+            _timeBetweenUpdates = Mathf.Max(_timeBetweenUpdates-0.08f, 0.05f);
         }
 
         private async void InitializeHighScore()
@@ -66,6 +68,8 @@ namespace Core.Managers
                 highScoreUI.text = "best: " + _currentDistanceTraveled;
                 _currentDistanceTraveled = 0;
             }
+
+            _timeBetweenUpdates = basicTimeToUpdateScore;
 
             CoreManager.instance.UserDataManager.AddGems(_currentGemsPicked);
         }

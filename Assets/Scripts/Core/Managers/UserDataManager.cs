@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.GameData;
 using Firebase;
@@ -186,6 +187,24 @@ namespace Core.Managers
         }
 
 
+        public Item GetEquippedItem(FirebasePath firebasePath)
+        {
+            foreach (var (path, dictionary) in itemsOwned)
+            {
+                if (path == firebasePath)
+                {
+                    foreach (var v in dictionary)
+                    {
+                        Debug.Log($"item : {v.Key}  eqipped: {v.Value}");
+                    }
+
+                    return dictionary.FirstOrDefault(kvp => kvp.Value).Key;
+                }
+            }
+            Debug.Log("ITEM WASNT FOUND !! FIX DATA BASE DATA");
+            return Item.None;
+        }
+
         public bool IsItemEquipped(Item item, FirebasePath firebasePath)
         {
             Debug.Log("ISITEM CALLED");
@@ -208,7 +227,7 @@ namespace Core.Managers
         }
 
         // Equip items  can be optimised !
-        public void EquipItem(Item item, FirebasePath path)
+        public  void  EquipItem(Item item, FirebasePath path)
         {
             if (!itemsOwned.ContainsKey(path))
             {
@@ -216,23 +235,20 @@ namespace Core.Managers
                 return;
             }
 
-            var dict = itemsOwned[path];
+            var newDict = new Dictionary<int, object>();
 
-            foreach (var key in dict.Keys)
+            foreach (var key in itemsOwned[path].Keys)
             {
-                dict[key] = false; // Unequip all items
+                newDict[(int)key] = false; // Unequip all items
             }
 
-            dict[item] = true; // Equip the new item
+            newDict[(int)item] = true; // Equip the new item
 
-            // Prepare data for Firebase
-            var firebaseData = new Dictionary<int, bool>();
-            foreach (var entry in dict)
+            userRef.Child(path.ToString()).SetValueAsync(newDict).ContinueWithOnMainThread(task =>
             {
-                firebaseData[(int)entry.Key] = entry.Value;
-            }
-
-            userRef.Child(path.ToString()).SetValueAsync(firebaseData);
+                itemsOwned[path] = newDict.ToDictionary(k => (Item)k.Key, v => (bool)v.Value);
+            });
+            
         }
 
         public void EquipStyle(Item style) => EquipItem(style, FirebasePath.stylesOwned);
@@ -242,7 +258,7 @@ namespace Core.Managers
         public void EquipAvatar(Item avatar) => EquipItem(avatar, FirebasePath.avatarsOwned);
 
         // Add items
-        public void AddItem(Item item, FirebasePath firebasePath)
+        public async Task AddItem(Item item, FirebasePath firebasePath)
         {
             if (!itemsOwned.ContainsKey(firebasePath))
             {
@@ -251,10 +267,10 @@ namespace Core.Managers
             }
 
             var dict = itemsOwned[firebasePath];
-            AddItemToDataBase(item, firebasePath, dict);
+            await AddItemToDataBase(item, firebasePath, dict);
         }
 
-        private void AddItemToDataBase(Item item, FirebasePath path, Dictionary<Item, bool> dict)
+        private async Task AddItemToDataBase(Item item, FirebasePath path, Dictionary<Item, bool> dict)
         {
             if (dict.TryAdd(item, false)) // Add item to the local dictionary if it doesn't already exist
             {
@@ -263,7 +279,7 @@ namespace Core.Managers
                     { ((int)item).ToString(), false }
                 };
 
-                userRef.Child(path.ToString()).UpdateChildrenAsync(newItem).ContinueWith(task =>
+                await userRef.Child(path.ToString()).UpdateChildrenAsync(newItem).ContinueWith(task =>
                 {
                     if (task.IsCompleted)
                     {
@@ -277,11 +293,11 @@ namespace Core.Managers
             }
         }
 
-        public void AddStyle(Item style) => AddItem(style, FirebasePath.stylesOwned);
-
-        public void AddColorTheme(Item colorTheme) => AddItem(colorTheme, FirebasePath.colorThemesOwned);
-
-        public void AddAvatar(Item avatar) => AddItem(avatar, FirebasePath.avatarsOwned);
+        // public void AddStyle(Item style) => AddItem(style, FirebasePath.stylesOwned);
+        //
+        // public void AddColorTheme(Item colorTheme) => AddItem(colorTheme, FirebasePath.colorThemesOwned);
+        //
+        // public void AddAvatar(Item avatar) => AddItem(avatar, FirebasePath.avatarsOwned);
 
         // Add boosters
         public void AddBooster(Item booster, int quantity, Action onComplete)
@@ -323,6 +339,7 @@ namespace Core.Managers
 
         public bool HasItem(Item itemType, FirebasePath avatarFirebasePath)
         {
+            Debug.Log($"{itemType} is : {itemsOwned[avatarFirebasePath].ContainsKey(itemType)}");
             return itemsOwned[avatarFirebasePath].ContainsKey(itemType);
         }
 

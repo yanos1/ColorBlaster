@@ -1,27 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.GameData;
 using Extentions;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Core.Managers
 {
-    [Serializable] // To make it visible and editable in the Inspector
-    public class ColorTheme
-    {
-        public ColorThemeType type;
-
-        public Color color1;
-        public Color color2;
-        public Color color3;
-        public Color color4;
-        
-        public Color[] GetColors()
-        {
-            return new [] {color1,color2,color3, color4};
-        }
-    }
-
     public class ColorSaver : ISaveData
     {
         public string SavedColors;
@@ -32,23 +18,12 @@ namespace Core.Managers
         }
     }
 
-    // Define an enum that will be used as keys for the dictionary
-    public enum ColorThemeType
-    {
-        None = 0,
-        Default = 1,
-        Mystic = 2,
-        // Solar =3,
-        // Oceanic =4,
-        // Cyber =5,
-    }
-
     public class ColorsManager
     {
-        public Color[] CurrentColors => _currentColorTheme[..maxColors];
-        public Color[] AllColors => _currentColorTheme;
+        public Color[] CurrentColors => _currentColorTheme.GetColors()[..maxColors];
+        public Color[] AllColors => _currentColorTheme.GetColors();
         
-        private  Color[] _currentColorTheme;
+        private  ColorTheme _currentColorTheme;
 
         // Serialized list where each element holds 4 colors
         private readonly List<ColorTheme> _colorSets;
@@ -63,50 +38,62 @@ namespace Core.Managers
             minAmountOfColors = 2;
             _colorSets = colorSets;
             maxColors = minAmountOfColors;
-
+            GetEquippedColorTheme();
             // Load saved color theme
-            CoreManager.instance.SaveManager.Load<ColorSaver>(savedData =>
-            {
-                // If saved data exists, try to parse it to ColorTheme
-                if (savedData != null && Enum.TryParse(savedData.SavedColors, out ColorThemeType savedColorTheme))
-                {
-                    // Try to find the color set from the saved theme
-                    _currentColorTheme = _colorSets.FirstOrDefault(theme => theme.type == savedColorTheme)?.GetColors();
-                   
-
-                }
-
-                // Fallback to default style if no saved style was found or an invalid style was saved
-                if (_currentColorTheme == null)
-                {
-                    _currentColorTheme = _colorSets.FirstOrDefault(theme => theme.type == ColorThemeType.Default)?.GetColors();
-                    Debug.Log(_currentColorTheme.First());
-                    // Save the default theme if no saved theme was found
-                    CoreManager.instance.SaveManager.Save(new ColorSaver(ColorThemeType.Default.ToString()));
-                }
-            CoreManager.instance.EventManager.AddListener(EventNames.SessionUp, (object obj)=> maxColors=Mathf.Min(maxColors+1,_currentColorTheme.Length));
+            // CoreManager.instance.SaveManager.Load<ColorSaver>(savedData =>
+            // {
+            //     // If saved data exists, try to parse it to ColorTheme
+            //     if (savedData != null && Enum.TryParse(savedData.SavedColors, out ColorThemeType savedColorTheme))
+            //     {
+            //         // Try to find the color set from the saved theme
+            //         _currentColorTheme = _colorSets.FirstOrDefault(theme => theme.colorThemeType == savedColorTheme)?.GetColors();
+            //        
+            //
+            //     }
+            //
+            //     // Fallback to default style if no saved style was found or an invalid style was saved
+            //     if (_currentColorTheme == null)
+            //     {
+            //         _currentColorTheme = _colorSets.FirstOrDefault(theme => theme.colorThemeType == ColorThemeType.Default)?.GetColors();
+            //         Debug.Log(_currentColorTheme.First());
+            //         // Save the default theme if no saved theme was found
+            //         CoreManager.instance.SaveManager.Save(new ColorSaver(ColorThemeType.Default.ToString()));
+            //     }
+            CoreManager.instance.EventManager.AddListener(EventNames.SessionUp, (object obj)=> maxColors=Mathf.Min(maxColors+1,_currentColorTheme.GetColors().Length));
             CoreManager.instance.EventManager.AddListener(EventNames.GameOver, (object obj)=> maxColors=minAmountOfColors);
-            });
+            CoreManager.instance.EventManager.AddListener(EventNames.StartGame, (object obj) => GetEquippedColorTheme());
+        }
+
+        private void GetEquippedColorTheme()
+        {
+            foreach (var colorSet in _colorSets)
+            {
+                if (CoreManager.instance.UserDataManager.IsItemEquipped(colorSet.colorThemeType, ColorTheme.path))
+                { 
+                    _currentColorTheme = colorSet;
+                }
+            }
         }
 
 
         public void OnDestroy()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.SessionUp, (object obj)=> maxColors=Mathf.Min(maxColors+1,_currentColorTheme.Length));
+            CoreManager.instance.EventManager.RemoveListener(EventNames.SessionUp, (object obj)=> maxColors=Mathf.Min(maxColors+1,_currentColorTheme.GetColors().Length));
             CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, (object obj)=> maxColors=minAmountOfColors);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, (object obj) => GetEquippedColorTheme());
+
 
 
         }
 
-        // You can add methods to get or manipulate colors as needed
-        public Color[] GetThemeColors(ColorThemeType colorTheme)
+        public void ChangeColorTheme(Item type)
         {
-            return _colorSets.FirstOrDefault(theme => theme.type == colorTheme)?.GetColors();
+            _currentColorTheme = _colorSets.FirstOrDefault(theme => type == theme.colorThemeType);
         }
 
-        public void ChangeColorTheme(ColorThemeType type)
+        public Color[] GetThemeColors(Item item)
         {
-            _currentColorTheme = _colorSets.FirstOrDefault(theme => type == theme.type)?.GetColors();
+            return _colorSets.FirstOrDefault(set => set.colorThemeType == item)?.GetColors()[..maxColors];
         }
     }
 }

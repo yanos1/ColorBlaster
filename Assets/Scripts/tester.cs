@@ -18,8 +18,8 @@ public class tester : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             i++;
-            CoreManager.instance.ColorsManager.ChangeColorTheme(i%2==1 ? ColorThemeType.Mystic : ColorThemeType.Default);
-            CoreManager.instance.SaveManager.Save(new ColorSaver(i%2==1 ?ColorThemeType.Mystic.ToString() : ColorThemeType.Default.ToString()));
+            // CoreManager.instance.ColorsManager.ChangeColorTheme(i%2==1 ? ColorThemeType.Mystic : ColorThemeType.Default);
+            // CoreManager.instance.SaveManager.Save(new ColorSaver(i%2==1 ?ColorThemeType.Mystic.ToString() : ColorThemeType.Default.ToString()));
         }
 
         if (Input.GetKey(KeyCode.D))

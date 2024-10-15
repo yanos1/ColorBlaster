@@ -31,7 +31,7 @@ namespace Core.Managers
 
         private void OnEnable()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.EndRun, StopBuffs);
+            CoreManager.instance.EventManager.AddListener(EventNames.KillPlayer, StopBuffs);
             CoreManager.instance.EventManager.AddListener(EventNames.StartGame, StartUpdate);
             CoreManager.instance.EventManager.AddListener(EventNames.FinishedReviving, StartUpdate);
             CoreManager.instance.EventManager.AddListener(EventNames.AddBooster, OnAddBooster);
@@ -40,7 +40,7 @@ namespace Core.Managers
 
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.EndRun, StopBuffs);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.KillPlayer, StopBuffs);
             CoreManager.instance.EventManager.RemoveListener(EventNames.StartGame, StartUpdate);
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, StartUpdate);
             CoreManager.instance.EventManager.RemoveListener(EventNames.AddBooster, OnAddBooster);

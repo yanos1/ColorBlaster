@@ -21,19 +21,19 @@
       "cost": 10
     },
     {
-      "item": "Colors2",
-      "cost": 100
+      "item": "DefaultColorTheme",
+      "cost": 0
     },
     {
       "item": "Colors3",
       "cost": 100
     },
     {
-      "item": "TurkeyAvatar",
-      "cost": 10
+      "item": "DefaultAvatar",
+      "cost": 0
     },
     {
-      "item": "Character2",
+      "item": "TurkeyAvatar",
       "cost": 300
     },
     {
