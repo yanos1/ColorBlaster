@@ -169,7 +169,6 @@ namespace Core.Managers
         // Public function to get mouse position
         public Vector2? GetMousePosition()
         {
-            print($"mouse position : {mousePosition}");
             return mousePosition != default ? mousePosition : null;
         }
 

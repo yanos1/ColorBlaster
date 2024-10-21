@@ -158,7 +158,7 @@ namespace Core.Managers
                 {
                     { ((int)Item.DefaultStyle).ToString(), true }
                 }),
-                userRef.Child(FirebasePath.gemsOwned.ToString()).SetValueAsync(0),
+                userRef.Child(FirebasePath.gemsOwned.ToString()).SetValueAsync(100),
                 userRef.Child(FirebasePath.colorThemesOwned.ToString()).SetValueAsync(new Dictionary<string, object>
                 {
                     { ((int)Item.DefaultColorTheme).ToString(), true }
@@ -169,7 +169,8 @@ namespace Core.Managers
                 }),
                 userRef.Child(FirebasePath.boostersOwned.ToString()).SetValueAsync(new Dictionary<string, object>
                 {
-                    { ((int)Item.ShieldBooster).ToString(), 0 }, { ((int)Item.ColorBlasterBooster).ToString(), 0 }
+                    { ((int)Item.ShieldBooster).ToString(), 0 }, { ((int)Item.ColorBlasterBooster).ToString(), 0 },
+                    { ((int)Item.GunnersBooster).ToString(), 0 }
                 })
             );
 
@@ -201,6 +202,7 @@ namespace Core.Managers
                     return dictionary.FirstOrDefault(kvp => kvp.Value).Key;
                 }
             }
+
             Debug.Log("ITEM WASNT FOUND !! FIX DATA BASE DATA");
             return Item.None;
         }
@@ -227,7 +229,7 @@ namespace Core.Managers
         }
 
         // Equip items  can be optimised !
-        public  void  EquipItem(Item item, FirebasePath path)
+        public void EquipItem(Item item, FirebasePath path)
         {
             if (!itemsOwned.ContainsKey(path))
             {
@@ -248,7 +250,6 @@ namespace Core.Managers
             {
                 itemsOwned[path] = newDict.ToDictionary(k => (Item)k.Key, v => (bool)v.Value);
             });
-            
         }
 
         public void EquipStyle(Item style) => EquipItem(style, FirebasePath.stylesOwned);
@@ -312,10 +313,7 @@ namespace Core.Managers
             }
 
             userRef.Child(FirebasePath.boostersOwned.ToString()).Child(((int)booster).ToString())
-                .SetValueAsync(boostersOwned[booster]).ContinueWithOnMainThread(task =>
-                {
-                    onComplete?.Invoke();
-                });
+                .SetValueAsync(boostersOwned[booster]).ContinueWithOnMainThread(task => { onComplete?.Invoke(); });
         }
 
         // Add gems
@@ -379,7 +377,6 @@ namespace Core.Managers
                                 updates[booster.Key] = newBoosterCount;
                                 Debug.Log("UPDATE UI 222");
                                 onComplete?.Invoke();
-                                
                             }
                         }
 

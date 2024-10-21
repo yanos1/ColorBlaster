@@ -49,6 +49,10 @@
       "cost": 10
     },
     {
+      "item": "GunnersBooster",
+      "cost": 10
+    },
+    {
       "item": "Revive",
       "cost": 1
     }

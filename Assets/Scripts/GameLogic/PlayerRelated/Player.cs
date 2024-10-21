@@ -1,6 +1,7 @@
 ﻿using Core.Managers;
 using Extentions;
 using GameLogic.Boosters;
+using GameLogic.Boosters.Gunners;
 using GameLogic.ConsumablesGeneration;
 using GameLogic.ObstacleGeneration;
 using Unity.VisualScripting;
@@ -12,7 +13,7 @@ namespace GameLogic.PlayerRelated
     {
         public Shooter Shooter => shooter;
         public PlayerMovement PlayerMovement => playerMovement;
-        
+
 
         public bool IsDead
         {
@@ -22,11 +23,15 @@ namespace GameLogic.PlayerRelated
 
         [SerializeField] private PlayerAvatarHandler avatarHandler;
         [SerializeField] public TouchInputManager inputManager;
+
         [SerializeField] private ColorWheel colorWheel;
-        [SerializeField] private MachineGun machineGun;
         [SerializeField] private Shooter shooter;
         [SerializeField] private PlayerMovement playerMovement;
+
+        //boosters
         [SerializeField] private Shield shieldBuff;
+        [SerializeField] private GameObject machineGun;
+        [SerializeField] private Gunners gunners;
 
         private Vector3 startPos;
         private bool isDead;
@@ -45,9 +50,13 @@ namespace GameLogic.PlayerRelated
             rb = GetComponent<Rigidbody2D>();
             startPos = transform.position;
             isDead = false;
-            shooter.Init(inputManager);
+            gunners.Init(inputManager);
             playerMovement.Init(inputManager);
+            shooter.Init(inputManager);
         }
+
+
+        #region EVENTS
 
         private void OnEnable()
         {
@@ -57,9 +66,10 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.AddListener(EventNames.ActivateColorRush, OnActivateColorRush);
             CoreManager.instance.EventManager.AddListener(EventNames.DeactivateShield, OnDeactivateShield);
             CoreManager.instance.EventManager.AddListener(EventNames.DeactivateColorRush, OnDeactivateColorRush);
-
+            CoreManager.instance.EventManager.AddListener(EventNames.ActivateGunners, OnActivateGunners);
+            CoreManager.instance.EventManager.AddListener(EventNames.DeactivateGunners, OnDeactivateGunners);
         }
- 
+
         private void OnDisable()
         {
             CoreManager.instance.EventManager.RemoveListener(EventNames.FinishedReviving, MakeAlive);
@@ -68,10 +78,23 @@ namespace GameLogic.PlayerRelated
             CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateShield, OnDeactivateShield);
             CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateColorRush, OnActivateColorRush);
             CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateColorRush, OnDeactivateColorRush);
-
+            CoreManager.instance.EventManager.RemoveListener(EventNames.ActivateGunners, OnActivateGunners);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.DeactivateGunners, OnDeactivateGunners);
         }
-        
-        
+
+        #endregion
+
+        private void OnDeactivateGunners(object obj)
+        {
+            gunners.gameObject.SetActive(false);
+        }
+
+        private void OnActivateGunners(object obj)
+        {
+            gunners.gameObject.SetActive(true);
+        }
+
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             // if (invincible) return;
@@ -112,28 +135,24 @@ namespace GameLogic.PlayerRelated
             print("ATTEMPT TO ACTIVE SHIELD 222");
             if (obj is (Color color, float duration, BoosterButtonController buff))
             {
-                print("SET SHIELD ACTIVE222" );
+                print("SET SHIELD ACTIVE222");
                 shieldBuff.gameObject.SetActive(true);
                 shieldBuff.SetColor(color);
             }
         }
-        
-        
+
 
         private void Die()
         {
             isDead = true;
             StartCoroutine(UtilityFunctions.MoveObjectOverTime(
-                gameObject, 
-                transform.position, 
+                gameObject,
+                transform.position,
                 Quaternion.identity,
-                transform.position + Vector3.up * GetFallDistance(), 
-                Quaternion.identity, 
-                reviveDuration, 
-                () => 
-                {
-                    CoreManager.instance.EventManager.InvokeEvent(EventNames.EndRun, null);
-                }
+                transform.position + Vector3.up * GetFallDistance(),
+                Quaternion.identity,
+                reviveDuration,
+                () => { CoreManager.instance.EventManager.InvokeEvent(EventNames.EndRun, null); }
             ));
         }
 

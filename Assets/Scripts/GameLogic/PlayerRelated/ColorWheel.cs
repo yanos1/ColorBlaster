@@ -124,7 +124,7 @@ namespace GameLogic.PlayerRelated
         private IEnumerator SetIsShootingForShortDuration()
         {
             isShooting = true;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
             isShooting = false;
         }
 

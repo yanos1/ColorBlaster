@@ -22,6 +22,12 @@ namespace GameLogic.ObstacleGeneration
             private set => difficulty = value;
         }
 
+        public bool CanMove
+        {
+            get => _canMove;
+            set => _canMove = value;
+        }
+
         public ObstacleType ObstacleType => obstacleType;
 
         [SerializeField] private ObstacleType obstacleType;
@@ -29,9 +35,18 @@ namespace GameLogic.ObstacleGeneration
         [SerializeField] private List<ObstacleComponent> obstacleComponents;
         [SerializeField] private Transform rightMostPosition;
 
+        private bool _canMove;
+
+        public virtual void Start()
+        {
+            _canMove = true;
+        }
         public override void Update()
         {
-            base.Update();
+            if (_canMove)
+            {
+                base.Update();
+            }
         }
 
         public void ResetGameObject()

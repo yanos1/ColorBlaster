@@ -9,7 +9,8 @@ PluginImporter:
   externalObjects: {}
   serializedVersion: 2
   iconMap: {}
-  executionOrder: {}
+  executionOrder:
+    Google.MultiSelectWindow: 2200
   defineConstraints: []
   isPreloaded: 0
   isOverridable: 0

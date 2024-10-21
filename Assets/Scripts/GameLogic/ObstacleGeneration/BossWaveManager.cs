@@ -4,6 +4,9 @@ using System.Linq;
 using Core.Managers;
 using Extentions;
 using UnityEngine;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GameLogic.ObstacleGeneration
 {
@@ -12,26 +15,42 @@ namespace GameLogic.ObstacleGeneration
         private float _currentBossLevelDifficulty;
         private int obstacleAddtitionAmount = 1;
         private Dictionary<ObstacleType, (int, List<Obstacle>)> _bossObstacleMap;
+        private List<List<Obstacle>> _bossLevels;
 
-        private void Start()
+        private int _nextBossLevelIndex;
+
+        private void Awake()
         {
+            _bossLevels = new List<List<Obstacle>>();
             _bossObstacleMap = CoreManager.instance.ObstacleManager.GetBossObstacleMap();
             _currentBossLevelDifficulty = CoreManager.instance.ControlPanelManager.minBossLevelDifficulty;
+            SpawnBossLevelsForSession(null);
         }
 
         private void OnEnable()
         {
-            CoreManager.instance.EventManager.AddListener(EventNames.LevelUp,
-                AdjustObstacleDifficultyAndIncreaseBossLevel);
+            CoreManager.instance.EventManager.AddListener(EventNames.SessionUp, SpawnBossLevelsForSession);
         }
-
+        
         private void OnDisable()
         {
-            CoreManager.instance.EventManager.RemoveListener(EventNames.LevelUp,
-                AdjustObstacleDifficultyAndIncreaseBossLevel);
+            CoreManager.instance.EventManager.AddListener(EventNames.SessionUp, SpawnBossLevelsForSession);
         }
 
-        private void AdjustObstacleDifficultyAndIncreaseBossLevel(object obj)
+
+        private void SpawnBossLevelsForSession(object obj)
+        {
+            _bossLevels.Clear();
+            for (int i = 0; i < CoreManager.instance.ControlPanelManager.levelSpeeds.Length; ++i)
+            {
+                AddBossWave();
+                AdjustObstacleDifficultyAndIncreaseBossLevel();
+            }
+
+            
+        }
+
+        private void AdjustObstacleDifficultyAndIncreaseBossLevel()
         {
             foreach (var bossKey in _bossObstacleMap.Keys.ToList())
             {
@@ -55,7 +74,7 @@ namespace GameLogic.ObstacleGeneration
         }
 
 
-        public void AddBossWave(List<Obstacle> newBatch)
+        private void AddBossWave()
         {
             ObstacleType chosenBoss = UtilityFunctions.GetRandomKey(_bossObstacleMap);
             if (chosenBoss == default) return;
@@ -72,12 +91,16 @@ namespace GameLogic.ObstacleGeneration
             {
                 print(currentPoints);
                 Obstacle currentObstacle = obstacles[maxIndex - 1];
-                while (currentObstacle.Difficulty <= currentPoints)
+
+                print(currentPoints);
+                int amount = (int)currentPoints % currentObstacle.Difficulty;
+                for (int i = 0; i < amount; ++i)
                 {
-                    print(currentPoints);
                     obstaclesToAdd.Add(currentObstacle);
-                    currentPoints -= currentObstacle.Difficulty;
                 }
+
+                currentPoints -= currentObstacle.Difficulty * amount;
+
 
                 if (--maxIndex <= 0)
                 {
@@ -86,8 +109,59 @@ namespace GameLogic.ObstacleGeneration
             }
 
             obstaclesToAdd.Reverse();
-            print($"boss level count : {obstaclesToAdd.Count}");
-            newBatch.AddRange(obstaclesToAdd);
+            _bossLevels.Add(obstaclesToAdd);
+        }
+
+        // public int GetTotalBossObstaclesInSession()  //fix and give seession agument
+        // {
+        //     int numsLevels = CoreManager.instance.ControlPanelManager.levelSpeeds.Length;
+        //     ObstacleType chosenBoss = UtilityFunctions.GetRandomKey(_bossObstacleMap);
+        //     int maxIndex = _bossObstacleMap[chosenBoss].Item1;
+        //     List<Obstacle> obstacles = _bossObstacleMap[chosenBoss].Item2;
+        //
+        //     int total = 0;
+        //     for (int i = 0; i < numsLevels; ++i)
+        //     {
+        //         int curIndex = maxIndex;
+        //         Obstacle currentObstacle = obstacles[curIndex - 1];
+        //
+        //
+        //         float currentPoints = _currentBossLevelDifficulty +
+        //                               i * CoreManager.instance.ControlPanelManager.bossLevelDifficultyIncreasePerLevel;
+        //
+        //         while (currentPoints > 0)
+        //         {
+        //             int amount = (int)currentPoints % currentObstacle.Difficulty;
+        //             currentObstacle = obstacles[curIndex - 1];
+        //
+        //             total += amount;
+        //
+        //             currentPoints -= currentObstacle.Difficulty * amount;
+        //
+        //             if (--curIndex <= 0)
+        //             {
+        //                 break;
+        //             }
+        //         }
+        //
+        //         if (_bossObstacleMap[chosenBoss].Item1 < obstacles.Count)
+        //         {
+        //             maxIndex++;
+        //         }
+        //     }
+        //
+        //     return total;
+        // }
+
+        public int GetNumberOfBossObstaclesForSession()
+        {
+            print($"boss wages generated : {_bossLevels.Count}");
+            return _bossLevels.Sum(sub => sub.Count);
+        }
+
+        public List<Obstacle> GetNextBossLevel()
+        {
+            return _bossLevels[_nextBossLevelIndex++%CoreManager.instance.ControlPanelManager.levelSpeeds.Length];
         }
     }
 }

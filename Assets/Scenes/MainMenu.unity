@@ -10703,7 +10703,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 238242638842051743, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
       propertyPath: itemType
-      value: 0
+      value: 111
       objectReference: {fileID: 0}
     - target: {fileID: 685220009826208465, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10727,7 +10727,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 890094271240899439, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4160465742244483053, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
       propertyPath: m_AnchorMax.y
@@ -10744,6 +10744,18 @@ PrefabInstance:
     - target: {fileID: 4160465742244483053, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -425
+      objectReference: {fileID: 0}
+    - target: {fileID: 4210731290620311698, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
+      propertyPath: m_Color.b
+      value: 0.5661303
+      objectReference: {fileID: 0}
+    - target: {fileID: 4210731290620311698, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
+      propertyPath: m_Color.g
+      value: 0.97735846
+      objectReference: {fileID: 0}
+    - target: {fileID: 4210731290620311698, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
+      propertyPath: m_Color.r
+      value: 0.5945068
       objectReference: {fileID: 0}
     - target: {fileID: 5861780326456117669, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
       propertyPath: m_Pivot.x
@@ -10851,6 +10863,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5861780326456117669, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
   m_PrefabInstance: {fileID: 977380698}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &977380700 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 238242638842051743, guid: 874c17c4b2274fa4ebb4071ca4858f12, type: 3}
+  m_PrefabInstance: {fileID: 977380698}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80815ff7ec7e4afc8a59ef4fda2c4a7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1007147873
 GameObject:
   m_ObjectHideFlags: 0
@@ -12327,6 +12350,7 @@ MonoBehaviour:
   boosters:
   - {fileID: 5179265150953817824}
   - {fileID: 1387878142}
+  - {fileID: 977380700}
   avatars:
   - {fileID: 708691146848144644}
   - {fileID: 2086747703}
@@ -14657,7 +14681,7 @@ GameObject:
   - component: {fileID: 1482788911}
   - component: {fileID: 1482788910}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: MenuUiManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

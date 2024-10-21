@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 291898d457e9497c83c9e5bce64bbb30, type: 3}
-  m_Name: DeleteColorBuff
+  m_Name: GunnersBooster
   m_EditorClassIdentifier: 
-  buffType: 4
+  boosterType: 111
   poolType: 16
-  buffMultiPlier: 3
-  activatonEvent: 24
-  deactivationEvent: 25
-  prefabReachTargetEvent: 26
-  UIImage: {fileID: 2508768222581782103, guid: 11df89a1bd4735640a6f5c97a6d3ff27, type: 3}
+  duration: 10
+  activationEvent: 33
+  deactivationEvent: 34
+  firebasePath: 4

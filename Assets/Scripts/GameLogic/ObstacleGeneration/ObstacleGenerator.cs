@@ -113,12 +113,13 @@ namespace GameLogic.ObstacleGeneration
 
         private IEnumerator ActiveObstaclesUpdate()
         {
-            while (true)
+            while (CoreManager.instance.GameManager.IsGameActive)
             {
                // print($"Time  : {Time.time} time for new obstacle : {lastTimeGenerated + maxTimeBetweenRockets}");
                 if (currentObstacle.ObstacleType == ObstacleType.Rocket && Time.time > lastTimeGenerated + maxTimeBetweenRockets)
                 {
                     CoreManager.instance.PoolManager.ReturnToPool(currentObstacle.PoolType, currentObstacle.gameObject);
+                    activeObstacles.Remove(currentObstacle);
                     currentObstacle = GenerateObstacle();
                     yield return new WaitForSeconds(0.2f); // we check for updates every 0.2 seconds
                 }
@@ -148,6 +149,7 @@ namespace GameLogic.ObstacleGeneration
                         activeObstacles.RemoveAt(i); // Remove it from the active list
                     }
                 }
+                
 
                 yield return new WaitForSeconds(0.2f); // we check for updates every 0.2 seconds
             }
@@ -173,6 +175,11 @@ namespace GameLogic.ObstacleGeneration
         private static float MapDistance(float x) 
         {
             return 3f - 0.06f * x;
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.ObstacleCrossed, null);
         }
     }
 }

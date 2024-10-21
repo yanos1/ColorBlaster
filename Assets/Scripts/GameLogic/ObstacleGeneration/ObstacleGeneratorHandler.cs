@@ -71,7 +71,7 @@ namespace GameLogic.ObstacleGeneration
             if (CoreManager.instance.ControlPanelManager.spawnBossObstacleAtTheEndOfLevel)
             {
                 // Increase the size of the array by 1
-                bossWaveManager.AddBossWave(newBatch);
+                newBatch.AddRange(bossWaveManager.GetNextBossLevel());
 
                 // Add the boss obstacle to the last position
                 // newBatch[^1] = GetBossObstacle();
@@ -86,10 +86,6 @@ namespace GameLogic.ObstacleGeneration
             // {
             //     newBatch[i] = GenerateTreasureObstacle();
             // }
-            foreach (var obs in newBatch)
-            {
-                print(obs.name);
-            }
 
             return newBatch;
         }

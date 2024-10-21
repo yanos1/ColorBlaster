@@ -109,6 +109,7 @@ namespace GameLogic.PlayerRelated
 
             // Move player smoothly towards the target position
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, adaptiveSpeed * Time.deltaTime);
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.Move, null);
         }
 
 

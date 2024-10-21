@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using GameLogic.ObstacleGeneration;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,27 +19,44 @@ namespace Core.Managers
             set
             {
                 if (value < 0) throw new ArgumentOutOfRangeException(nameof(value));
-                obstaclesCrossedThisLevel = value;
+                obstaclesCrossedThisLevel++;
+                obstaclesCrossed++;
             }
         }
 
+        public int NumObstaclesInSession => numObstaclesInSession;
+
+        [SerializeField] private BossWaveManager bossWaveManager;
+
         private int obstaclesCrossedThisLevel;
+        private int obstaclesCrossed;
+        private int numObstaclesInSession;
 
 
-        private void Start()
+        private void Awake()
         {
             // Initial setup if needed
+            numObstaclesInSession = GetNumObstaclesPerSession();
+
             if (levelDisplayText != null)
             {
                 levelDisplayText.gameObject.SetActive(false); // Make sure it's initially hidden
             }
-
         }
+
+        private int GetNumObstaclesPerSession()
+        {
+            return bossWaveManager.GetNumberOfBossObstaclesForSession() +
+                   CoreManager.instance.ControlPanelManager.obstaclesPerLevel *
+                   CoreManager.instance.ControlPanelManager.levelSpeeds.Length;
+        }
+
         private void OnEnable()
         {
             // Subscribe to the StartGame event
             CoreManager.instance.EventManager.AddListener(EventNames.GameOver, OnGameOver);
             CoreManager.instance.EventManager.AddListener(EventNames.LevelUp, OnLevelUp);
+            CoreManager.instance.EventManager.AddListener(EventNames.SessionUp,OnSessionUp);
         }
 
         private void OnDisable()
@@ -46,6 +64,13 @@ namespace Core.Managers
             // Unsubscribe from the event to prevent memory leaks
             CoreManager.instance.EventManager.RemoveListener(EventNames.GameOver, OnGameOver);
             CoreManager.instance.EventManager.RemoveListener(EventNames.LevelUp, OnLevelUp);
+            CoreManager.instance.EventManager.RemoveListener(EventNames.SessionUp,OnSessionUp);
+
+        }
+
+        private void OnSessionUp(object obj)
+        {
+            numObstaclesInSession = GetNumObstaclesPerSession();
         }
 
         private void OnGameOver(object obj)
@@ -81,7 +106,6 @@ namespace Core.Managers
             Debug.Log("Level and Session Reset");
         }
 
- 
 
         // Coroutine to display session and level
         private void DisplaySessionAndLevel()

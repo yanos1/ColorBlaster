@@ -42,6 +42,7 @@
         DefaultStyle=108,
         DefaultAvatar=109,
         Revive = 110,
+        GunnersBooster=111,
         
         
     }

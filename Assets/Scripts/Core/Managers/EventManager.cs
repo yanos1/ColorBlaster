@@ -87,5 +87,9 @@ namespace Core.Managers
         BoughtItem=30,
         AddBooster=31,
         StopBooster=32,
+        ActivateGunners=33,
+        DeactivateGunners=34,
+
+        ObstacleCrossed=35,
     }
 }
