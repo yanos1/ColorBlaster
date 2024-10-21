@@ -90,9 +90,8 @@ namespace GameLogic.StyleRelated
         }
 
 
-        public virtual void SetColor(Color newColor)
+        public virtual void ChangeColor(Color newColor)
         {
-            print($"renderer {_renderer}");
             _renderer.materials[0].color = newColor;
         }
     }

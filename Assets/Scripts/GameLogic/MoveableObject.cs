@@ -33,7 +33,7 @@ namespace GameLogic
             Move();
         }
 
-        public void Move()
+        public virtual void Move()
         {
             transform.position -= new Vector3(0, CoreManager.instance.ControlPanelManager.GetGameMoveSpeed() * Time.deltaTime, 0);
         }

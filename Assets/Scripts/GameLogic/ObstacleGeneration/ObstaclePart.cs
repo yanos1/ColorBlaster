@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Core.GameData;
 using Core.Managers;
 using Extentions;
@@ -19,6 +20,7 @@ namespace GameLogic.ObstacleGeneration
         // [SerializeField] private Image gemUIimage;
         private float gemTravelingDistance = 1.2f;
         private float gemTravelDuration = 0.2f;
+        private ObstacleComponent parent;
 
 
         public override void Awake()
@@ -38,7 +40,7 @@ namespace GameLogic.ObstacleGeneration
             return null;
         }
 
-        public virtual void ResetGameObject()
+        public virtual void ResetObstacle()
         {
             // Color? deleteColorBuffColor = CoreManager.instance.BoosterManager.IsBuffActive(Item.DeleteColorBuff);
             // if (deleteColorBuffColor is Color color && UtilityFunctions.CompareColors(color, GetColor()))
@@ -51,7 +53,6 @@ namespace GameLogic.ObstacleGeneration
 
         public override void Shatter()
         {
-            print("gem earned from obstacle");
             
             GameObject gem = CoreManager.instance.PoolManager.GetFromPool(PoolType.Gem);
             gem.GetComponent<SpriteRenderer>().color = GetColor();
@@ -63,10 +64,23 @@ namespace GameLogic.ObstacleGeneration
                 {
                     CoreManager.instance.EventManager.InvokeEvent(EventNames.GemPrefabArrived, null);
                     CoreManager.instance.PoolManager.ReturnToPool(PoolType.Gem, gem);
+                    NotifyParent();
                 }));
         
         base.Shatter();
     }
+
+        public void NotifyParent()
+        {
+            print($"NTIFY PARENT { parent} for {GetInstanceID()}");
+            parent.NotifyParent();
+        }
+
+        public void SetParent(ObstacleComponent component)
+        {
+            print($"SET PARENT for {GetInstanceID()}");
+            parent = component;
+        }
 }
 
 }

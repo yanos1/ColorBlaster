@@ -16,7 +16,7 @@ namespace GameLogic.Boosters.Gunners
             if (block is not null)
             {
                 print($"set color of chaningcoloblock to {block.GetColor().ToString()}");
-                SetColor(block.GetColor());
+                ChangeColor(block.GetColor());
             }
         }
     }

@@ -180,10 +180,13 @@ namespace GameLogic.ObstacleGeneration
 
         private static Obstacle ResetObstacle(Obstacle obstacle)
         {
+            Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.ColorsManager.CurrentColors);
             GameObject obstaclePrefab = CoreManager.instance.PoolManager.GetFromPool(obstacle.PoolType);
             Obstacle newObstacle = obstaclePrefab.GetComponent<Obstacle>();
-            newObstacle.ChangeColors();
-            newObstacle.ResetGameObject();
+            
+            newObstacle.ChangeColors(shuffledColors, 0);
+            newObstacle.ResetObstacle();
+            
             return newObstacle;
         }
 

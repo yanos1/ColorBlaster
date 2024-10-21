@@ -11,9 +11,9 @@ namespace GameLogic.PlayerRelated
     {
         [SerializeField] private PoolType explosion;
 
-        public override void ResetGameObject()
+        public override void ResetObstacle()
         {
-            base.ResetGameObject();
+            base.ResetObstacle();
         }
 
         public override void FixedUpdate()

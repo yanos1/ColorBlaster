@@ -56,6 +56,9 @@ namespace Core.Managers
         {
             foreach (var obs in _bossObstacleData)
             {
+                Debug.Log("333 " + obs);
+                Debug.Log( " 333 " +obs.ObstacleType);
+                Debug.Log( " 333 " + _bossObstacleData);
                 if (SkipObstacleType(obs.ObstacleType))
                 {
                     continue;
@@ -90,7 +93,7 @@ namespace Core.Managers
         {
             foreach (var obs in _obstacleData)
             {
-                // Debug.Log("bbb" + obs.name);
+                Debug.Log("bbb" + obs.name);
                 if (SkipObstacleType(obs.ObstacleType))
                 {
                     // Debug.Log($"SKIPPED {obs.ObstacleType}");
@@ -138,7 +141,8 @@ namespace Core.Managers
 
         private static bool SkipObstacleType(ObstacleType type)
         {
-      
+            Debug.Log("??????????");
+            Debug.Log(111+ type);
             bool skip = ((type == ObstacleType.Chasing &&
                           !CoreManager.instance.ControlPanelManager.canSpawnChasingObstacles) ||
                          (type == ObstacleType.Rotating &&

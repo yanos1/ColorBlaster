@@ -27,7 +27,7 @@ namespace GameLogic.PlayerRelated
         
             public virtual void OnEnable()
             {
-                ResetGameObject();
+                ResetObstacle();
             }
 
             // Provide a default implementation (can be overridden in child classes)
@@ -36,7 +36,7 @@ namespace GameLogic.PlayerRelated
                 // Default behavior, which can be empty or overridden by subclasses
             }
         
-            public virtual void ResetGameObject()
+            public virtual void ResetObstacle()
             {
                 gameObject.SetActive(true);
             }

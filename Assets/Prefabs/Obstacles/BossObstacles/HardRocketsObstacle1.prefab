@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3853920311481261557}
-  - component: {fileID: 5422812282413597159}
+  - component: {fileID: 7012638209978436195}
   m_Layer: 0
   m_Name: HardRocketsObstacle1
   m_TagString: Untagged
@@ -33,9 +33,10 @@ Transform:
   - {fileID: 2503889298335552860}
   - {fileID: 4057895800793998897}
   - {fileID: 4363501127148186811}
+  - {fileID: 1231300464608833138}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5422812282413597159
+--- !u!114 &7012638209978436195
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,7 +45,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 423088138292595383}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6ace18a645e4195be342f226d9c229f, type: 3}
+  m_Script: {fileID: 11500000, guid: ee9395d9d96882a4698cdcadd320fbf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   type: 17
@@ -79,12 +80,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8011055687515070452}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.61, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 4856791227092974849}
+  m_Father: {fileID: 3853920311481261557}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2465775943246263918
 PrefabInstance:
@@ -156,10 +157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7016322091003251567, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1231300464608833138}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
 --- !u!114 &1294458715202483011 stripped
@@ -176,11 +174,6 @@ MonoBehaviour:
 --- !u!4 &4363501127148186811 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2213087177440139989, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
-  m_PrefabInstance: {fileID: 2465775943246263918}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4856791227092974849 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7016322091003251567, guid: a3fcc1eccbaf295428eab992949df998, type: 3}
   m_PrefabInstance: {fileID: 2465775943246263918}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2803206771138280676

@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace GameLogic.ObstacleGeneration
 {
-    public class Rocket : ObstaclePart
+    public class RocketObstaclePart : ObstaclePart
     {
         [SerializeField] private Vector2 spawnYPositionRange;
         [SerializeField] private TrailRenderer trail;
@@ -27,7 +27,6 @@ namespace GameLogic.ObstacleGeneration
             imageFadeDuration = 0.5f;
             numOfAlerts = 3;
             startDirection = Random.value > 0.5 ? 1: -1;
-            speedMultiplier = 8f;
         }
 
         
@@ -41,28 +40,18 @@ namespace GameLogic.ObstacleGeneration
 
             }
 
-            yield return StartCoroutine(Launch());
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.MoveObstacle, null);
         }
+        
 
-        private IEnumerator Launch()
+        public override void ResetObstacle()
         {
-            while (gameObject.activeInHierarchy)
-            {
-                Vector3 forwardMovement = Vector3.down * (CoreManager.instance.ControlPanelManager.GetGameMoveSpeed() * speedMultiplier * Time.deltaTime);
-                // Vector3 sineWaveMotion = Vector3.left * (Mathf.Sin(Time.deltaTime * frequency*startDirection) * amplitude);
-
-                transform.position += forwardMovement;
-
-                yield return null;
-            }
-        }
-
-        public override void ResetGameObject()
-        {
-            base.ResetGameObject();
+            base.ResetObstacle();
             StopAllCoroutines();
             transform.position = new Vector3(Random.Range(spawnYPositionRange.x, spawnYPositionRange.y),
                 transform.parent.parent.position.y, 0);   // I DONT LIKE THIS AT ALL
+            print("RESET ROCKET");
+            print($"rocket color {GetColor()}");
             trail.startColor = GetColor();
             startDirection = Random.value > 0.5 ? 1 : -1;
             StartCoroutine(AlertThenLaunch());

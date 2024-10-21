@@ -62,7 +62,7 @@ namespace Core.Managers
             Obstacle obstacle = obj.GetComponent<Obstacle>();
             if ( obstacle is not null)
             {
-                List<StyleableObject> obstacleParts = obstacle.ExtractStyleableObjects();
+                List<StyleableObject> obstacleParts = obstacle.ExtractObstacleParts();
                 foreach (var part in obstacleParts)
                 {
                     CoreManager.instance.StyleManager.AddStyleableObject(part);

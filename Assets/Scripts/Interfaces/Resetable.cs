@@ -2,6 +2,6 @@ namespace Interfaces
 {
     public interface IResettable
     {
-        public void ResetGameObject();
+        public void ResetObstacle();
     }
 }

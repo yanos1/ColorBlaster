@@ -15,13 +15,13 @@ namespace GameLogic.ObstacleGeneration
     {
         [SerializeField] private ObstacleGeneratorHandler _generatorHandler;
         private float generationThreshold;
-        private float returnToPoolThreshold = -8f;
+        private float returnToPoolThreshold = -5f;
 
         private List<Obstacle> activeObstacles;
         private Dictionary<int, ValueTuple<int, List<Obstacle>>> obstacleData;
         private Dictionary<ObstacleType, ValueTuple<int, List<Obstacle>>> bossObstacleData;
         private Coroutine colorRushCoroutine;
-        private Obstacle currentObstacle;
+        private Obstacle _currentObstacle;
         private float maxTimeBetweenRockets = 4.9f;
         private float maxTimeBetweenObstacles = 6f;
         private float lastTimeGenerated;
@@ -36,7 +36,7 @@ namespace GameLogic.ObstacleGeneration
             activeObstacles = new List<Obstacle>();
             obstacleData = CoreManager.instance.ObstacleManager.GetBaseObstacleMap();
             _generatorHandler.Init(obstacleData);
-            currentObstacle = GenerateObstacle();
+            _currentObstacle = GenerateObstacle();
             StartCoroutine(ActiveObstaclesUpdate());
             // DontDestroyOnLoad(this.gameObject);
         }
@@ -66,7 +66,7 @@ namespace GameLogic.ObstacleGeneration
             {
                 foreach (var obstacle in activeObstacles)
                 {
-                    List<StyleableObject> obstacleParts = obstacle.ExtractStyleableObjects();
+                    List<StyleableObject> obstacleParts = obstacle.ExtractObstacleParts();
                     foreach (var part in obstacleParts)
                     {
                         if (UtilityFunctions.CompareColors(part.GetColor(), color))
@@ -91,9 +91,9 @@ namespace GameLogic.ObstacleGeneration
                 isColorRushActive = true;
                 foreach (var obstacle in activeObstacles)
                 {
-                    foreach (var part in obstacle.ExtractStyleableObjects())
+                    foreach (var part in obstacle.ExtractObstacleParts())
                     {
-                        part.SetColor(color);
+                        part.ChangeColor(color);
                         colorRushColor = color;
                     }
                 }
@@ -102,12 +102,14 @@ namespace GameLogic.ObstacleGeneration
 
         private void PauseObstacles(object obj)
         {
+            activeObstacles.Clear();
             StopAllCoroutines(); // this looks like bad practice !! better to save the coroutine, watch out !
         }
 
         private void ResumeObstacles(object obj)
         {
             StartCoroutine(ActiveObstaclesUpdate());
+            _currentObstacle = GenerateObstacle();
         }
 
 
@@ -115,31 +117,32 @@ namespace GameLogic.ObstacleGeneration
         {
             while (CoreManager.instance.GameManager.IsGameActive)
             {
-               // print($"Time  : {Time.time} time for new obstacle : {lastTimeGenerated + maxTimeBetweenRockets}");
-                if (currentObstacle.ObstacleType == ObstacleType.Rocket && Time.time > lastTimeGenerated + maxTimeBetweenRockets)
-                {
-                    CoreManager.instance.PoolManager.ReturnToPool(currentObstacle.PoolType, currentObstacle.gameObject);
-                    activeObstacles.Remove(currentObstacle);
-                    currentObstacle = GenerateObstacle();
-                    yield return new WaitForSeconds(0.2f); // we check for updates every 0.2 seconds
-                }
-                else if (Time.time > lastTimeGenerated + maxTimeBetweenObstacles)
-                {
-                    currentObstacle = GenerateObstacle();
-                    yield return new WaitForSeconds(0.2f); // we check for updates every 0.2 seconds
-
-
-                }
+                // print($"Time  : {Time.time} time for new obstacle : {lastTimeGenerated + maxTimeBetweenRockets}");
+                // if (_currentObstacle.ObstacleType == ObstacleType.Rocket && Time.time > lastTimeGenerated + maxTimeBetweenRockets)
+                // {
+                //     CoreManager.instance.PoolManager.ReturnToPool(_currentObstacle.PoolType, _currentObstacle.gameObject);
+                //     activeObstacles.Remove(_currentObstacle);
+                //     _currentObstacle = GenerateObstacle();
+                //     yield return new WaitForSeconds(0.2f); // we check for updates every 0.2 seconds
+                // }
+                // else if (Time.time > lastTimeGenerated + maxTimeBetweenObstacles)
+                // {
+                //     _currentObstacle = GenerateObstacle();
+                //     yield return new WaitForSeconds(0.2f); // we check for updates every 0.2 seconds
+                //
+                //
+                // }
 
                 for (int i = activeObstacles.Count - 1; i >= 0; i--)
                 {
                     Obstacle obstacle = activeObstacles[i];
 
                     // Check if the obstacle crossed the generation threshold
-
-                    if (obstacle == currentObstacle && obstacle.RightMostPosition.y < generationThreshold)
+                    print("44 " + obstacle.RightMostPosition + " " + generationThreshold);
+                    if (obstacle == _currentObstacle && obstacle.RightMostPosition.y < generationThreshold)
                     {
-                        currentObstacle = GenerateObstacle();
+                        
+                        _currentObstacle = GenerateObstacle();
                     }
 
                     // Check if the obstacle crossed the return-to-pool threshold
@@ -147,9 +150,13 @@ namespace GameLogic.ObstacleGeneration
                     {
                         CoreManager.instance.PoolManager.ReturnToPool(obstacle.PoolType, obstacle.gameObject);
                         activeObstacles.RemoveAt(i); // Remove it from the active list
+                        if (!obstacle.Crossed)
+                        {
+                            CoreManager.instance.EventManager.InvokeEvent(EventNames.ObstacleCrossed, null);
+                        }
                     }
                 }
-                
+
 
                 yield return new WaitForSeconds(0.2f); // we check for updates every 0.2 seconds
             }
@@ -158,28 +165,23 @@ namespace GameLogic.ObstacleGeneration
         private Obstacle GenerateObstacle()
         {
             lastTimeGenerated = Time.time;
-            currentObstacle = _generatorHandler.GetNextObstacle();
+            _currentObstacle = _generatorHandler.GetNextObstacle();
             if (isColorRushActive)
             {
-                foreach (var part in currentObstacle.ExtractStyleableObjects())
+                foreach (var part in _currentObstacle.ExtractObstacleParts())
                 {
-                    part.SetColor(colorRushColor);
+                    part.ChangeColor(colorRushColor);
                 }
             }
 
-            currentObstacle.transform.position = transform.position;
-            activeObstacles.Add(currentObstacle);
-            return currentObstacle;
+            _currentObstacle.transform.position = transform.position;
+            activeObstacles.Add(_currentObstacle);
+            return _currentObstacle;
         }
 
-        private static float MapDistance(float x) 
+        private static float MapDistance(float x)
         {
             return 3f - 0.06f * x;
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            CoreManager.instance.EventManager.InvokeEvent(EventNames.ObstacleCrossed, null);
         }
     }
 }

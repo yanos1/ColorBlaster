@@ -137,7 +137,7 @@ namespace GameLogic.PlayerRelated
             {
                 print("SET SHIELD ACTIVE222");
                 shieldBuff.gameObject.SetActive(true);
-                shieldBuff.SetColor(color);
+                shieldBuff.ChangeColor(color);
             }
         }
 

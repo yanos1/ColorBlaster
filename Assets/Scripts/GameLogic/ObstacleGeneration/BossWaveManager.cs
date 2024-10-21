@@ -161,6 +161,7 @@ namespace GameLogic.ObstacleGeneration
 
         public List<Obstacle> GetNextBossLevel()
         {
+            print($"boss level count {_bossLevels.Count}");
             return _bossLevels[_nextBossLevelIndex++%CoreManager.instance.ControlPanelManager.levelSpeeds.Length];
         }
     }

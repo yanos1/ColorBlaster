@@ -27,10 +27,10 @@ namespace GameLogic.PlayerRelated
             base.ApplyStyle();
         }
 
-        public override void SetColor(Color color)
+        public override void ChangeColor(Color color)
         {
             float newAlpha = opacity;
-            base.SetColor(new Color(color.r, color.g, color.b, newAlpha));
+            base.ChangeColor(new Color(color.r, color.g, color.b, newAlpha));
         }
     }
 }

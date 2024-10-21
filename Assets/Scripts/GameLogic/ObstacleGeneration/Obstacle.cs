@@ -10,9 +10,9 @@ using UnityEngine.UIElements;
 
 namespace GameLogic.ObstacleGeneration
 {
-    public class Obstacle : MoveableObject, IResettable
+    public class Obstacle : MoveableObject, IObstacleElement
     {
-
+    
         public List<ObstacleComponent> ObstacleComponents => obstacleComponents;
         public Vector3 RightMostPosition => rightMostPosition.position;
 
@@ -27,6 +27,11 @@ namespace GameLogic.ObstacleGeneration
             get => _canMove;
             set => _canMove = value;
         }
+        public bool Crossed
+        {
+            get => crossed;
+            set => crossed = value;
+        }
 
         public ObstacleType ObstacleType => obstacleType;
 
@@ -36,10 +41,13 @@ namespace GameLogic.ObstacleGeneration
         [SerializeField] private Transform rightMostPosition;
 
         private bool _canMove;
+        private bool crossed;
 
-        public virtual void Start()
+        public virtual void Awake()
         {
             _canMove = true;
+            crossed = false;
+            SetParent();
         }
         public override void Update()
         {
@@ -49,28 +57,30 @@ namespace GameLogic.ObstacleGeneration
             }
         }
 
-        public void ResetGameObject()
+        public virtual void ResetObstacle()
         {
+            crossed = false;
             foreach (var part in obstacleComponents)
             {
-                part.ResetGameObject();
+                part.ResetObstacle();
             }
+            
+      
         }
 
 
-        // Update is called once per frame
-
-        public void ChangeColors()
+        public int ChangeColors(Color[] shuffledColors, int index)
         {
-            Color[] shuffledColors = UtilityFunctions.ShuffleArray(CoreManager.instance.ColorsManager.CurrentColors);
             int currentColorIndex = 0;
             for (int i = 0; i < obstacleComponents.Count; ++i)
             {
-                currentColorIndex = obstacleComponents[i].SetColor(shuffledColors, currentColorIndex);
+                currentColorIndex = obstacleComponents[i].ChangeColors(shuffledColors, currentColorIndex);
             }
+
+            return 0;
         }
 
-        public List<StyleableObject> ExtractStyleableObjects()
+        public List<StyleableObject> ExtractObstacleParts()
         {
             List<StyleableObject> allObstacleParts = new();
             foreach (var component in obstacleComponents)
@@ -82,6 +92,28 @@ namespace GameLogic.ObstacleGeneration
             }
 
             return allObstacleParts;
+        }
+
+        private void SetParent()
+        {
+            foreach (var component in obstacleComponents)
+            {
+                component.SetParent(this);
+            }
+        }
+
+        public void OnComponentChange()
+        {
+            print("ALL GONE !");
+            foreach (var part in ExtractObstacleParts())
+            {
+                if (part.gameObject.activeInHierarchy)
+                {
+                    return;
+                }
+            }
+            CoreManager.instance.EventManager.InvokeEvent(EventNames.ObstacleCrossed, null);
+            crossed = true;
         }
     }
 }

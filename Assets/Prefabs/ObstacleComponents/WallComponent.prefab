@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3495355062483403668}
   - component: {fileID: 2084105168619154934}
-  - component: {fileID: 8745554891865519092}
   m_Layer: 0
   m_Name: WallComponent
   m_TagString: Untagged
@@ -48,21 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parts:
   - {fileID: 2557454894274207486}
-  isSingleColorComponent: 0
---- !u!114 &8745554891865519092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 831250115945865344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3c4189ef5ce4df9b084dd303291dab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parts:
-  - {fileID: 2240510147647776691}
   isSingleColorComponent: 0
 --- !u!1 &8186761375300714043
 GameObject:

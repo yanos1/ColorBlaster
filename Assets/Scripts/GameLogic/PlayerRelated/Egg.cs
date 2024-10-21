@@ -26,7 +26,7 @@ namespace GameLogic.PlayerRelated
             if (colorBlock is not null && GetColor() == Color.white)
             {
                 Color color = colorBlock.GetColor();
-                SetColor(color);
+                ChangeColor(color);
             }
 
             ObstaclePart obstacle = other.gameObject.GetComponent<ObstaclePart>();
@@ -41,10 +41,10 @@ namespace GameLogic.PlayerRelated
             }
         }
 
-        public override void ResetGameObject()
+        public override void ResetObstacle()
         {
-            base.ResetGameObject();
-            SetColor(Color.white);
+            base.ResetObstacle();
+            ChangeColor(Color.white);
         }
     }
 }

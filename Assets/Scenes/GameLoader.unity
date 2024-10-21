@@ -437,9 +437,9 @@ MonoBehaviour:
   - {fileID: 8105898414595832603, guid: e67203c94d2893842b7fa2b347214792, type: 3}
   - {fileID: 4698200018929776202, guid: aa39d03f7bd60df49904bcffa1287c74, type: 3}
   bossObstaclesList:
-  - {fileID: 5422812282413597159, guid: 335a29bf0c3cfe24ab87cff3d539575c, type: 3}
-  - {fileID: 2031825499238378032, guid: 5d789d75d48a6a84ab11a6617d92ce8a, type: 3}
-  - {fileID: 438429272075136512, guid: 139b045da6135764a98ecce5fff316ba, type: 3}
+  - {fileID: 7888962911005830183, guid: 5d789d75d48a6a84ab11a6617d92ce8a, type: 3}
+  - {fileID: 7012638209978436195, guid: 335a29bf0c3cfe24ab87cff3d539575c, type: 3}
+  - {fileID: 1256792934841040252, guid: 139b045da6135764a98ecce5fff316ba, type: 3}
   poolEntries:
   - type: 1
     prefab: {fileID: 6722398912885778981, guid: e9cc0ce5ffa0e9949b2cb860b20f9196, type: 3}

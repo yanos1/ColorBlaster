@@ -48,7 +48,7 @@ namespace GameLogic.ObstacleGeneration
             return multyplier;
         }
 
-        public override void ResetGameObject()
+        public override void ResetObstacle()
         {
             gameObject.SetActive(true);
             amountOfShotsToBreak = Random.Range(minAmountOfShots, maxAmountOfShots);

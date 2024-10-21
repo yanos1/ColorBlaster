@@ -91,5 +91,6 @@ namespace Core.Managers
         DeactivateGunners=34,
 
         ObstacleCrossed=35,
+        MoveObstacle=36,
     }
 }

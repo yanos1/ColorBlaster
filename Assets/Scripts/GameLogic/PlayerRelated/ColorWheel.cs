@@ -68,7 +68,7 @@ namespace GameLogic.PlayerRelated
 
             for (int i = 0; i < blocks.Length; ++i)
             {
-                blocks[i].SetColor(currentColors[i%currentColors.Length]);
+                blocks[i].ChangeColor(currentColors[i%currentColors.Length]);
             }
         }
         private void OnColorRushPickUp(object obj)

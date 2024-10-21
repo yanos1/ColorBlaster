@@ -216,7 +216,6 @@ namespace Core.Managers
             while (CoreManager.instance.GameManager.IsRunActive)
             {
                 keysToRemove.Clear();
-                print($"activatebuffsdurastionsleft {activeBuffsDurationsLeft is null}");
                 foreach (var kvp in activeBuffsDurationsLeft)
                 {
                     if (Time.time > kvp.Value.Item2)
